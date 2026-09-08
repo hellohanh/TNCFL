@@ -1,0 +1,15 @@
+.body {
+  margin-bottom: 32px;
+}
+
+.paragraph {
+  font-size: 15px;
+  line-height: 1.75;
+  color: #c4c4c2;
+  margin: 0 0 16px;
+}
+
+.paragraph b {
+  color: #f2f2f0;
+  font-weight: 600;
+}

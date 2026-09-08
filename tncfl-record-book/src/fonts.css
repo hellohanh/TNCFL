@@ -1,0 +1,43 @@
+/* Licensed fonts, served from /public/fonts/ (verified name-table metadata
+   before use — see the Milestone session notes). Two real families here:
+   "Segoe UI" (regular 400 + bold 700, used for body/UI text everywhere) and
+   "Segoe UI Black" (a separate, heavier family — 900 + 900 italic, reserved
+   for headers per the user's explicit type-pairing decision).
+
+   `font-display: swap` tells the browser to show a fallback font
+   immediately and swap to the real one once it loads, rather than leaving
+   text invisible while the font downloads (the old default behavior, called
+   "flash of invisible text" / FOIT). Trades a brief visible font swap for
+   never blocking the page on a font download. */
+
+@font-face {
+  font-family: 'Segoe UI';
+  src: url('/fonts/segoeui.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Segoe UI';
+  src: url('/fonts/segoeuib.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Segoe UI Black';
+  src: url('/fonts/seguibl.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Segoe UI Black';
+  src: url('/fonts/seguibli.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}

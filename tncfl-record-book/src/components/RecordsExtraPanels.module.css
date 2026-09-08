@@ -1,0 +1,112 @@
+.card {
+  border-left: 3px solid;
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.accentRed {
+  border-left-color: #c0252b;
+}
+
+.accentGold {
+  border-left-color: #d9a521;
+}
+
+.accentBlue {
+  border-left-color: #4aaced;
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #eee;
+  margin-bottom: 10px;
+}
+
+.compRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 12.5px;
+}
+
+.compRank {
+  width: 20px;
+  color: #777;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.compPts {
+  width: 38px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.compName {
+  width: 60px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.compMedals {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+.hlRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 12.5px;
+}
+
+.hlRank {
+  width: 20px;
+  color: #777;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.hlName {
+  width: 55px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.hlVal {
+  width: 48px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.hlCtx {
+  font-size: 11px;
+  color: #777;
+}
+
+.scrollWrap {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.scrollWrap::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollWrap::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.scrollWrap::-webkit-scrollbar-track {
+  background: transparent;
+}

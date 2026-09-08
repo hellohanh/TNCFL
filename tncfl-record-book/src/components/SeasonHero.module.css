@@ -1,0 +1,74 @@
+.hero {
+  margin-bottom: 8px;
+}
+
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: #8a8a8a;
+  margin: 0 0 14px;
+  text-transform: lowercase;
+}
+
+.lockBadge {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: rgba(78, 199, 158, 0.3);
+  color: #4ec79e;
+  border: 1px solid rgba(78, 199, 158, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 10px;
+}
+
+.headline {
+  font-family: var(--font-black);
+  font-size: 30px;
+  font-weight: 900;
+  color: #f2f2f0;
+  margin: 0 0 10px;
+  line-height: 1.25;
+}
+
+.subLine {
+  font-size: 15px;
+  color: #a8a8a6;
+  margin: 0 0 24px;
+  line-height: 1.6;
+}
+
+.statRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 28px;
+  margin-bottom: 28px;
+}
+
+.sparkWrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.sparkWrap svg {
+  display: block;
+}
+
+.statNumber {
+  font-size: 44px;
+  font-family: var(--font-black);
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: #8a8a8a;
+  margin-top: 6px;
+}

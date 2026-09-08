@@ -1,0 +1,79 @@
+.card {
+  border-left: 3px solid #d4a017;
+  border-radius: 8px;
+  padding: 14px 16px;
+  box-sizing: border-box;
+}
+
+.title {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: #e8e8e8;
+  margin: 0 0 6px 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2px;
+}
+
+.scrollWrap {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  padding-right: 15px;
+}
+
+.scrollWrap::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollWrap::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.scrollWrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 13px;
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.rank {
+  min-width: 26px;
+  color: #777777;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.name {
+  flex: 1;
+  font-weight: 700;
+  color: #e8e8e8;
+}
+
+.total {
+  font-weight: 700;
+  color: #e8e8e8;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.year {
+  min-width: 44px;
+  color: #777777;
+  text-align: right;
+  font-size: 11px;
+}

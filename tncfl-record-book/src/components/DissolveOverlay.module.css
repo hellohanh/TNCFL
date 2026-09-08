@@ -1,0 +1,9 @@
+.overlay {
+  position: sticky;
+  top: var(--header-height, 0px);
+  height: 400px;
+  margin-bottom: -400px;
+  pointer-events: none;
+  z-index: 50;
+  background: linear-gradient(to bottom, #111111 0%, rgba(17, 17, 17, 0) 100%);
+}

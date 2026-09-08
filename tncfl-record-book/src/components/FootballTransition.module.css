@@ -1,0 +1,28 @@
+.wrap {
+  height: 600px;
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+.frame {
+  width: 55%;
+  /* Shorter than .wrap's own 600px on purpose — position:sticky needs its
+     PARENT to be taller than the sticky element itself, or there's no
+     scroll "slack" for it to hold within before its parent's bottom edge
+     catches up and releases it (the exact lesson from the header/rail
+     sticky bug earlier this session). Keeping .wrap at 600px preserves the
+     established recap-to-scoreboard gap size; this 300px just carves out
+     room INSIDE that same gap for the hold to actually be noticeable. */
+  height: 300px;
+  position: sticky;
+  top: var(--header-height, 0px);
+  background-repeat: no-repeat;
+  filter: grayscale(1) brightness(0.55) contrast(1.1);
+  /* Radial mask so the frame's rectangular edge is never visible — opaque
+     through the middle, fading to fully transparent well before the edges,
+     so the image blends into the page's own dark background rather than
+     showing a hard-edged box (the exact thing flagged from a screenshot). */
+  mask-image: radial-gradient(ellipse at center, black 35%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 35%, transparent 75%);
+}
