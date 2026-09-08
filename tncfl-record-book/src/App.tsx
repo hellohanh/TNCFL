@@ -31,7 +31,19 @@ function App() {
   return (
     <HoveredManagerProvider>
       <ManagerFilterProvider>
-        <BrowserRouter>
+        {/* basename is REQUIRED once this app is deployed under a subpath
+            (this repo's real base is '/TNCFL/', not '/') — without it,
+            BrowserRouter matches routes against the full pathname
+            ('/TNCFL/season/2025'), which none of the routes below (defined
+            starting from '/') ever match, so <Routes> silently renders
+            nothing. This was the real cause of the blank-page-with-zero-
+            errors bug on the first live deploy: every asset loaded
+            correctly, the JS executed fine, data fetched fine — routing was
+            the only thing broken, and React Router doesn't throw or log
+            when nothing matches, it just renders null. Confirmed by testing
+            locally with base unset (mounts fine) vs base set to '/TNCFL/'
+            (silently blank) — same app, same code, only the base differed. */}
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
           <Routes>
             <Route path="/" element={<Layout data={data} />}>
               {/* Visiting just "/" redirects to the most recent season by

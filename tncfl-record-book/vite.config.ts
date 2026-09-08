@@ -1,6 +1,22 @@
 import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
+
+// Strips the `crossorigin` attribute Vite adds by default to the built
+// <script>/<link> tags. Not the fix for the real blank-page bug (that was
+// BrowserRouter missing a `basename` — see App.tsx) — this was a dead end
+// investigated and ruled out along the way (manually importing the module
+// in CORS mode from the console still succeeded). Left in as a legitimate,
+// harmless simplification: this is a same-origin site, so there's no real
+// reason for these same-origin asset requests to run in CORS mode.
+function stripCrossorigin(): Plugin {
+  return {
+    name: 'strip-crossorigin',
+    transformIndexHtml(html) {
+      return html.replace(/\s+crossorigin(=""|="[^"]*")?/g, '')
+    },
+  }
+}
 
 // base: '/TNCFL/' — this is a project-page GitHub Pages repo (hellohanh/TNCFL),
 // served at https://hellohanh.github.io/TNCFL/, not a username.github.io root
@@ -9,6 +25,7 @@ export default defineConfig({
   base: '/TNCFL/',
   plugins: [
     react(),
+    stripCrossorigin(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icon192.png', 'icon512.png'],
