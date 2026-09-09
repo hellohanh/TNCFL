@@ -87,7 +87,13 @@ body {
   min-width: 0;
   max-width: 1250px;
   margin: 0 auto;
-  padding: 24px;
+  /* 1000px bottom buffer, applied site-wide (every route renders through
+     this element via <Outlet />) — without it, the last bit of content
+     (e.g. the Hall of Fame hero essay's closing paragraph) stops flush
+     against the bottom of the viewport once you've scrolled to the end,
+     instead of being scrollable up into a comfortable reading position
+     in the middle of the screen. */
+  padding: 24px 24px 1000px;
 }
 
 .season-page-placeholder {
