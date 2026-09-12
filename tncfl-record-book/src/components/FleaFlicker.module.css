@@ -1,6 +1,7 @@
 .wrap {
   position: relative;
   height: 380vh;
+  margin-top: 100px;
 }
 
 .stickyFrame {
