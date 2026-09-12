@@ -284,7 +284,6 @@ function addYardNumber(fieldG: SVGGElement, x: number, y: number, label: string)
 
 // ── Fireworks ─────────────────────────────────────────────────────────────────
 const FW_PALETTE=['#FF0000','#FF7A00','#FFD400','#9DFF00','#00E03C','#00E5FF','#1E5BFF','#8A2BE2','#FF00D4','#FF2D8A']
-const FW_SPOTS=[{x:22,y:18},{x:78,y:14},{x:50,y:10}]
 const FW_SPARKS=35
 
 function fwShuffle<T>(a: T[]): T[] {
@@ -334,7 +333,7 @@ export default function FleaFlicker() {
     gl.setAttribute('stroke','#e8e6dc');gl.setAttribute('stroke-width','2.5');gl.setAttribute('opacity','0.85')
     fieldG.appendChild(gl)
     const los=svgEl('line')
-    los.setAttribute('x1','135');los.setAttribute('y1','299');los.setAttribute('x2','545');los.setAttribute('y2','299')
+    los.id='ff2Los';los.setAttribute('x1','135');los.setAttribute('y1','299');los.setAttribute('x2','545');los.setAttribute('y2','299')
     los.setAttribute('stroke','#4aa3df');los.setAttribute('stroke-width','2');los.setAttribute('opacity','0.7')
     fieldG.appendChild(los)
 
@@ -442,11 +441,22 @@ export default function FleaFlicker() {
       anchor.classList.add(styles.celebrate)
     }
     function fwLaunchAll(){
-      if(!fwLayer)return;fwLayer.innerHTML=''
-      FW_SPOTS.forEach((spot,idx)=>window.setTimeout(()=>fwFire(spot,fwRollColorway()),idx*350))
+      if(!fwLayer||!fwFiredRef.current)return
+      // Random burst count 2–4, random positions, random stagger
+      const count=2+Math.floor(Math.random()*3)
+      let delay=0
+      for(let i=0;i<count;i++){
+        const spot={x:10+Math.random()*80,y:5+Math.random()*50}
+        const colorway=fwRollColorway()
+        window.setTimeout(()=>{if(fwFiredRef.current)fwFire(spot,colorway)},delay)
+        delay+=200+Math.floor(Math.random()*600)
+      }
+      // Schedule next cycle at a random interval 2400–4800ms
+      const nextIn=2400+Math.floor(Math.random()*2400)
+      fwIntervalRef.current=window.setTimeout(fwLaunchAll,nextIn) as unknown as number
     }
-    function fwStart(){if(fwFiredRef.current)return;fwFiredRef.current=true;fwLaunchAll();fwIntervalRef.current=window.setInterval(fwLaunchAll,3400)}
-    function fwStop(){fwFiredRef.current=false;if(fwIntervalRef.current!==null){clearInterval(fwIntervalRef.current);fwIntervalRef.current=null};if(fwLayer)fwLayer.innerHTML=''}
+    function fwStart(){if(fwFiredRef.current)return;fwFiredRef.current=true;fwLaunchAll()}
+    function fwStop(){fwFiredRef.current=false;if(fwIntervalRef.current!==null){clearTimeout(fwIntervalRef.current);fwIntervalRef.current=null};if(fwLayer)fwLayer.innerHTML=''}
 
     // ── Interpolation helpers ─────────────────────────────────────────────────
     function trackState(track:Track,i:number,frac:number){
@@ -540,6 +550,14 @@ export default function FleaFlicker() {
       // Cadence overlay
       updateCadence(frameFloat,fadeMul)
 
+      // LOS cross-fades blue→mustard as TD fades in
+      const losEl=document.getElementById('ff2Los') as SVGLineElement|null
+      if(losEl){
+        const r1=parseInt('4a',16),g1=parseInt('a3',16),b1=parseInt('df',16)
+        const r2=parseInt('d9',16),g2=parseInt('a5',16),b2=parseInt('21',16)
+        const mix=(a:number,b:number)=>Math.round(a+(b-a)*td)
+        losEl.setAttribute('stroke',`rgb(${mix(r1,r2)},${mix(g1,g2)},${mix(b1,b2)})`)
+      }
       tdTextG!.setAttribute('opacity',td.toFixed(2))
       if(td>0.05)fwStart();else if(td<0.02)fwStop()
     }
