@@ -1,0 +1,32 @@
+.wrap {
+  margin-top: 11px;
+  margin-bottom: 24px;
+}
+
+.chartArea {
+  margin-top: 8px;
+  width: 100%;
+}
+
+.axisLabel {
+  font-size: 9.5px;
+  fill: #777777;
+  font-family: var(--font-sans);
+}
+
+.weekLabel {
+  font-size: 9px;
+  font-weight: 700;
+  fill: #777777;
+  font-family: var(--font-sans);
+}
+
+.avgLabel {
+  font-size: 9.5px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+}
+
+.chartArea circle {
+  cursor: default;
+}

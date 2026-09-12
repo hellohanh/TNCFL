@@ -1,0 +1,103 @@
+.wrap {
+  margin-top: 11px;
+  margin-bottom: 24px;
+}
+
+/* No background/border on the outer wrap or the rules column — matches the
+   RB's own established panel convention (BumpChart .card, DroughtBars .wrap
+   are both background-less), a deliberate departure from the old hub's
+   boxed `.salary-rules` look, which the redesign has consistently dropped
+   elsewhere (see Entries 24/27: background/border removed from nugget
+   cards and the SalaryDonuts panel boxes). */
+.head {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  margin-top: 11px;
+}
+
+/* Card first (60%), logo second (40%) — reversed from the old hub's
+   logo-then-card order and its real 30%-logo/flex-1-card split, per the
+   user's explicit request for this redesign. Using flex:1 on the card
+   (rather than a hard 60% + 40% pair) mirrors the hub's own technique for
+   avoiding flex-basis/gap overflow — only the logo gets a hard percentage. */
+.rules {
+  flex: 1;
+}
+
+.logo {
+  flex: 0 0 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo img {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.45));
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 22px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4px 0;
+}
+
+.k {
+  color: #aaaaaa;
+}
+
+.v {
+  color: #e8e8e8;
+  font-weight: 600;
+}
+
+.rowHd {
+  border-bottom: none;
+  color: #777777;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding-top: 8px;
+}
+
+.newBadge {
+  display: inline-block;
+  font-size: 8px;
+  font-weight: 700;
+  background: #c0252b;
+  color: #fff;
+  border-radius: 3px;
+  padding: 1px 4px;
+  margin-left: 5px;
+  vertical-align: middle;
+  letter-spacing: 0.05em;
+}
+
+.ringNote {
+  color: #777777;
+  font-weight: 400;
+}
+
+@media (max-width: 760px) {
+  .head {
+    flex-direction: column;
+  }
+  .logo {
+    flex: 0 0 auto;
+  }
+  .logo img {
+    width: 160px;
+  }
+}

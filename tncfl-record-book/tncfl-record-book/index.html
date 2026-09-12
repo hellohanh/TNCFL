@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/icon192.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TNCFL Record Book</title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      // Matching decode half of public/404.html's redirect — must run
+      // BEFORE the app's module script, since it restores the real URL
+      // (via history.replaceState, no page reload) that React Router needs
+      // to see. If nothing redirected here, the query string won't start
+      // with "/" and this is a silent no-op for normal navigation.
+      ;(function (l) {
+        if (l.search[1] === '/') {
+          var decoded = l.search
+            .slice(1)
+            .split('&')
+            .map(function (s) {
+              return s.replace(/~and~/g, '&')
+            })
+            .join('?')
+          window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash)
+        }
+      })(window.location)
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

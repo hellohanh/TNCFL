@@ -1,0 +1,54 @@
+.wrap {
+  margin-top: 11px;
+  margin-bottom: 24px;
+}
+
+/* No background/border, per explicit request — the hub's real .peak-card
+   has both (var(--bg2) fill + a border), matching its other panel boxes.
+   Padding is kept (matches the hub's real 16px 14px exactly) since that's
+   layout breathing room, not "box" chrome. */
+.card {
+  padding: 16px 14px;
+}
+
+.secLabel {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 550;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #777777;
+  margin: 22px 0 4px 0;
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+}
+
+.empty {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: #777777;
+  font-style: italic;
+  padding: 6px 0;
+}
+
+.expandBtn {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #aaaaaa;
+  background: #222222;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.expandBtn:hover {
+  color: #e8e8e8;
+  background: #2a2a2a;
+}
