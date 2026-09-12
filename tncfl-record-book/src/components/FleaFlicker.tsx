@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useScrollProgress } from '../lib/useScrollProgress'
+import { useHeaderHeight } from '../lib/HeaderHeightContext'
 import styles from './FleaFlicker.module.css'
 
 // ────────────────────────────────────────────────────────────────────────
@@ -100,12 +101,8 @@ const DEF_BY_FRAME: Record<number, Pt>[] = [
 ]
 
 const NFRAMES = 10
-const FRAME_LABELS = [
-  'Frame 1', 'Frame 2', 'Frame 3', 'Frame 4', 'Frame 5',
-  'Frame 6', 'Frame 7', 'Frame 8', 'Frame 9', 'Frame 10', 'Touchdown!',
-]
 const INK = '#8a8a80'
-const FRAME_SPAN = 0.9
+const FRAME_SPAN = 0.82
 const STEP = FRAME_SPAN / (NFRAMES - 1)
 const SVG_NS = 'http://www.w3.org/2000/svg'
 
@@ -417,7 +414,6 @@ export default function FleaFlicker() {
   const tracksGRef = useRef<SVGGElement | null>(null)
   const tdTextGRef = useRef<SVGGElement | null>(null)
   const fwLayerRef = useRef<HTMLDivElement | null>(null)
-  const phaseLabelRef = useRef<HTMLDivElement | null>(null)
 
   const renderRef = useRef<((p: number) => void) | null>(null)
   const fwFiredRef = useRef(false)
@@ -431,15 +427,14 @@ export default function FleaFlicker() {
     const tracksG = tracksGRef.current
     const tdTextG = tdTextGRef.current
     const fwLayer = fwLayerRef.current
-    const phaseLabel = phaseLabelRef.current
-    if (!fieldG || !routesG || !tracksG || !tdTextG || !fwLayer || !phaseLabel) return
+    if (!fieldG || !routesG || !tracksG || !tdTextG || !fwLayer) return
 
     // Static field grid + two columns of stadium-style yard numbers.
     const lines: [number, number, number, number, string][] = [
       [185, 120, 595, 120, '10'],
-      [220, 180, 620, 180, '20'],
-      [260, 250, 640, 250, '30'],
-      [300, 330, 650, 330, '40'],
+      [185, 180, 595, 180, '20'],
+      [185, 250, 595, 250, '30'],
+      [185, 330, 595, 330, '40'],
     ]
     const leftColX = lines[0][0] + 45
     const rightColX = lines[0][2] - 45
@@ -580,7 +575,7 @@ export default function FleaFlicker() {
       fwLayer.appendChild(anchor)
       // Force layout so the animation class re-triggers cleanly on relaunch.
       void anchor.offsetWidth
-      anchor.classList.add('celebrate')
+      anchor.classList.add(styles.celebrate)
     }
     function fwLaunchAll() {
       if (!fwLayer) return
@@ -653,9 +648,6 @@ export default function FleaFlicker() {
 
       if (td > 0.05) fwStart()
       else if (td < 0.02) fwStop()
-
-      const labelIdx = td > 0.5 ? NFRAMES : Math.round(frameFloat)
-      phaseLabel!.textContent = FRAME_LABELS[Math.min(FRAME_LABELS.length - 1, labelIdx)]
     }
 
     renderRef.current = render
@@ -678,9 +670,11 @@ export default function FleaFlicker() {
     renderRef.current?.(progress)
   }, [progress])
 
+  const headerHeight = useHeaderHeight()
+
   return (
     <div className={styles.wrap} ref={wrapperRef}>
-      <div className={styles.stickyFrame} ref={frameRef}>
+      <div className={styles.stickyFrame} ref={frameRef} style={{ top: headerHeight }}>
         <div className={styles.stage}>
           <svg className={styles.board} viewBox="0 0 680 460">
             <g ref={fieldGRef} />
@@ -689,9 +683,6 @@ export default function FleaFlicker() {
             <g ref={tdTextGRef} opacity={0} />
           </svg>
           <div className={styles.fwLayer} ref={fwLayerRef} />
-          <div className={styles.phaseLabel} ref={phaseLabelRef}>
-            Frame 1
-          </div>
         </div>
       </div>
     </div>

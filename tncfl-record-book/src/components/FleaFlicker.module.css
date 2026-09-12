@@ -1,11 +1,12 @@
 .wrap {
   position: relative;
-  height: 320vh;
+  height: 380vh;
 }
 
 .stickyFrame {
+  /* top is set inline (JS) to the live header height, so the frame pins
+     right below the site header instead of underneath it. */
   position: sticky;
-  top: 0;
   height: 100vh;
   max-height: 700px;
   min-height: 460px;
@@ -13,7 +14,6 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: #0d0f0a;
 }
 
 .stage {
@@ -32,20 +32,6 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-}
-
-.phaseLabel {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  font-family: sans-serif;
-  font-weight: 700;
-  font-size: 15px;
-  letter-spacing: 0.02em;
-  color: #d9a521;
-  background: rgba(17, 17, 17, 0.55);
-  padding: 4px 10px;
-  border-radius: 4px;
 }
 
 /* Hub-style firework sparks — see FleaFlicker.tsx for the JS that assigns
