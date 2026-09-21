@@ -36,17 +36,6 @@ export default function TimelineRail({ years }: TimelineRailProps) {
     <nav className="timeline-rail">
       <ul className="timeline-rail-years">
         <li>
-          <a
-            href="https://hellohanh.github.io/TNCFL_TRACKER/TNCFL_2026_Tracker.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="timeline-year"
-            style={{ display: 'block' }}
-          >
-            2026 ↗
-          </a>
-        </li>
-        <li>
           <button
             type="button"
             className={onLeagueRoute ? 'timeline-year active' : 'timeline-year'}
@@ -80,6 +69,17 @@ export default function TimelineRail({ years }: TimelineRailProps) {
               ))}
             </ul>
           )}
+        </li>
+        <li>
+          <a
+            href="https://hellohanh.github.io/TNCFL_TRACKER/TNCFL_2026_Tracker.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="timeline-year"
+            style={{ display: 'block' }}
+          >
+            2026 ↗
+          </a>
         </li>
         {years.map((year) => (
           <li key={year}>
