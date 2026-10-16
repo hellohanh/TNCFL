@@ -2655,3 +2655,34 @@ Real bug, found from a user screenshot showing a visible rectangular border arou
 Fixed surgically, not with a blanket `border: 'none'` (which would have wiped out the class's `border-left` too, since inline styles win over classes): added explicit `borderTop`/`borderRight`/`borderBottom: 'none'` to the button's inline style, leaving `border-left` entirely to the CSS class. Verified via computed-style comparison — top/right/bottom now `0px none`, left still `3px solid` (transparent at rest, `#d9a521` on the active route), matching the year links' own resting state exactly.
 
 ---
+
+## Entry 82 (2026-10-16) — Direct GitHub push workflow established
+
+**New workflow:** Claude now works directly from a live clone of the repo at `/home/claude/tncfl` (session-attached via `add_repo` with push access). Changes are committed and pushed to `main` from this cloud session — GitHub Actions then builds and deploys to `gh-pages` automatically (~1–2 min to live). No more zip files or manual git on Hanh's end for this project.
+
+Repo: `hellohanh/TNCFL` (case-insensitive alias `hellohanh/tncfl`). Git identity set: `Hanh <hello.meetho@gmail.com>`. The existing `deploy.yml` workflow (push to `main` → `npm ci` → `npm run build` → deploy `dist/` to Pages) required no changes.
+
+---
+
+## Entry 83 (2026-10-16) — FootballTransition component deleted
+
+Removed the old 10-frame `FootballTransition` component (flagged for deletion since FF2 was confirmed good, session S038). Deleted `FootballTransition.tsx` and `FootballTransition.module.css`. Removed the commented-out import and JSX usage from `SeasonPage.tsx`. Clean build verified (`vite build`, 535 modules, no errors). Committed and pushed directly to `main`; GitHub Actions deployed automatically.
+
+---
+
+## Entry 84 (2026-10-16) — Data analysis: consecutive 200+ scoring weeks
+
+Analysed `site_data.json` across all 15 seasons (2011–2025) for weeks where ≥1 manager scored 200+ pts, then found consecutive runs of 3 or more such weeks within a season.
+
+**Results — 4 runs all-time:**
+
+| Season | Weeks | Length | Notes |
+|--------|-------|--------|-------|
+| 2013 | 11–13 | 3 | Douang alone all three weeks (211/203/217) |
+| 2021 | 1–3 | 3 | Different manager each week: Kito 235.5 / Randy 214.6 / Titi 204.1 |
+| 2024 | 9–12 | 4 | Hanh/Tim/Damian+D'lyn/Ted |
+| 2024 | 14–17 | 4 | Hanh/Randy+Tony/Randy/Randy — Randy hit 200+ in all four, including personal 3-week streak Wks 15–17 |
+
+**Personal 3+ consecutive 200+ streaks:** Douang 2013 (Wks 11–13) and Randy 2024 (Wks 15–17) are the only two managers in league history to score 200+ in 3 consecutive weeks.
+
+---
