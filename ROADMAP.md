@@ -10,6 +10,28 @@ that's flagged so you know what you already have muscle memory for vs. what's ge
 
 ---
 
+## Status at a glance (as of 2026-10-16)
+
+| Milestone | Status |
+|-----------|--------|
+| 0–7 (+ sub-rounds 7a–7p) | ✅ Done — 2011 template first pass |
+| 8 — Site branding header | ✅ Done |
+| 9 — Manager filters (simplified) | ✅ Done (2-state toggle + click-to-pin; no week filter) |
+| 10 — Salary rules card + ledger | ✅ Done |
+| 11 — Despair Differential + Spread Index | ✅ Done |
+| 12 — Superiority Beatdown Index | ❌ Cancelled |
+| 13 — Peak Performance Distribution | ✅ Done |
+| 14 — Cumulative Competence Chart | ✅ Done |
+| 15 — 2011 review & template lock | ✅ Done (2026-09-06) |
+| 16 — Roll out 2012–2025 | ✅ Done (2026-09-06) |
+| 17 — League / Hall of Fame section | ✅ Done (2026-09-08) |
+| 18 — PWA + deploy pipeline | ✅ Done (2026-09-08/09) |
+| 19 — Polish pass | ⏳ Not started |
+| 20 — Nugget system rebuild | ✅ Done (2026-09-08) — **visual review of every season's nuggets still outstanding** |
+| 21 — FleaFlicker scroll animation (replaces FootballTransition) | ✅ Done (2026-09-11/12; old component deleted 2026-10-16) |
+
+---
+
 ## Type system — LOCKED (cross-cutting, applies to all milestones)
 
 Two licensed font families, verified against real name-table metadata (not just filenames) before
@@ -702,6 +724,11 @@ computed-style opacity samples taken every ~80ms across the transition: a genuin
 ---
 
 ## Milestone 7f — Football transition artwork in the scroll gap
+
+> **Superseded (note added 2026-10-16):** `FootballTransition` (7f v1–v3 below, plus the Entry 80
+> image/zoom update) was replaced by the FleaFlicker scroll animation (Milestone 21) on 2026-09-11
+> and deleted from the codebase on 2026-10-16 (SESSION_LEDGER Entry 83). Kept here as history only.
+> The 5 images in `public/football/` are no longer referenced by any code.
 
 **Update: real football artwork added inside the cue-to-first-section 1000px gap.** User supplied 2
 line-art football illustrations (`Football_1.zip`) — verified real alpha transparency before use
@@ -1637,7 +1664,7 @@ computed style: both now measure exactly 15px.
 
 ---
 
-## Milestone 8 — Site branding header ✅ built, pending your verification
+## Milestone 8 — Site branding header — DONE (verified as part of the Milestone 15 lock)
 
 The old hub's owl-logo + league-name header, plus its horizontal year-tab nav, revealed a real gap:
 nothing currently carries the league's actual brand identity (logo, name, "EST. 2011 · 15 seasons").
@@ -1677,7 +1704,13 @@ now sits directly on the header's dark background with no white box behind it.
 
 ---
 
-## Milestone 9 — Manager & week filters
+## Milestone 9 — Manager & week filters — DONE in simplified form (2026-09-06)
+
+> **Status note (added 2026-10-16):** the plan below is the ORIGINAL scope. What was actually built
+> (SESSION_LEDGER Entry 43, per explicit user request) is much simpler: a 2-state All Managers /
+> Money Circle toggle (`ManagerFilterContext` + `ManagerFilterToggle.tsx`) plus a separate
+> click-to-pin system on top of hover. No individual manager pills, no Clear All, and no week
+> filter at all. See `SKILL.md`'s Status section for the full description.
 
 The old hub's "Filter Managers" (All/Clear/Money Circle/individual manager toggle pills) and
 "Filter Weeks" (All/Clear/Q1–Q4) bars — genuinely interactive filtering, not yet built at all.
@@ -1696,7 +1729,7 @@ charts built so far.
 
 ---
 
-## Milestone 10 — Salary Cap rules card + full ledger table
+## Milestone 10 — Salary Cap rules card + full ledger table — DONE (2026-09-06, Entry 34)
 
 Milestone 5 built only the donut summary (winners/losers). Two real pieces are still missing: the
 rules-explainer card (buy-in, HMOTW fee, trans/trade fee, prize split — `payouts[year]`'s top-level
@@ -1710,7 +1743,7 @@ table, not just the donut summary.
 
 ---
 
-## Milestone 11 — Despair Differential + Scoring Spread Index
+## Milestone 11 — Despair Differential + Scoring Spread Index — DONE (2026-09-06, Entries 35–36)
 
 Two more per-week analytical charts, bundled together since both are pure functions of already-typed
 `season.scores` — no new data needed.
@@ -1744,7 +1777,7 @@ has no deliverable.
 
 ---
 
-## Milestone 13 — Peak Performance Distribution (HMOTW pyramids)
+## Milestone 13 — Peak Performance Distribution (HMOTW pyramids) — DONE (2026-09-06, Entry 39)
 
 HMOTW wins visualized per manager. For 2011 specifically this needs nothing beyond the already-typed
 `season.hmotw_tally` — buildable now. **Scope note:** the old hub's version is framed as "wins by
@@ -1759,7 +1792,7 @@ another shape — decide the visual treatment before building, don't default to 
 
 ---
 
-## Milestone 14 — Cumulative Competence Chart
+## Milestone 14 — Cumulative Competence Chart — DONE (2026-09-06, Entry 40)
 
 A points-per-finish leaderboard (1st=10, 2nd=5, 3rd=2, 4th=1, 5th=0.9, 6th=0.8 — confirmed against
 the old hub's own displayed legend). **Data note:** `summary[year].competence` already exists as a
@@ -1999,7 +2032,21 @@ scope, offered but not yet requested.
 
 ---
 
-## Milestone 18 — PWA + deploy pipeline
+## Milestone 18 — PWA + deploy pipeline — DONE (2026-09-08/09)
+
+**What was built** (SESSION_LEDGER Entries 81a–81c; commits `0f8d039`, `0abc2de`, `da6eb8b`):
+- `.github/workflows/deploy.yml` — push to `main` → `npm ci` + `npm run build` in
+  `tncfl-record-book/` → `actions/upload-pages-artifact` + `actions/deploy-pages`. Replaced the old
+  hub's copy-to-`docs/` workflow. Live at **https://hellohanh.github.io/TNCFL/**.
+- `vite.config.ts`: `base: '/TNCFL/'` (project-page repo), `vite-plugin-pwa` (manifest reuses the
+  old hub's icons, renamed "Thursday Night Curse Record Book"), plus a small plugin that strips
+  `crossorigin` from built tags.
+- Subpath bugs fixed: 5 hardcoded root asset paths; `BrowserRouter` given
+  `basename={import.meta.env.BASE_URL}` (without it every route silently rendered blank under
+  `/TNCFL/`); `public/404.html` + an `index.html` decode script (the `spa-github-pages` pattern)
+  so deep links like `/league/hof` don't hit GitHub's own 404.
+
+Original plan, kept for reference:
 
 - 🎓 **`vite-plugin-pwa`** — Wanderlog already uses this exact package for its installable-app
   behavior; the manifest/service-worker concepts carry over directly, just pointed at the new app.
@@ -2010,7 +2057,7 @@ scope, offered but not yet requested.
 
 ---
 
-## Milestone 19 — Polish pass
+## Milestone 19 — Polish pass — NOT STARTED
 
 Performance (route-based code splitting so visiting `/season/2011` doesn't load all 15 seasons'
 components at once), a real mobile QA pass across the swipeable season-chapter flow, and a final
@@ -2081,6 +2128,38 @@ remains fully open: no season's real rendered output has ever been screenshotted
 project.** This is now the single most valuable next step for whoever picks this up next, more so
 than before given how much changed in this milestone specifically (a full positioning-model
 replacement with zero visual confirmation yet).
+
+> **Update (2026-10-16):** headless Chromium has been available since Entry 65 (2026-09-08), so
+> the tooling block above is resolved. The visual review itself is still not done — no season's
+> nugget section has been screenshotted under the new positioning model.
+
+---
+
+## Milestone 21 — FleaFlicker scroll animation (replaces FootballTransition) — DONE (2026-09-11/12)
+
+Not in the original plan — added when the static football transition between the season recap and
+the scoreboard was replaced with a scroll-driven flea-flicker play diagram. See SESSION_LEDGER
+Entries 81e–81g for the build history.
+
+- **Component:** `FleaFlicker.tsx` / `.module.css`, rendered in `SeasonPage.tsx` as
+  `<FleaFlicker key={year} />`. Wrapper is `380vh` tall with a `100px` top margin; a `100vh` sticky
+  frame pins just below the site header (`useHeaderHeight()`).
+- **Field:** stadium-camera fake-perspective view, dark background, medium-grey yard lines, bold
+  italic Arial-Black yard numbers (10/20/30/40) rotated −90° in two columns.
+- **FF2 play (the shipped version, 18 frames):** F1 Huddle → F2 Formation → F3–F4 Motion → F5–F8 QB
+  cadence (BLUE 42 / OMAHA / OH-MA-HA!! / HUT) → F9 Snap → F10 Handoff → F11 Run Fake → F12 Reverse →
+  F13 Flea Flick → F14 Throw → F15 Catch → F16–F17 Break Tackles → F18 TD. Frames were authored by
+  hand in inline SVG whiteboard editors (method notes kept outside this repo as the
+  "inline frame builder" technique).
+- **Tokens:** greyscale; skill positions as bare 3D initials (QB/RB/FB/TE/X/Z); defenders tracked by
+  a permanent `num` 1–11 via `buildDefenderTracks()` (never nearest-position matching); grey
+  O-line circles; ball is a 🏈 emoji. Grey dashed route trails fade in and out per leg.
+- **Effects:** cadence words grow 0→100px (sqrt ease-out) then fade; line of scrimmage cross-fades
+  blue→mustard as the TD fades in; fireworks are 2–4 random bursts per cycle at random positions,
+  chained with `setTimeout` at a random 2400–4800ms (not `setInterval`), using the trophy-cabinet
+  spark mechanic.
+- **Old component:** `FootballTransition` was kept as a commented-out fallback until
+  2026-10-16, then deleted (Entry 83).
 
 ---
 

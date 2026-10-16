@@ -2656,6 +2656,50 @@ Fixed surgically, not with a blanket `border: 'none'` (which would have wiped ou
 
 ---
 
+> **Backfill block — Entries 81a–81h (written 2026-10-16).** The sessions between the S030 zip
+> (Entry 81) and today's work (Entry 82) — roughly S031–S038, 2026-09-08 through 2026-09-21 — never
+> got ledger entries. These were reconstructed after the fact from the repo's commit history
+> (hashes cited) and Hanh's own notes from those sessions. They're lettered off Entry 81 (same
+> convention as sub-milestones `7a`–`7p`) so the existing Entries 82–84 keep their numbers. Exact
+> session numbers per entry aren't recorded, except that S038 confirmed FF2 and flagged
+> `FootballTransition` for deletion.
+
+## Entry 81a (2026-09-08) — Milestone 18: GitHub Actions deploy pipeline + PWA (commit `0f8d039`)
+
+New `.github/workflows/deploy.yml` replaces the old copy-to-`docs/` workflow: `npm ci` + `vite build` in `tncfl-record-book/`, then `actions/upload-pages-artifact` + `actions/deploy-pages`. `vite.config.ts` gets `base: '/TNCFL/'` (project-page repo, served at `https://hellohanh.github.io/TNCFL/`) and `vite-plugin-pwa` (manifest reuses the old hub's real icons; name updated to "Thursday Night Curse Record Book"). Fixed 5 real hardcoded-root-path bugs that only show up under a subpath (`site_data.json`, `header_logo.png`, `salary_logo.png`, football images, trophy images), a broken `/favicon.svg` reference, and the browser tab title (was the raw npm package name). Verified via a headless-browser sweep against `vite preview` at `/TNCFL/` — zero failed requests on every route. `docs/` and `tncfl/` (old hub) intentionally left untouched.
+
+## Entry 81b (2026-09-08) — Real bug: blank page on live deploy — `BrowserRouter` missing `basename` (commit `0abc2de`)
+
+Under `/TNCFL/`, `BrowserRouter` matched routes against the full pathname (`/TNCFL/season/2025`), which no route (all defined from `/`) ever matched. React Router renders `null` silently when nothing matches, so every asset loaded, JS ran, data fetched, and the page stayed blank with zero console errors. Root cause confirmed by A/B test (same code, only base path differed). Fix: `<BrowserRouter basename={import.meta.env.BASE_URL}>`. Also left in: a small Vite plugin stripping `crossorigin` from built tags (investigated as a dead end; harmless for a same-origin site).
+
+## Entry 81c (2026-09-09) — Real bug: 404 on direct links to sub-routes (commit `da6eb8b`)
+
+GitHub Pages has no server-side rewrites, so a direct link to e.g. `/league/hof` hit GitHub's own 404 before the app loaded. Fixed with the standard `spa-github-pages` pattern: `public/404.html` encodes the path into a query string and redirects to `index.html`, which decodes it back via `history.replaceState` before React Router reads the URL. Verified against a GitHub-Pages-accurate static server (not `vite preview`, whose own SPA fallback had been masking the problem) across 5 deep-link routes.
+
+## Entry 81d (2026-09-09) — 1000px bottom scroll buffer site-wide (commit `2941a44`)
+
+`index.css` content column padding changed to `24px 24px 1000px` so the last content on any route (e.g. the Hall of Fame essay's closing paragraph) can scroll up to a comfortable reading position instead of stopping flush at the bottom of the viewport. Applies to every route via `<Outlet />`.
+
+## Entry 81e (2026-09-11) — FleaFlicker scroll animation added and made live; repo folder cleanup (commits `58f596a`, `e04f9f7`, `c9d4931`)
+
+New `FleaFlicker.tsx`: a scroll-driven flea-flicker play diagram between the season recap and the scoreboard, replacing `FootballTransition`. First version was 10 frames: stadium-camera fake-perspective field on a dark background, medium-grey yard lines, bold italic Arial-Black yard numbers rotated −90° in two columns; 3D-shaded tokens (X defenders, O linemen, T block marker, labeled skill-position circles, brown football with laces); defenders tracked across frames by a permanent `colorId` (never nearest-position matching); grey dashed route trails; fireworks on the TD ported from the trophy cabinet's spark mechanic. Sticky frame pins just below the site header via `useHeaderHeight()`; no "Frame N" label. `FootballTransition` kept as a commented-out fallback next to FleaFlicker in `SeasonPage.tsx`.
+
+**Repo mess along the way:** a zip containing its own top-level `tncfl-record-book/` folder was extracted into the same-named folder, nesting a full second copy (plus a `tncfl-record-book1/` duplicate) and disturbing `package-lock.json`. Cleaned up via git across `e04f9f7`/`c9d4931`. This left behind a stray `tncfl-record-book/package-lock (1).json` (removed in Entry 85). Lessons kept: CI's `npm ci` fails hard on a lockfile mismatch that a local `npm install` silently repairs; prefer handing over individual files with explicit paths over nested zips.
+
+## Entry 81f (2026-09-11) — FleaFlicker fixes: firework class-name bug, yard-line alignment, spacing (commits `fbe6ea5`, `f18495f`, `2beea54`)
+
+**Real bug:** fireworks never fired because the code did `classList.add('celebrate')`, but CSS Modules scope every class — including ones only used inside compound selectors like `.fwAnchor.celebrate .fwSpark` — so the literal string never matched. Fix: `styles.celebrate`. Also removed a hardcoded background, re-centered the yard lines/numbers (all frame data shifted 30px right to match), and added 100px of spacing between the scroll cue and the animation. Wrapper is `380vh` tall to leave scroll room for the fireworks.
+
+## Entry 81g (2026-09-11/12) — FF2: 18-frame play diagram wired in (commits `c7a1020`, `b777994`, `f488f61`)
+
+FleaFlicker rebuilt around a new 18-frame play (FF2), authored frame-by-frame in inline SVG whiteboard editors: F1 Huddle → F2 Formation → F3 Motion going → F4 Motion back → F5–F8 QB cadence (BLUE 42 / OMAHA / OH-MA-HA!! / HUT) → F9 Snap → F10 Handoff → F11 Run Fake → F12 Reverse → F13 Flea Flick → F14 Throw → F15 Catch → F16 Break Tackle 1 → F17 Break Tackle 2 → F18 TD. All tokens greyscale; skill positions as bare 3D initials (QB/RB/FB/TE/X/Z); defenders tracked by permanent `num` 1–11 via `buildDefenderTracks()` (identity-tracking bug fixed in `b777994`); grey O-line circles; ball is a 🏈 emoji. Cadence words grow 0→100px (sqrt ease-out) then fade. Line of scrimmage cross-fades blue→mustard as the TD fades in. Fireworks fully randomized: 2–4 bursts per cycle at random positions, `setTimeout` chain with a random 2400–4800ms next-cycle delay. Clean build (`npx tsc --noEmit` + `npm run build`) verified before each push. Recorded as Milestone 21 in `ROADMAP.md`.
+
+## Entry 81h (2026-09-21) — 2026 Tracker link added to the nav rail (commits `bdc876c`, `2299421`)
+
+`TimelineRail.tsx` gained an external link, "2026 ↗", to `https://hellohanh.github.io/TNCFL_TRACKER/TNCFL_2026_Tracker.html` (plain `<a target="_blank">`, `className="timeline-year"`, `display: block`). First added at the top of the rail, then moved to sit below the LEAGUE section and just above the year list (above 2025). Internal year/league routes still use `NavLink`. In S038, FF2 was confirmed good and the old `FootballTransition` was flagged for deletion next session (done in Entry 83).
+
+---
+
 ## Entry 82 (2026-10-16) — Direct GitHub push workflow established
 
 **New workflow:** Claude now works directly from a live clone of the repo at `/home/claude/tncfl` (session-attached via `add_repo` with push access). Changes are committed and pushed to `main` from this cloud session — GitHub Actions then builds and deploys to `gh-pages` automatically (~1–2 min to live). No more zip files or manual git on Hanh's end for this project.
@@ -2686,3 +2730,24 @@ Analysed `site_data.json` across all 15 seasons (2011–2025) for weeks where �
 **Personal 3+ consecutive 200+ streaks:** Douang 2013 (Wks 11–13) and Randy 2024 (Wks 15–17) are the only two managers in league history to score 200+ in 3 consecutive weeks.
 
 ---
+
+## Entry 85 (2026-10-16) — Docs caught up to the real project state; stray lockfile removed
+
+All four project docs brought current with what's actually in the repo, checked against the commit history (not assumed from older docs):
+- **`SESSION_LEDGER.md`** — backfilled Entries 81a–81h for the unlogged 2026-09-08 → 2026-09-21 work (deploy pipeline, two real deploy bugs, scroll buffer, FleaFlicker v1 → FF2, 2026 Tracker link).
+- **`ROADMAP.md`** — new status-at-a-glance table at the top; status markers added to Milestones 8, 9, 10, 11, 13, 14 (flagged as missing in Entry 79); Milestone 18 marked DONE with what was built; Milestone 19 marked NOT STARTED; new Milestone 21 (FleaFlicker) written up; 7f marked superseded; Milestone 20's "headless browser blocked" note annotated as resolved.
+- **`README.md`** — Current State, file map, resume prompt and stop protocol rewritten for the direct-push GitHub workflow (Entry 82). The stacked per-zip "Since the last zip" paragraphs were removed (their detail already lives in this ledger, Entries 61–81).
+- **`SKILL.md`** — status section rewritten as a current summary; removed outdated notes ("sidebar restricted to 2011", "no headless browser", the 2025 `sumFitTopSeasons` deferred item that Entry 56's nugget swap made moot); added a locked Deploy & Workflow section and a FleaFlicker summary.
+
+**Stray file removed:** `tncfl-record-book/package-lock (1).json` — confirmed byte-identical to `package-lock.json` (`cmp`) before deleting. Left over from Entry 81e's nested-folder cleanup.
+
+**Flagged, not changed:**
+- `public/football/football-1.png` … `football-5.png` (~2.8 MB) are no longer referenced by any code since Entry 83 — still shipped in every build. Hanh's call whether to delete.
+- `TNCFL_Scope.html` / `TNCFL_TechRef.html` are listed as project docs but don't exist in the repo.
+- `docs/` and `tncfl/` hold old-hub copies (`TNCFL_hub.html`, `site_data.json`, logos, PWA files; `tncfl/` also has `server.py`). Pages now deploys from the Actions build, so neither folder is served anymore; both are kept as reference only.
+
+**Old-hub `site_data.json` copies (`tncfl/`, `docs/`)** checksum-differ from the app's `public/` copy — expected (they predate the Milestone 20 nugget format). Docs now say: only `public/` is live; don't sync into the old copies.
+
+**Stop:** committed and pushed to `main`; snapshot zip `S040_2026-10-16_TNCFL_RecordBook.zip` produced.
+
+**Still the top outstanding item:** a screenshot-based visual review of every season's nugget layout under the Milestone 20 positioning model.
