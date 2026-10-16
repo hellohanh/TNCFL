@@ -8,7 +8,6 @@ import RecapBody from './RecapBody'
 import ScrollCue from './ScrollCue'
 import DissolveOverlay from './DissolveOverlay'
 import FleaFlicker from './FleaFlicker'
-// import FootballTransition from './FootballTransition' // previous transition — swap back in if ever needed
 import { useCrossedLine } from '../lib/useCrossedLine'
 import { useRowCapHeight } from '../lib/useRowCapHeight'
 import { useHeaderHeight } from '../lib/HeaderHeightContext'
@@ -79,7 +78,6 @@ export default function SeasonPage() {
       </div>
       <ScrollCue />
       <FleaFlicker key={year} />
-      {/* <FootballTransition key={year} /> */}
       <RevealOnScroll marginTop={0}>
         <SeasonStatTiles season={season} summary={summary} meta={data.meta} />
         <ManagerFilterToggle />
