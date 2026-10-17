@@ -47,6 +47,21 @@ export default function SeasonPage() {
   const summary = useSeasonSummary(season ?? data.seasons[fallbackYear])
 
   const isPhone = useIsPhone()
+  // Entry 116: every hook runs BEFORE the "no data" early return below, so
+  // React always sees the same hooks in the same order (an invalid year URL
+  // followed by a real one used to break that rule).
+  const { rowRef: atdrRowRef, maxHeight: atdrMaxHeight } = useRowCapHeight(15)
+  const seasonYear = season?.year
+  const seasonTotals = useMemo(
+    () => (seasonYear === undefined ? [] : computeSeasonTotals(data.seasons, data.meta.years_desc, seasonYear, 50)),
+    [data.seasons, data.meta.years_desc, seasonYear],
+  )
+  // Milestone 7e continuation: the dissolve overlay is scoped specifically
+  // to the recap's own scroll position — it activates once the recap's top
+  // edge crosses the header's bottom edge, and deactivates again if you
+  // scroll back up past that line (bidirectional, same as RevealOnScroll).
+  const headerHeight = useHeaderHeight()
+  const { ref: recapRef, crossed: recapPastHeader } = useCrossedLine<HTMLDivElement>(headerHeight)
 
   if (!season || !year) {
     return <p>No data for season {year}.</p>
@@ -61,18 +76,7 @@ export default function SeasonPage() {
   const cumulative = data.cumulative[year]
   const atdrRows = (data.meta.hmotw.atdr_snapshots[year] || []).slice(0, 50)
   const statusByYear = data.meta.hmotw.status_by_year[year] || {}
-  const { rowRef: atdrRowRef, maxHeight: atdrMaxHeight } = useRowCapHeight(15)
-  const seasonTotals = useMemo(
-    () => computeSeasonTotals(data.seasons, data.meta.years_desc, season.year, 50),
-    [data.seasons, data.meta.years_desc, season.year],
-  )
 
-  // Milestone 7e continuation: the dissolve overlay is scoped specifically
-  // to the recap's own scroll position — it activates once the recap's top
-  // edge crosses the header's bottom edge, and deactivates again if you
-  // scroll back up past that line (bidirectional, same as RevealOnScroll).
-  const headerHeight = useHeaderHeight()
-  const { ref: recapRef, crossed: recapPastHeader } = useCrossedLine<HTMLDivElement>(headerHeight)
 
   return (
     <div className="season-page">

@@ -2977,3 +2977,9 @@ Going through Entry 114's catalog one at a time (Hanh's calls):
 - **#1 Records medal-canvas speed — dropped.** **#2 Manager Profiles phone items — dropped.** **#3 Phone landscape audit — dropped.** **#4 Season-page scroll shift — dropped.** **#5 Nav handle over turned panels — dropped.**
 - **#6 Season Competence chart — checked all 15 years (S25):** every year OK — rows inside the panel, legend tucks/opens/tucks, zero errors (6 rows/3 medals in 2011 up to 18 rows/56 medals in 2025). Closed.
 - **#7 Trophy cabinet drag — fixed, all devices.** Hanh asked whether a touchscreen laptop could swipe: it couldn't (wider than 820px = desktop rules, and the old image `drag` never fired because the images have `pointer-events: none`). `TrophyCabinet.tsx`: the stage's pan handler now runs on every screen (finger and mouse), swipe/drag left = older year; dead image-drag code removed; `.stage` gets `user-select: none`. Verified: touch laptop (1440px + touch) swipe and mouse drag both ways; desktop mouse drag both ways; S25 unchanged; arrows still work; zero errors. Committed locally, not pushed.
+- **#8 Desktop nugget visual review — dropped.** **#9 2025 fireworks overflow — dropped.**
+- **#10 SeasonPage hooks after early return — fixed** (Entry 116 below).
+
+## Entry 116 (2026-10-17) — SeasonPage: all hooks before the "no data" early return
+
+`SeasonPage.tsx`: `useRowCapHeight`, the season-totals `useMemo` (now null-safe on `season?.year`) and `useHeaderHeight`/`useCrossedLine` moved above `if (!season || !year) return …`, so React sees the same hooks in the same order on every render. No visible change. Verified (phone + desktop): `/season/2030` shows "No data for season 2030.", then in-app navigation to 2020 and to all 15 seasons renders correctly, zero console errors; clean `tsc -b` + build. Committed locally, not pushed.
