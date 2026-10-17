@@ -2868,3 +2868,11 @@ Per Hanh: the HMOTW/DHMOTW second line should line up with the title text, not t
 ## Entry 103 (2026-10-16) — Mobile: rotated H2H matrix fills the turned screen (dead band removed)
 
 Per Hanh: too much dead space beneath the rotated All-vs-All matrix (turned-phone view). Cause: `RotateOnPhone` laid the panel out at the phone's full long side (756px); its length then limited the scale to 0.91, so the matrix was only 265px of the 312px turned height, leaving a ~47px empty band (+24px page padding) under it. Fix: "fill" instead of "fit" — the layout length is shortened (up to 3 measure passes) so that scaling to fill the turned height exactly still keeps the whole length visible below the header; scale-up capped at 1.3×. Verified on S25: scale 0.91 → 1.07, matrix now spans the full 312px content width (right edge 336px = content edge; only the standard 24px page padding remains), full length still on screen; landscape/desktop unaffected. Clean build. Committed locally, not pushed.
+
+## Entry 104 (2026-10-16) — Pull-out legend handle on every Cumulative Competence Chart, desktop and phones
+
+Per Hanh: the "Points per finish" legend handle (Entry 91, Records/phones only) now applies to every Cumulative Competence Chart site-wide — the Records page's `CumulativeCompetenceChart` AND each Season page's `CompetenceChart` (same title) — on desktop as well as phones. New shared `PointsLegendDock.tsx` / `.module.css` (handle + legend + tap/swipe logic, one copy instead of two); both charts render it and drop their own legend markup/CSS; both cards get `overflow: hidden` to clip the tucked legend. The legend is now always opaque (`#1c1c1c`, mustard-tinted border) since it slides over medal rows. Clicks on the handle/legend stop propagation so they don't clear a pinned manager on Season pages.
+
+Verified (headless Chromium) on Records, Season 2011 and Season 2025, at S25 and 1440px desktop: closed → only the handle visible inside the panel, legend clipped; tap/click handle → legend out; tap/click legend → tucked. Zero console errors; clean build. Committed locally, not pushed.
+
+Noted (not changed): on phones the Season page's Competence | Highest | Lowest row is still the desktop 3-column layout (each ~90px wide) — for the season-page mobile pass.

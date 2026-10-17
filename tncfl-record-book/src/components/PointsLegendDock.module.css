@@ -1,0 +1,89 @@
+/* Pull-out "Points per finish" legend (Entry 104) — desktop and phones.
+   Docked at the chart panel's bottom-right; slid off the panel's right edge
+   except for the 22px handle until opened. */
+.dock {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  bottom: 14px;
+  z-index: 5;
+  transform: translateX(calc(100% - 22px));
+  transition: transform 0.25s ease;
+}
+.open {
+  transform: translateX(0);
+}
+
+.handle {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 84px;
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.pill {
+  width: 10px;
+  height: 72px;
+  border-radius: 8px 0 0 8px;
+  background: #d9a521;
+  box-shadow: -2px 0 10px rgba(217, 165, 33, 0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.pill i {
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+/* The legend box itself — same look as the old floating legend, but opaque
+   since it now slides over the medal rows. */
+.legend {
+  background: #1c1c1c;
+  border: 1px solid rgba(217, 165, 33, 0.5);
+  box-shadow: -6px 0 18px rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  padding: 9px 12px;
+  width: 138px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.legTitle {
+  font-size: 9px;
+  letter-spacing: 0.07em;
+  color: #777777;
+  font-weight: 700;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.legGrid {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 1px 10px;
+  justify-content: space-between;
+}
+
+.legPl {
+  font-size: 11px;
+  color: #aaaaaa;
+}
+
+.legPt {
+  font-size: 11px;
+  color: #e8e8e8;
+  font-weight: 700;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

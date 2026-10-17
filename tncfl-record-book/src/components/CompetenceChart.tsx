@@ -1,7 +1,7 @@
-import { Fragment } from 'react'
 import type { CompetenceRow, Meta } from '../types/data'
 import { useHoveredManagerContext } from '../lib/HoveredManagerContext'
 import MedalIcon from './MedalIcon'
+import PointsLegendDock from './PointsLegendDock'
 import styles from './CompetenceChart.module.css'
 
 interface CompetenceChartProps {
@@ -15,18 +15,6 @@ interface CompetenceChartProps {
 // legend. Rendered as its own standalone nugget-styled card (left accent
 // stripe, rounded corners — same treatment as Dancing Shoes), per the user's
 // explicit call, rather than folded into NuggetGrid's own rendering loop.
-const LEGEND: Array<[string, string]> = [
-  ['1st', '10'],
-  ['2nd', '5'],
-  ['3rd', '2'],
-  ['4th', '1'],
-  ['5th', '0.9'],
-  ['6th', '0.8'],
-  ['7th', '0.7'],
-  ['8th', '0.6'],
-  ['9th', '0.5'],
-  ['10th', '0.4'],
-]
 const MEDAL_TYPES = ['gold', 'silver', 'bronze', 'nickel'] as const
 
 export default function CompetenceChart({ rows, meta }: CompetenceChartProps) {
@@ -66,17 +54,8 @@ export default function CompetenceChart({ rows, meta }: CompetenceChartProps) {
           )
         })}
       </div>
-      <div className={styles.legend}>
-        <div className={styles.legTitle}>POINTS PER FINISH</div>
-        <div className={styles.legGrid}>
-          {LEGEND.map(([place, pts]) => (
-            <Fragment key={place}>
-              <span className={styles.legPl}>{place}</span>
-              <span className={styles.legPt}>{pts}</span>
-            </Fragment>
-          ))}
-        </div>
-      </div>
+      {/* Entry 104: legend on the shared pull-out handle (desktop + phones). */}
+      <PointsLegendDock />
     </div>
   )
 }
