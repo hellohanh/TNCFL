@@ -2846,3 +2846,9 @@ Head-to-Head → Duel Picker. Per Hanh: on phones the season-by-season table shr
 `H2HDuelPicker.module.css` at ≤820px: table type 12→10px, cells `5px 3px` (outer edges 0), `white-space: nowrap` (Edge on one line). `H2HDuelPicker.tsx`: Finish header renders both forms — names (desktop) and "Finish" over `[avatar A] / [avatar B]` (phones) — using the same `ManagerAvatar` as Manager Profiles (16px, rings from career rank-1 finishes, status). Desktop unchanged (12px, "Finish (A/B)").
 
 Verified on S25 across six pairings incl. the longest names (Hanh/Damian, Douang/Damian, Damian/Douang, Kito/Kevin, Randy/D'lyn, Aidan/Randy): table ends exactly at the card's content edge (316px), zero cells overflowing, one-line rows (25px). Zero console errors; clean build. Committed locally, not pushed.
+
+## Entry 99 (2026-10-16) — Duel Picker: both win counts in their manager's color (desktop + phones)
+
+Per Hanh: in the Duel Picker's score banner, the trailing manager's win count was plain white (`#eee`); only the leader got their color. Now each count always uses its own manager's color (`H2HDuelPicker.tsx`), on desktop and phones. Verified: Hanh vs Damian → 128 in Hanh's #FF9900, 113 in Damian's #05E632, on both S25 and 1440px desktop. Clean build. Committed locally, not pushed.
+
+Note: while applying this, the edit landed on disk with a code comment different from the one this session's script wrote (the script itself aborted before saving) — i.e. the file was changed concurrently by something other than this session. The resulting change matched the request exactly, so it was kept as-is.

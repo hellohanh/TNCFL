@@ -53,12 +53,14 @@ export default function H2HDuelPicker({ h2h, career, meta, allPlayers }: H2HDuel
           <div className={styles.mgr} style={{ color: color(a) }}>
             {a}
           </div>
+          {/* Entry 99 (Hanh): each win count always in its manager's color — the
+              trailing manager's count was plain white before. Desktop and phones. */}
           <div className={styles.record}>
-            <div className={styles.recNum} style={{ color: duel.winsA > duel.winsB ? color(a) : '#eee' }}>
+            <div className={styles.recNum} style={{ color: color(a) }}>
               {duel.winsA}
             </div>
             <div className={styles.dash}>&ndash;</div>
-            <div className={styles.recNum} style={{ color: duel.winsB > duel.winsA ? color(b) : '#eee' }}>
+            <div className={styles.recNum} style={{ color: color(b) }}>
               {duel.winsB}
             </div>
           </div>
