@@ -2818,3 +2818,7 @@ Noted (not changed): on phones the Season pages still lay ATDR and ATST side by 
 Per Hanh: on phones, All-Time Longest Drought's last column (the drought's date span, e.g. "S2013 WK10 → S2019 WK03") moves to a second line, left-aligned with the manager's name. `AtdrCard.module.css` at ≤820px: row wraps, span takes the full second line indented 44px (icon + rank + gaps) so it starts exactly under the name; "NN wks" now stays on one line. Applies wherever the card appears on a phone (Records and each Season page — it's one shared component). Desktop unchanged (single line, no wrap).
 
 Verified on S25: all 15 visible rows have the span directly below and aligned with the name (0px offset), "wks" on one line; still exactly 15 rows visible with scroll (Entry 92 cap re-measures). Clean build. Committed locally, not pushed.
+
+## Entry 94 (2026-10-16) — Mobile: Longest Drought status chip right-aligned
+
+Per Hanh: on phones the ended/ongoing chip is pushed to the right edge of each row's first line (`margin-left: auto` at ≤820px in `AtdrCard.module.css`), spaced away from "NN wks". Verified on S25: all 15 rows have the chip flush right (0px from the row's edge), chip on the same line as the weeks, date span still aligned under the name. Desktop unchanged. Committed locally, not pushed.

@@ -117,6 +117,11 @@
   .val {
     white-space: nowrap;
   }
+  /* Entry 94: status chip pushed to the right edge of the first line. */
+  .tagOn,
+  .tagEnd {
+    margin-left: auto;
+  }
   .span {
     flex: 0 0 calc(100% - 44px);
     margin-left: 44px;
