@@ -13,7 +13,7 @@ tracker is published separately from the `TNCFL_TRACKER` repo) — this project 
 
 ---
 
-## Current State (as of 2026-10-16, S040 → Entry 86)
+## Current State (as of 2026-10-16, S040 → Entry 87)
 
 - **Live site:** https://hellohanh.github.io/TNCFL/ — React 19 + Vite + TypeScript, deployed by
   GitHub Actions on every push to `main` (~1–2 min to live). Installable as a PWA.
@@ -26,7 +26,8 @@ tracker is published separately from the `TNCFL_TRACKER` repo) — this project 
   TD) plays between the recap and scoreboard of the **latest season only** (2025 today). The old
   `FootballTransition` was deleted 2026-10-16.
 - **Mobile (≤820px):** the rail is replaced by a yellow handle on the left edge that opens a tab
-  drawer — the Tracker's mobile treatment, mirrored left.
+  drawer — the Tracker's mobile treatment, mirrored left. The site header shrinks to fit. Mobile checks use a
+  Galaxy S25 (360×780).
 - **Nav rail (desktop):** LEAGUE (expandable) → "2026 ↗" external tracker link → years 2025…2011.
 - **Milestones:** 0–18, 20 and 21 done; 12 cancelled; **19 (polish pass) started** (mobile drawer done). See the
   status table at the top of `ROADMAP.md`.

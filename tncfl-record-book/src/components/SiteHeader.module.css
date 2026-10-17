@@ -50,3 +50,30 @@
   text-transform: uppercase;
   margin-top: 2px;
 }
+
+/* Phones / narrow screens (<=820px, same breakpoint as MobileTabDrawer):
+   the header shrinks to fit the screen instead of cutting off the title.
+   Logo, text and padding all scale down; both title lines stay on one line
+   each and fit the width. Checked on a Galaxy S25 (360px wide). Desktop is
+   unchanged. Per Hanh, 2026-10-16. */
+@media (max-width: 820px) {
+  .header {
+    padding: 8px 12px;
+  }
+  .brand {
+    gap: 10px;
+  }
+  .logo {
+    height: 52px;
+  }
+  .titleWrap {
+    min-width: 0;
+  }
+  .title {
+    font-size: clamp(10px, 3.3vw, 19px);
+  }
+  .sub {
+    font-size: clamp(8px, 2.4vw, 12px);
+    margin-top: 1px;
+  }
+}

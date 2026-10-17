@@ -418,6 +418,8 @@ At ≤820px (same breakpoint as the 2026 Tracker) the left `TimelineRail` is hid
 LEFT edge** (Hanh's call — the Tracker's is on the right). Lists LEAGUE pages, "2026 ↗", and every
 season. Tap or drag right to open; drag left, tap the scrim, Escape, or pick a link to close.
 Desktop is unchanged. If the Tracker's drawer changes, mirror the change here.
+The site header shrinks to fit on phones (Entry 87) rather than hiding. **Reference phone for all
+mobile checks: Galaxy S25** — emulate as 360×780, 3× density, touch, Android Chrome UA.
 
 ## FleaFlicker scroll animation — LOCKED (Milestone 21)
 

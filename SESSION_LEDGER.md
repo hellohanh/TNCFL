@@ -2765,3 +2765,9 @@ All four project docs brought current with what's actually in the repo, checked 
 **Verified (headless Chromium, `vite preview` at `/TNCFL/`):** iPhone 13 viewport — rail hidden, page width = viewport (no sideways scroll), swipe-open, tap-open, swipe-close and tap-to-navigate all work, drawer closes after navigating; desktop 1440px — rail visible, drawer hidden; 2024 page is ~3,300px shorter than 2025 (the 380vh animation gone), recap-to-scoreboard transition looks clean. Zero console errors. Clean `tsc -b` + `vite build` (537 modules).
 
 **Noted, not changed:** on a phone the sticky site header's title ("FANTASY FOOTBALL LEAGUE RECORD BOOK") is cut off at the right edge, and the header takes ~1/6 of the screen. The Tracker hides its top bar on phones — not requested here.
+
+## Entry 87 (2026-10-16) — Mobile: site header shrinks to fit the phone
+
+Per Hanh: the header shrinks rather than hiding (the Tracker hides its top bar; the RB keeps its brand). At ≤820px `SiteHeader.module.css` scales everything down: padding `8px 12px`, logo 90→52px, gap 16→10px, title `clamp(10px, 3.3vw, 19px)`, subtitle `clamp(8px, 2.4vw, 12px)`. Both title lines stay one line each and now fit.
+
+**Reference phone for mobile checks from now on: Galaxy S25** (Hanh's call) — emulated as 360×780 CSS px, 3× density, touch, Android Chrome UA (Playwright has no S25 preset). On it: header 119px → 69px tall, full title visible ("…LEAGUE RECORD BOOK" ends ~40px short of the right edge), page width = 360 (no sideways scroll), drawer still works. Desktop header unchanged (119px). Zero console errors; clean build.
