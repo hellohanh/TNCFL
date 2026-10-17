@@ -397,6 +397,8 @@ ship and required no new tooling, but the user chose to accept the added build-p
 
 - **Repo:** `hellohanh/TNCFL`, branch `main`. Claude works from a cloud clone attached with push
   access, commits as `Hanh <hello.meetho@gmail.com>`, and pushes directly to `main` (Entry 82).
+- **NEVER push to `main` without Hanh's explicit go-ahead ("push") — locked 2026-10-16.** Every push
+  deploys live. Build, verify, preview and commit locally; push only when told.
 - **Deploy:** `.github/workflows/deploy.yml` — push to `main` → `npm ci` → `npm run build` in
   `tncfl-record-book/` → deploy `dist/` to GitHub Pages. Live at `https://hellohanh.github.io/TNCFL/`.
 - **Subpath rules (all real bugs once):** `vite.config.ts` `base: '/TNCFL/'`; never hardcode a

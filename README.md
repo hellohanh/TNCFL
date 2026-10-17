@@ -116,8 +116,8 @@ This project does NOT include the 2026 season tracker, its rules doc, or the Clo
 2. Update this file's Current State and resume prompt if anything materially changed.
 3. Update `ROADMAP.md`'s status table and any milestone headers that changed.
 4. Update `SKILL.md` with any newly locked rules or template decisions.
-5. Verify a clean build, then commit and push to `main` (docs and code together). Confirm the
-   Actions deploy succeeded.
+5. Verify a clean build and commit. **Push to `main` only after Hanh says "push"** (every push
+   deploys live). After an approved push, confirm the Actions deploy succeeded.
 6. Also build a snapshot zip of the repo (excluding `.git` and `node_modules`) for the next
    session's upload: `S0XX_YYYY-MM-DD_TNCFL_RecordBook.zip`. `XX` continues this project's own
    sequence (last: **S040**, 2026-10-16 → next is **S041**). Never share the counter with the
