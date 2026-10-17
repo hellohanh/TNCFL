@@ -2838,3 +2838,11 @@ Per Hanh: too much dead space in the rotated matrix's first (name) column. Cause
 Per Hanh: exactly 20px between the longest name ("Damian") and the 2nd column, on both phones and desktop. `H2HMatrix.module.css`: `.corner` loses its fixed `min-width: 90px` (now `white-space: nowrap`), `.rowHdr` padding-right 10px → 20px; rotated view's `.rowHdr` padding-right 8px → 20px. `width: 1%` (shrink to content) is kept for the rotated view only — tried on desktop first and it made the un-stretched table grow to the full page width (an unrequested change), so it was scoped back to `[data-rotated]`. Replaces Entry 96's rotated-only column rule.
 
 Verified by layout measurement: phone (rotated) and desktop both — longest name 43px, name column 63px, gap from "Damian" to the 2nd column exactly 20px. Desktop table 637px → 610px wide (first column no longer padded to 90px), otherwise unchanged. Committed locally, not pushed.
+
+## Entry 98 (2026-10-16) — Mobile: Duel Picker season table fits; avatars in the Finish header
+
+Head-to-Head → Duel Picker. Per Hanh: on phones the season-by-season table shrinks so all five columns show with nothing cut off, and the Finish column header uses the two managers' avatars instead of their names. Before: the 5th column ("Finish (Hanh/Damian)") ran past the card's right edge (unreachable — no scroll) and Edge wrapped to two lines.
+
+`H2HDuelPicker.module.css` at ≤820px: table type 12→10px, cells `5px 3px` (outer edges 0), `white-space: nowrap` (Edge on one line). `H2HDuelPicker.tsx`: Finish header renders both forms — names (desktop) and "Finish" over `[avatar A] / [avatar B]` (phones) — using the same `ManagerAvatar` as Manager Profiles (16px, rings from career rank-1 finishes, status). Desktop unchanged (12px, "Finish (A/B)").
+
+Verified on S25 across six pairings incl. the longest names (Hanh/Damian, Douang/Damian, Damian/Douang, Kito/Kevin, Randy/D'lyn, Aidan/Randy): table ends exactly at the card's content edge (316px), zero cells overflowing, one-line rows (25px). Zero console errors; clean build. Committed locally, not pushed.

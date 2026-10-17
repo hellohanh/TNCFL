@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Meta } from '../types/data'
 import { computeDuel } from '../lib/computeH2H'
+import ManagerAvatar from './ManagerAvatar'
 import styles from './H2HDuelPicker.module.css'
 
 interface H2HDuelPickerProps {
@@ -20,6 +21,18 @@ export default function H2HDuelPicker({ h2h, career, meta, allPlayers }: H2HDuel
   const [a, setA] = useState(allPlayers[0] ?? '')
   const [b, setB] = useState(allPlayers.includes('Randy') ? 'Randy' : (allPlayers[1] ?? ''))
   const color = (m: string) => meta.manager_colors[m] ?? '#aaa'
+  // Phones (Entry 98): the Finish column header shows each manager's avatar
+  // instead of their name, so the header stays narrow enough for all five
+  // columns to fit. Same avatar (rings + status) as Manager Profiles.
+  const avatar = (m: string) => (
+    <ManagerAvatar
+      name={m}
+      color={color(m)}
+      rings={Object.values(career[m]?.rank ?? {}).filter((r) => r === 1).length}
+      status={career[m]?.status ?? 'D'}
+      size={16}
+    />
+  )
 
   if (a === b) {
     return (
@@ -72,7 +85,15 @@ export default function H2HDuelPicker({ h2h, career, meta, allPlayers }: H2HDuel
                 <th style={{ color: color(b) }}>{b} Pts</th>
                 <th>Edge</th>
                 <th>
-                  Finish ({a}/{b})
+                  <span className={styles.finNames}>
+                    Finish ({a}/{b})
+                  </span>
+                  <span className={styles.finAvatars}>
+                    Finish
+                    <span className={styles.finAvRow}>
+                      {avatar(a)}/{avatar(b)}
+                    </span>
+                  </span>
                 </th>
               </tr>
             </thead>
