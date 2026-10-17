@@ -2983,3 +2983,11 @@ Going through Entry 114's catalog one at a time (Hanh's calls):
 ## Entry 116 (2026-10-17) — SeasonPage: all hooks before the "no data" early return
 
 `SeasonPage.tsx`: `useRowCapHeight`, the season-totals `useMemo` (now null-safe on `season?.year`) and `useHeaderHeight`/`useCrossedLine` moved above `if (!season || !year) return …`, so React sees the same hooks in the same order on every render. No visible change. Verified (phone + desktop): `/season/2030` shows "No data for season 2030.", then in-app navigation to 2020 and to all 15 seasons renders correctly, zero console errors; clean `tsc -b` + build. Committed locally, not pushed.
+- **#11 Milestone 19 polish (code splitting, reduced motion, contrast/keyboard) — deferred.** **#12 Unused football images — kept** (Hanh's call; closed). **#13 Scope/TechRef — write new ones** (Entry 117).
+
+## Entry 117 (2026-10-17) — TNCFL_Scope.html and TNCFL_TechRef.html rewritten for the Record Book
+
+Per Hanh: write new ones (the old hub-era files were never in the repo). Added at the repo root, self-contained dark-theme HTML matching the site's palette:
+- **`TNCFL_Scope.html`** — product scope: what the Record Book is, the data rule, who it's for, every season section and League page, how it behaves on a phone, out of scope, status.
+- **`TNCFL_TechRef.html`** — developer reference: stack, repo layout, routes, `site_data.json` keys, derived computations, key components, the mobile system (`MobileTabDrawer`, `RotateOnPhone` equal-height fill, list caps, lazy sections), hard-won gotchas, build/push workflow.
+Facts taken from the current code (`App.tsx` routes, `package.json`, component/lib listing, data keys). README file map and SKILL "Living docs" updated. Committed locally, not pushed.

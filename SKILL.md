@@ -357,9 +357,7 @@ right now — lower priority until the off-season.
 
 ## Living docs
 
-**Status (2026-10-16): neither file is in the `hellohanh/TNCFL` repo** — they may exist only on
-Hanh's machine or in an older zip. Find them or formally retire them; until then this section is
-dormant.
+**Status (2026-10-17, Entry 117): both rewritten from scratch for the current Record Book** and added at the repo root — `TNCFL_Scope.html` (product overview: what it is, who it's for, every page, mobile behaviour, out of scope) and `TNCFL_TechRef.html` (stack, repo layout, routes, data feed, key components, mobile system, gotchas, workflow). Keep them current per the rule below.
 
 `TNCFL_Scope.html` and `TNCFL_TechRef.html` were written as living documentation of the old hub
 (product overview / full dev reference) and were carried over as-is. Now that the template is

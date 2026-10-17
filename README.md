@@ -60,6 +60,7 @@ items, and the long-standing desktop nugget visual review.
 | `SESSION_LEDGER.md` | Locked change log — every session's entries, this project only |
 | `README.md` | This file — orientation, resume prompt, stop protocol |
 | `ROADMAP.md` | Milestone-by-milestone build plan with a status table at the top and 🎓 React/Vite learning notes |
+| `TNCFL_Scope.html` / `TNCFL_TechRef.html` | Living docs (rewritten 2026-10-17, Entry 117): product scope, and developer reference for the current React app — update when a change materially affects their facts |
 | `.github/workflows/deploy.yml` | Push to `main` → `npm ci` + `npm run build` → deploy `tncfl-record-book/dist` to GitHub Pages |
 | `tncfl-record-book/` | **The real app.** React + Vite + TypeScript source. `src/components/` holds every page/panel; `public/` holds `site_data.json`, logos, fonts, trophies, icons, `404.html` (deep-link redirect) |
 | `tncfl-record-book/public/site_data.json` | **The only data file the app reads.** Numbers come from the engine pipeline (`tncfl-hmotw-engine`); only prose (recaps, nuggets, dance) is hand-authored |

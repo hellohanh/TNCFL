@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TNCFL Record Book — Tech Reference</title>
+<style>
+  :root { --bg:#111; --bg2:#1a1a1a; --bg3:#222; --text:#e8e8e8; --text2:#aaa; --text3:#777; --red:#c0252b; --mustard:#d9a521; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.6 "Segoe UI", system-ui, -apple-system, Arial, sans-serif; }
+  main { max-width: 960px; margin: 0 auto; padding: 40px 20px 60px; }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  h1 span { color: var(--red); }
+  .sub { color: var(--text3); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 28px; }
+  h2 { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--mustard); margin: 34px 0 10px; }
+  h3 { font-size: 15px; margin: 18px 0 6px; }
+  p, li { color: var(--text2); }
+  b { color: var(--text); }
+  ul { padding-left: 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 8px 0; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid #262626; vertical-align: top; }
+  th { color: var(--text3); font-weight: 600; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+  td:first-child { white-space: nowrap; }
+  code { background: var(--bg3); padding: 1px 6px; border-radius: 4px; font-size: 12.5px; color: var(--text); font-family: ui-monospace, Consolas, monospace; }
+  pre { background: var(--bg2); border-radius: 8px; padding: 12px 14px; overflow-x: auto; font-size: 12.5px; color: var(--text); }
+  .note { background: var(--bg2); border-left: 3px solid var(--mustard); border-radius: 8px; padding: 12px 16px; margin: 14px 0; }
+  .warn { border-left-color: var(--red); }
+  .muted { color: var(--text3); font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>TNCFL <span>Record Book</span> — Tech Reference</h1>
+  <div class="sub">Developer reference · living doc · last updated 2026-10-17 (Ledger Entry 116)</div>
+
+  <h2>Stack</h2>
+  <table>
+    <tr><th>Piece</th><th>Choice</th></tr>
+    <tr><td>UI</td><td>React 19 + TypeScript, function components and hooks, CSS Modules per component + a small global <code>index.css</code></td></tr>
+    <tr><td>Build</td><td>Vite (<code>tsc -b &amp;&amp; vite build</code>), <code>base: '/TNCFL/'</code></td></tr>
+    <tr><td>Routing</td><td>React Router 6, <code>BrowserRouter basename={import.meta.env.BASE_URL}</code></td></tr>
+    <tr><td>Motion</td><td>framer-motion (reveals, trophy coverflow, nugget page-turns); hand-written SVG/canvas for charts</td></tr>
+    <tr><td>PWA</td><td><code>vite-plugin-pwa</code> (autoUpdate service worker, manifest from the old hub's icons)</td></tr>
+    <tr><td>Hosting</td><td>GitHub Pages via GitHub Actions — <code>hellohanh/TNCFL</code>, branch <code>main</code></td></tr>
+    <tr><td>Size</td><td>~54 components, ~27 lib modules, ~8,000 lines of TS/TSX</td></tr>
+  </table>
+
+  <h2>Repo layout</h2>
+<pre>TNCFL/
+├─ .github/workflows/deploy.yml   push to main → npm ci → npm run build → deploy dist/ to Pages
+├─ README.md  SKILL.md  ROADMAP.md  SESSION_LEDGER.md   project docs (resume, rules, plan, log)
+├─ TNCFL_Scope.html  TNCFL_TechRef.html                  these living docs
+├─ tncfl-record-book/            ← the app
+│  ├─ index.html                 (+ deep-link decode script for GitHub Pages)
+│  ├─ public/                    site_data.json, logos, fonts, trophies/1LT–5LT, icons, 404.html
+│  └─ src/  App.tsx · main.tsx · index.css · fonts.css · components/ · lib/ · types/
+├─ docs/   tncfl/                old hub copies — reference only, not served</pre>
+
+  <h2>Routes</h2>
+  <table>
+    <tr><th>Path</th><th>Component</th></tr>
+    <tr><td><code>/</code></td><td>redirects to the latest season</td></tr>
+    <tr><td><code>/season/:year</code></td><td><code>SeasonPage</code> — 2011–2025</td></tr>
+    <tr><td><code>/league/hof</code></td><td><code>HallOfFame</code> (<code>TrophyCabinet</code> + <code>HeroEssay</code>)</td></tr>
+    <tr><td><code>/league/profiles[/:manager]</code></td><td><code>ManagerProfiles</code> / <code>ManagerProfileCard</code></td></tr>
+    <tr><td><code>/league/records</code></td><td><code>Records</code></td></tr>
+    <tr><td><code>/league/h2h</code></td><td><code>HeadToHead</code> (<code>H2HMatrix</code>, <code>H2HDuelPicker</code>)</td></tr>
+    <tr><td><code>/league/how-it-works</code></td><td><code>HowLeagueWorks</code></td></tr>
+  </table>
+  <p><code>Layout</code> wraps every route: sticky <code>SiteHeader</code>, <code>TimelineRail</code> (desktop) or <code>MobileTabDrawer</code> (phones), and the <code>&lt;Outlet&gt;</code>. Deep links work on Pages through <code>public/404.html</code> + the decode script in <code>index.html</code>.</p>
+
+  <h2>Data</h2>
+  <p><code>public/site_data.json</code> is fetched once (<code>useRecordBookData</code>) and passed down via the outlet context. It is <b>generated by the HMOTW engine pipeline — never hand-edited</b>. Only this copy is live; the copies under <code>docs/</code> and <code>tncfl/</code> are frozen old-hub snapshots.</p>
+  <table>
+    <tr><th>Key</th><th>Contents</th></tr>
+    <tr><td><code>meta</code></td><td>years, <code>manager_colors</code> (exact hex, used everywhere), <code>hmotw</code> (tallies, ATDR snapshots, status by year, all players)</td></tr>
+    <tr><td><code>seasons[year]</code></td><td>weekly <code>scores</code>, <code>weekly_high</code>, <code>cum_points</code>, <code>weekly_rank</code>, <code>money_circle</code>, <code>gap_behind</code>, <code>hmotw_tally</code></td></tr>
+    <tr><td><code>summary[year]</code></td><td>competence, top/low weeks</td></tr>
+    <tr><td><code>recaps · dance · nuggets</code></td><td>hand-written prose per season (nuggets carry authored <code>colStart/colSpan/top/ownHeight</code>)</td></tr>
+    <tr><td><code>career · h2h · streaks_at_1 · all_time_scores</code></td><td>career-spanning stats for the League pages</td></tr>
+    <tr><td><code>payouts · cumulative</code></td><td>season and career money ledgers</td></tr>
+  </table>
+  <p>Derived client-side (pure functions in <code>lib/compute*.ts</code>): season totals, trophy cabinet, league records, H2H, cumulative competence, highest/lowest weeks.</p>
+
+  <h2>Key components</h2>
+  <table>
+    <tr><th>Component</th><th>Notes</th></tr>
+    <tr><td><code>SeasonPage</code></td><td>Composes every season section in a fixed order. All hooks run before the "no data" early return.</td></tr>
+    <tr><td><code>ScoreTable</code></td><td>Sortable weekly scores, high/low/200+ pills.</td></tr>
+    <tr><td><code>BumpChart</code> + <code>F1Car</code>, <code>RaceCountdown</code>, <code>TireSmoke</code></td><td>Weekly Burnout race; fires once per season navigation.</td></tr>
+    <tr><td><code>ScoringSpreadIndex</code>, <code>DespairDifferential</code>, <code>DroughtBars</code></td><td>SVG charts sized by <code>useElementSize</code>.</td></tr>
+    <tr><td><code>PeakPerformance</code> (<code>lib/drawPeakChart</code>)</td><td>Canvas 3D pyramids, Active and Inactive.</td></tr>
+    <tr><td><code>NuggetGrid</code></td><td>Desktop: authored 1200px pixel layout with auto-stretch. Phones: one column in reading order.</td></tr>
+    <tr><td><code>SalaryLedgerTable</code>, <code>SalaryDonuts</code> (<code>lib/drawExtrudedPie</code>)</td><td>16-column ledger; canvas 3D donuts with rotation slider.</td></tr>
+    <tr><td><code>CompetenceChart</code>, <code>CumulativeCompetenceChart</code> + <code>PointsLegendDock</code></td><td>Medal leaderboards; legend on a pull-out yellow handle (all screens).</td></tr>
+    <tr><td><code>TrophyCabinet</code></td><td>framer-motion coverflow; swipe/drag on every device; phones show one trophy at a time.</td></tr>
+    <tr><td><code>FleaFlicker</code></td><td>18-frame scroll-driven play diagram — desktop only, latest season only.</td></tr>
+    <tr><td><code>ManagerHoverCard</code> + <code>HoveredManagerContext</code></td><td>Hover/click-to-pin a manager across every chart.</td></tr>
+  </table>
+
+  <h2>Mobile system (≤820px)</h2>
+  <ul>
+    <li><b>Breakpoint:</b> 820px everywhere — CSS media queries and <code>lib/useIsPhone.ts</code>. Reference device: Galaxy S25 (360×780, 3×). Desktop must not change when doing phone work.</li>
+    <li><b><code>MobileTabDrawer</code>:</b> left-edge yellow handle, tap/swipe to open, tapped tab highlights instantly then navigates.</li>
+    <li><b><code>RotateOnPhone</code>:</b> wraps a panel; on an upright phone it lays the panel out at landscape length and draws it rotated −90°. <b>Equal-height fill:</b> scale so the turned height = phone content width (every flipped panel shares it) and the length fills the visible screen below the header; tables/pyramids that need more length run longer. Measures lazily (IntersectionObserver), reads only the panel and its <code>&lt;table&gt;</code>s. Children can style themselves with <code>:global([data-rotated])</code>.</li>
+    <li><b>Lists:</b> <code>useCapToRows</code> / batched caps show exactly the top 15 and scroll.</li>
+    <li><b>Speed:</b> <code>RevealOnScroll</code> builds a section only within ~1.5 screens on phones; Records renders 20 rows per list first.</li>
+    <li><b>Layout helpers:</b> <code>.pair-row</code> (side by side → stacked), 24px bottom padding on phones (desktop keeps a 1000px reading buffer).</li>
+  </ul>
+
+  <div class="note warn"><b>Gotchas learned the hard way</b>
+    <ul>
+      <li><code>getBoundingClientRect()</code> returns the <i>transformed</i> box — inside a rotated panel use layout sizes (<code>useElementSize</code> reads <code>borderBoxSize</code>).</li>
+      <li>CSS Modules scope every class, even in compound selectors — toggle with <code>styles.x</code>, never a string.</li>
+      <li>Never hardcode root-relative asset paths; use <code>import.meta.env.BASE_URL</code>.</li>
+      <li>CI uses <code>npm ci</code> — keep exactly one <code>package-lock.json</code>.</li>
+      <li>Don't read layout in a loop after writing styles — batch writes, then reads.</li>
+    </ul>
+  </div>
+
+  <h2>Workflow</h2>
+<pre>cd tncfl-record-book
+npm install            # first time
+npm run dev            # local dev server
+npx tsc -b &amp;&amp; npm run build   # must be clean before any push
+git push origin main   # ONLY on Hanh's "push" — every push deploys live (~1 min)</pre>
+  <p>Verify with headless Chromium (Playwright) at S25 size and desktop width before asking Hanh to lock anything; show screenshots. Log every change in <code>SESSION_LEDGER.md</code>.</p>
+  <p class="muted">Product overview: see <code>TNCFL_Scope.html</code>.</p>
+</main>
+</body>
+</html>

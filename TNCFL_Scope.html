@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TNCFL Record Book — Scope</title>
+<style>
+  :root { --bg:#111; --bg2:#1a1a1a; --bg3:#222; --text:#e8e8e8; --text2:#aaa; --text3:#777; --red:#c0252b; --mustard:#d9a521; --green:#4ec79e; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.65 "Segoe UI", system-ui, -apple-system, Arial, sans-serif; }
+  main { max-width: 900px; margin: 0 auto; padding: 40px 20px 60px; }
+  h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  h1 span { color: var(--red); }
+  .sub { color: var(--text3); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 32px; }
+  h2 { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--mustard); margin: 36px 0 10px; }
+  h3 { font-size: 16px; margin: 20px 0 6px; }
+  p, li { color: var(--text2); }
+  b, strong { color: var(--text); }
+  ul { padding-left: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .card { background: var(--bg2); border-left: 3px solid var(--red); border-radius: 8px; padding: 14px 16px; }
+  .card h3 { margin-top: 0; }
+  .card p { margin: 0; font-size: 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #262626; vertical-align: top; }
+  th { color: var(--text3); font-weight: 600; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+  td:first-child { color: var(--text); white-space: nowrap; }
+  code { background: var(--bg3); padding: 1px 6px; border-radius: 4px; font-size: 13px; color: var(--text); }
+  .note { background: var(--bg2); border-left: 3px solid var(--mustard); border-radius: 8px; padding: 12px 16px; margin: 16px 0; }
+  .muted { color: var(--text3); font-size: 13px; }
+  a { color: var(--mustard); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Thursday Night Curse <span>Record Book</span></h1>
+  <div class="sub">Product scope · living doc · last updated 2026-10-17 (Ledger Entry 116)</div>
+
+  <h2>What it is</h2>
+  <p>The <b>TNCFL Record Book</b> is the all-time archive website of the Thursday Night Curse Fantasy League, a points-based fantasy football league running since <b>2011</b>. It tells each season's story — who won, who got cursed, where the money went — and keeps the league's permanent records, rivalries and Hall of Fame in one place. It is live at <a href="https://hellohanh.github.io/TNCFL/">hellohanh.github.io/TNCFL</a> and installs on a phone like an app.</p>
+  <p>It replaced the old single-file "TNCFL Hub" with a modern, scroll-driven design: same data, same numbers, rebuilt to be more immersive and interactive, season by season from 2011 forward. The live <b>2026 season</b> is tracked separately by the 2026 Tracker; the Record Book covers completed seasons only.</p>
+
+  <div class="note"><b>The non-negotiable rule:</b> every number on the site — scores, tallies, droughts, records, payouts — is derived from the verified HMOTW engine's data feed. Nothing is hand-typed. Only prose (recaps, nugget cards, the Dancing Shoes roast, manager bios) is written by hand.</div>
+
+  <h2>Who it's for</h2>
+  <ul>
+    <li><b>League managers</b> (18 all-time, ~10 active) looking up a season, a rivalry or their own career.</li>
+    <li><b>Hanh</b>, the league's historian and the site's owner, who curates the story and verifies the numbers.</li>
+    <li>Mostly on <b>phones</b> (Galaxy S25 is the reference device) as well as desktop.</li>
+  </ul>
+
+  <h2>What's on it</h2>
+  <h3>Seasons — 15 chapters, 2011 to 2025</h3>
+  <p>Every season uses the same locked template (proven on 2011, then rolled out to all 15):</p>
+  <div class="grid">
+    <div class="card"><h3>The story</h3><p>Headline, recap essay, the champion's total with a week-by-week sparkline, stat tiles, and a scroll-driven flea-flicker play animation on the latest season (desktop).</p></div>
+    <div class="card"><h3>The scoreboard</h3><p>Every manager's weekly score with high/low/200+ pills, sortable; a toggle to focus on the Money Circle; click any manager to pin them across every chart.</p></div>
+    <div class="card"><h3>The race</h3><p>Weekly Burnout — an F1-style race of the standings with a countdown and replay; Scoring Spread Index; the Despair Differential.</p></div>
+    <div class="card"><h3>The curse</h3><p>Drought bars ("Thirsting for a W"), the Dancing Shoes roast of the driest manager, the all-time Longest Drought list, Peak Performance pyramids.</p></div>
+    <div class="card"><h3>The trivia</h3><p>Nugget cards — hand-written fact finds for each season — plus the Cumulative Competence chart and all-time highest/lowest single weeks.</p></div>
+    <div class="card"><h3>The money</h3><p>Salary-cap rules, the full 16-column ledger, winners &amp; losers donuts — for the season and for each manager's whole career.</p></div>
+  </div>
+
+  <h3>League — 5 pages</h3>
+  <table>
+    <tr><th>Page</th><th>What it shows</th></tr>
+    <tr><td>Hall of Fame</td><td>The trophy cabinet — one Lombardi per championship, growing with each repeat title (art for up to 5) — and the league's hero essay.</td></tr>
+    <tr><td>Manager Profiles</td><td>Every manager's avatar, two-paragraph bio, career stats, streaks and season-by-season record.</td></tr>
+    <tr><td>Records</td><td>A 3×3 grid of league records plus all-time leaderboards: Competence, highest and lowest weeks, longest droughts, season totals.</td></tr>
+    <tr><td>Head-to-Head</td><td>An all-vs-all win/loss matrix and a Duel Picker for any two managers' shared history.</td></tr>
+    <tr><td>How Our League Works</td><td>Plain-language rules: HMOTW, DHMOTW (2017+), the drought system and payouts, with real examples.</td></tr>
+  </table>
+
+  <h2>How it feels on a phone</h2>
+  <ul>
+    <li>A <b>yellow handle on the left edge</b> opens the page menu (the 2026 Tracker's drawer, mirrored).</li>
+    <li>Wide charts and tables are <b>drawn sideways</b> — turn the phone to read them full size. Every sideways panel is the same height and fills the screen.</li>
+    <li>Long lists show the <b>top 15</b> and scroll; side-by-side panels stack; nothing runs off the screen.</li>
+    <li>Sections build as you scroll near them, so tapping between pages stays quick.</li>
+  </ul>
+
+  <h2>Out of scope</h2>
+  <ul>
+    <li>The live 2026 season tracker, its rules document and its Cloudflare Worker (separate project, linked from the menu as "2026 ↗").</li>
+    <li>Data entry and the drought engine itself — the Record Book reads the engine's output, it doesn't calculate league results.</li>
+  </ul>
+
+  <h2>Status</h2>
+  <p>All 15 seasons and all 5 League pages are built and verified against the engine. The full mobile pass is done. Remaining polish (code splitting, reduced-motion and accessibility checks) is deferred. Open items are tracked in <code>SESSION_LEDGER.md</code>; milestones in <code>ROADMAP.md</code>.</p>
+  <p class="muted">Developer details: see <code>TNCFL_TechRef.html</code>.</p>
+</main>
+</body>
+</html>
