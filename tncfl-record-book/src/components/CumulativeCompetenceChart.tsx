@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useRef, useState } from 'react'
 import type { Meta } from '../types/data'
 import { computeCumulativeCompetence } from '../lib/computeCumulativeCompetence'
 import MedalIcon from './MedalIcon'
@@ -33,6 +33,14 @@ const MEDAL_TYPES = ['gold', 'silver', 'bronze', 'nickel'] as const
 
 export default function CumulativeCompetenceChart({ career, meta }: CumulativeCompetenceChartProps) {
   const rows = computeCumulativeCompetence(career)
+  // Phones only (Entry 91): the legend is tucked off the panel's right edge
+  // behind a pull-out handle (same yellow pill as the site's nav handle), so it
+  // no longer sits on top of the lower ranks' medals. Tap the handle, or swipe
+  // it left, to pull the legend out; tap or swipe right to tuck it back.
+  // On desktop the dock is `display: contents` and the handle is hidden, so
+  // the legend renders exactly as before.
+  const [legendOpen, setLegendOpen] = useState(false)
+  const touchX = useRef<number | null>(null)
   return (
     <div className={styles.card}>
       <div className={styles.title}>{'\u{1F3C5}'} Cumulative Competence Chart</div>
@@ -57,7 +65,31 @@ export default function CumulativeCompetenceChart({ career, meta }: CumulativeCo
           )
         })}
       </div>
-      <div className={styles.legend}>
+      <div
+        className={`${styles.legendDock} ${legendOpen ? styles.legendOpen : ''}`}
+        onTouchStart={(e) => { touchX.current = e.touches[0].clientX }}
+        onTouchEnd={(e) => {
+          if (touchX.current === null) return
+          const dx = e.changedTouches[0].clientX - touchX.current
+          touchX.current = null
+          if (dx < -20) setLegendOpen(true)
+          else if (dx > 20) setLegendOpen(false)
+        }}
+      >
+        <button
+          type="button"
+          className={styles.legendHandle}
+          aria-label={legendOpen ? 'Hide points per finish' : 'Show points per finish'}
+          aria-expanded={legendOpen}
+          onClick={() => setLegendOpen((o) => !o)}
+        >
+          <span className={styles.legendPill}>
+            <i />
+            <i />
+            <i />
+          </span>
+        </button>
+      <div className={styles.legend} onClick={() => setLegendOpen(false)}>
         <div className={styles.legTitle}>POINTS PER FINISH</div>
         <div className={styles.legGrid}>
           {LEGEND.map(([place, pts]) => (
@@ -67,6 +99,7 @@ export default function CumulativeCompetenceChart({ career, meta }: CumulativeCo
             </Fragment>
           ))}
         </div>
+      </div>
       </div>
     </div>
   )
