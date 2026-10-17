@@ -2918,3 +2918,7 @@ Per Hanh (first under the career donuts, then "for all tabs"): the site-wide 100
 ## Entry 109 (2026-10-17) — Mobile: FleaFlicker scroll animation removed on phones
 
 Per Hanh: "remove the hero scroll on mobile device only." `SeasonPage.tsx`: `<FleaFlicker>` now renders only when it's the latest season AND not a phone (`useIsPhone`, ≤820px; hook placed above the early return). Phones go straight from the recap to the scoreboard on every season, 2025 included. Verified: 2025 on S25 — no FleaFlicker; on desktop — still present. Zero console errors; clean build. Pushed with Entry 108 at Hanh's "push".
+
+## Entry 110 (2026-10-17) — Mobile: drawer tab text a little bigger
+
+Per Hanh: keep the left drawer's spacing, make the tab text a little bigger for easier tapping. `MobileTabDrawer.module.css`: `.item` font 13px → 15px; padding unchanged (11px 18px). Verified on S25: every item one line (incl. "HOW OUR LEAGUE WORKS"), tap rows 42px; the list scrolls inside the drawer as before (2011–2015 below the fold). Committed locally, not pushed.
