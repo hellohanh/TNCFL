@@ -47,7 +47,11 @@ export default function PeakPerformance({ season, meta }: PeakPerformanceProps) 
     if (!container) return
 
     function draw() {
-      const containerW = Math.max(360, container?.clientWidth ?? 360)
+      // Entry 106: the 360px floor is desktop-era; on a phone (312px of room)
+      // it pushed both pyramid charts ~110px off-screen. Phones draw at the
+      // real container width so Active and Inactive stack and fit.
+      const floor = window.matchMedia('(max-width: 820px)').matches ? 0 : 360
+      const containerW = Math.max(floor, container?.clientWidth ?? 360)
       const DPR = Math.max(1, window.devicePixelRatio || 1)
       const spotlit =
         mode === 'moneyCircle' ? new Set(season.money_circle) : new Set(meta.hmotw.all_players)

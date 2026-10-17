@@ -20,7 +20,7 @@ import { useHeaderHeight } from '../lib/HeaderHeightContext'
 // its own layout for the turned screen (e.g. H2HMatrix stretches its table).
 const QUERY = '(max-width: 820px) and (orientation: portrait)'
 // Upper bound when scaling a short panel UP to fill the turned height.
-const MAX_SCALE = 1.3
+const MAX_SCALE = 1.6
 
 export default function RotateOnPhone({ children }: { children: ReactNode }) {
   const [upright, setUpright] = useState(() => typeof window !== 'undefined' && window.matchMedia(QUERY).matches)
@@ -46,29 +46,48 @@ export default function RotateOnPhone({ children }: { children: ReactNode }) {
     if (!wrap || !unit) return
     let raf = 0
     const measure = () => {
-      // Entry 103: FILL the turned screen, not just fit it. Lay out at the
-      // phone's long side, measure the panel's height H, then pick the layout
-      // length so that, scaled to fill the turned height (phone width) exactly,
-      // its length still fits the visible height below the header. Two passes
-      // (shorter layout length -> remeasure), since H can change with width.
-      // Before this, a long layout made the length the limit, so the panel was
-      // shrunk and left a dead band under it on the turned screen.
-      const longSide = Math.max(window.innerHeight, window.screen?.height || 0) - 24
+      // Entry 106 — EQUAL-HEIGHT FILL (Hanh's rule for every flipped panel):
+      // 1) every flipped panel is scaled so its height fills the turned screen
+      //    height (= the phone's content width) exactly, so all flipped panels
+      //    share one height, set by the device — and nothing is left under them;
+      // 2) its layout length is chosen so that, at that scale, it fills the
+      //    visible length below the header; a panel that NEEDS more length (a
+      //    wide table) keeps its natural width and simply runs longer — you
+      //    scroll along it.
+      // Repeats a few passes because a panel's height can depend on its width
+      // (charts, donuts). Scale is capped at MAX_SCALE for very short panels.
       const wrapW = wrap.clientWidth
       const visibleLong = window.innerHeight - headerHeight - 24
-      let Wd = Math.ceil(Math.min(longSide, 900))
+      const neededWidth = () => {
+        // Widest content, including tables sitting inside their own
+        // sideways-scrolling boxes (scrollWidth beyond the box).
+        let need = unit.scrollWidth
+        unit.querySelectorAll<HTMLElement>('*').forEach((el) => {
+          const extra = el.scrollWidth - el.clientWidth
+          if (extra > 1 && getComputedStyle(el).overflowX !== 'visible') need = Math.max(need, unit.offsetWidth + extra)
+        })
+        return need
+      }
+      // The narrowest the content can go (tables' natural width; charts ~0):
+      // lay the panel out at 1px and read what overflows.
+      unit.style.width = '1px'
+      const minW = Math.max(1, neededWidth())
+      let Wd = Math.max(minW, Math.ceil(Math.min(Math.max(window.innerHeight, window.screen?.height || 0) - 24, 900)))
       let H = 0
       let s = 1
-      for (let pass = 0; pass < 3; pass++) {
+      for (let pass = 0; pass < 5; pass++) {
         unit.style.width = `${Wd}px`
-        Wd = Math.max(Wd, unit.scrollWidth)
         H = unit.offsetHeight
-        s = Math.min(wrapW / H, visibleLong / Wd, MAX_SCALE)
-        // Length is the limit -> shorten the layout so the fill scale fits.
-        const target = Math.floor((visibleLong * H) / wrapW)
-        if (wrapW / H <= MAX_SCALE && visibleLong / Wd < wrapW / H && target < Wd) Wd = target
-        else break
+        s = Math.min(wrapW / H, MAX_SCALE)
+        // Layout length that fills the visible length at this scale — never
+        // narrower than the content needs.
+        const target = Math.max(minW, Math.floor(visibleLong / s))
+        if (Math.abs(target - Wd) <= 2) break
+        Wd = target
       }
+      unit.style.width = `${Wd}px`
+      H = unit.offsetHeight
+      s = Math.min(wrapW / H, MAX_SCALE)
       setGeo((g) => (g && g.Wd === Wd && g.H === H && Math.abs(g.s - s) < 0.001 ? g : { Wd, H, s }))
     }
     measure()

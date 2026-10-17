@@ -29,6 +29,7 @@ import SalaryRulesCard from './SalaryRulesCard'
 import SalaryLedgerTable from './SalaryLedgerTable'
 import SeasonExtremesRow from './SeasonExtremesRow'
 import ManagerHoverCard from './ManagerHoverCard'
+import RotateOnPhone from './RotateOnPhone'
 
 // Milestone 7: the recap's full prose body now renders right under the hero
 // (still part of the "story" read, not gated behind a scroll-reveal — same
@@ -86,37 +87,52 @@ export default function SeasonPage() {
       <RevealOnScroll marginTop={0}>
         <SeasonStatTiles season={season} summary={summary} meta={data.meta} />
         <ManagerFilterToggle />
-        <ScoreTable season={season} championName={summary.championName} />
+        {/* Entry 106 (mobile, Hanh's picks): Flip = drawn sideways on an upright
+            phone, all flipped panels sharing one height (RotateOnPhone). */}
+        <RotateOnPhone>
+          <ScoreTable season={season} championName={summary.championName} />
+        </RotateOnPhone>
       </RevealOnScroll>
       <RevealOnScroll>
-        <BumpChart key={year} season={season} meta={data.meta} />
+        <RotateOnPhone>
+          <BumpChart key={year} season={season} meta={data.meta} />
+        </RotateOnPhone>
       </RevealOnScroll>
       <RevealOnScroll>
-        <ScoringSpreadIndex season={season} meta={data.meta} />
+        <RotateOnPhone>
+          <ScoringSpreadIndex season={season} meta={data.meta} />
+        </RotateOnPhone>
       </RevealOnScroll>
       <RevealOnScroll>
-        <DespairDifferential season={season} meta={data.meta} />
+        <RotateOnPhone>
+          <DespairDifferential season={season} meta={data.meta} />
+        </RotateOnPhone>
       </RevealOnScroll>
       <RevealOnScroll>
         <PeakPerformance season={season} meta={data.meta} />
       </RevealOnScroll>
       <RevealOnScroll>
-        <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
-          <div style={{ flex: 1 }}>
-            <AtdrCard rows={atdrRows} statusByYear={statusByYear} meta={data.meta} rowRef={atdrRowRef} maxHeight={atdrMaxHeight} />
+        {/* pair-row: side by side on desktop, stacked on phones (index.css).
+            Records-tab treatment on phones: each list shows its own top 15. */}
+        <div className="pair-row">
+          <div>
+            <AtdrCard rows={atdrRows} statusByYear={statusByYear} meta={data.meta} rowRef={atdrRowRef} maxHeight={atdrMaxHeight} phoneRows={15} />
           </div>
-          <div style={{ flex: 1 }}>
-            <SeasonTotalsCard rows={seasonTotals} maxHeight={atdrMaxHeight} meta={data.meta} />
+          <div>
+            <SeasonTotalsCard rows={seasonTotals} maxHeight={atdrMaxHeight} meta={data.meta} phoneRows={15} />
           </div>
         </div>
       </RevealOnScroll>
       <RevealOnScroll>
-        <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
-          <div style={{ flex: 1 }}>
+        {/* Phones: Dancing Shoes stacked above; Drought Bars below it, flipped. */}
+        <div className="pair-row">
+          <div>
             <DancingShoes dance={dance} meta={data.meta} />
           </div>
-          <div style={{ flex: 1 }}>
-            <DroughtBars season={season} meta={data.meta} />
+          <div>
+            <RotateOnPhone>
+              <DroughtBars season={season} meta={data.meta} />
+            </RotateOnPhone>
           </div>
         </div>
       </RevealOnScroll>
@@ -133,25 +149,31 @@ export default function SeasonPage() {
       </RevealOnScroll>
       <RevealOnScroll>
         <SalaryRulesCard year={season.year} payouts={payouts} />
-        <SalaryLedgerTable rows={payouts.rows} meta={data.meta} moneyCircle={season.money_circle} />
+        <RotateOnPhone>
+          <SalaryLedgerTable rows={payouts.rows} meta={data.meta} moneyCircle={season.money_circle} />
+        </RotateOnPhone>
       </RevealOnScroll>
       <RevealOnScroll>
         <SalaryDonuts rows={payouts.rows} meta={data.meta} />
       </RevealOnScroll>
       <RevealOnScroll>
-        <div className="module-title-row">
-          <div className="module-title">Career Salary Cap Contributions</div>
-        </div>
-        <div className="module-subtitle" style={{ marginBottom: 10 }}>
-          Every dollar each manager has cycled through the league, summed from 2011 through the
-          selected season
-        </div>
-        <SalaryLedgerTable
-          rows={cumulative.rows}
-          meta={data.meta}
-          moneyCircle={season.money_circle}
-          seasonPurseLabel="Career"
-        />
+        <RotateOnPhone>
+          <div>
+            <div className="module-title-row">
+              <div className="module-title">Career Salary Cap Contributions</div>
+            </div>
+            <div className="module-subtitle" style={{ marginBottom: 10 }}>
+              Every dollar each manager has cycled through the league, summed from 2011 through the
+              selected season
+            </div>
+            <SalaryLedgerTable
+              rows={cumulative.rows}
+              meta={data.meta}
+              moneyCircle={season.money_circle}
+              seasonPurseLabel="Career"
+            />
+          </div>
+        </RotateOnPhone>
       </RevealOnScroll>
       <RevealOnScroll>
         <SalaryDonuts

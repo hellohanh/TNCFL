@@ -10,3 +10,11 @@
   flex: 1;
   min-width: 0;
 }
+
+/* Phones (Entry 106): Competence, Highest and Lowest stack, full width. */
+@media (max-width: 820px) {
+  .row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

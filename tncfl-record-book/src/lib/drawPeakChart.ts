@@ -140,7 +140,11 @@ export function drawPeakChart(args: DrawPeakChartArgs): PeakHit[] {
   let g = geom(CELL)
   const needW = g.maxX - g.minX + PAD_L + PAD_R
   if (needW > containerW) {
-    scale = containerW / needW
+    // Entry 106: only the grid shrinks — the label margins (PAD_L/PAD_R) stay
+    // full size — so scale the GRID part to fit what's left after the
+    // margins (was containerW / needW, which still overflowed at phone width).
+    const fixed = PAD_L + PAD_R
+    scale = Math.max(0.2, (containerW - fixed) / Math.max(1, needW - fixed))
     CELL = STD_CELL * scale
     g = geom(CELL)
   }

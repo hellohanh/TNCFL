@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import type { Nugget } from '../types/data'
 import { useInView } from '../lib/useInView'
+import { useIsPhone } from '../lib/useIsPhone'
 import styles from './NuggetGrid.module.css'
 
 interface NuggetGridProps {
@@ -92,6 +93,10 @@ function computeLayout(nuggets: Nugget[]): { containerHeight: number; stretchTo:
 // while the user was arranging Final Layout, invisibly, since the
 // exported data only ever captured the unstretched authored heights.
 export default function NuggetGrid({ nuggets }: NuggetGridProps) {
+  // Phones (Entry 106, Hanh: "Stack"): the authored 1200px pixel layout is
+  // replaced by a single full-width column, cards in reading order (top, then
+  // left), each as tall as its own text. Desktop keeps the authored layout.
+  const isPhone = useIsPhone()
   const { ref, isInView } = useInView({ once: false, threshold: 0.1 })
 
   const { containerHeight, stretchTo } = useMemo(() => computeLayout(nuggets), [nuggets])
@@ -120,11 +125,15 @@ export default function NuggetGrid({ nuggets }: NuggetGridProps) {
         key={nugget.title}
         className={styles.card}
         style={{
-          position: 'absolute',
-          left: panelLeft(nugget),
-          top: nugget.top,
-          width: panelWidth(nugget),
-          height: stretchTo.get(nugget.title) ?? nugget.ownHeight,
+          ...(isPhone
+            ? { position: 'relative' as const, width: '100%', marginBottom: 12 }
+            : {
+                position: 'absolute' as const,
+                left: panelLeft(nugget),
+                top: nugget.top,
+                width: panelWidth(nugget),
+                height: stretchTo.get(nugget.title) ?? nugget.ownHeight,
+              }),
           borderLeftColor: accentColor,
           transformOrigin: flip.axis === 'Y' ? 'left center' : 'top center',
         }}
@@ -154,9 +163,11 @@ export default function NuggetGrid({ nuggets }: NuggetGridProps) {
     <div
       ref={ref}
       className={styles.grid}
-      style={{ width: RECT_WIDTH, height: containerHeight }}
+      style={isPhone ? { width: '100%' } : { width: RECT_WIDTH, height: containerHeight }}
     >
-      {nuggets.map((nugget) => renderCardContent(nugget))}
+      {(isPhone ? [...nuggets].sort((a, b) => a.top - b.top || a.colStart - b.colStart) : nuggets).map((nugget) =>
+        renderCardContent(nugget),
+      )}
     </div>
   )
 }

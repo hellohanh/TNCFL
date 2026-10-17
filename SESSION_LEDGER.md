@@ -2880,3 +2880,23 @@ Noted (not changed): on phones the Season page's Competence | Highest | Lowest r
 ## Entry 105 (2026-10-16) — Mobile: season hero sparkline on its own full-width line
 
 Season pages, mobile pass (2020 as the example). Per Hanh: on phones the sparkline sits on its own line below the championship total, spanning the full width. `SeasonHero.module.css` at ≤820px: `.statRow` becomes a column (total, then sparkline), `.sparkWrap` full width; the line redraws to the measured width. Verified on S25: sparkline 312px wide (= content width), starts below the total. Desktop unchanged (side by side). Committed locally, not pushed.
+
+## Entry 106 (2026-10-16) — Mobile: Season pages (built on 2020, applies to every year)
+
+Per Hanh's choices (list widget, 2020 as the example; phones only, desktop unchanged):
+- **Keep:** season hero, recap story, stat tiles (wrap to 2×2 naturally), Money Circle toggle, salary rules card, both winners/losers donut sections (changed back from Flip mid-build at Hanh's request).
+- **Flip** (drawn sideways via `RotateOnPhone`): Score table, Weekly Burnout race, Scoring Spread Index, Despair Differential, Drought Bars ("Thirsting for a W" — stacked under Dancing Shoes, then flipped, per Hanh), season salary ledger, career salary ledger (with its title/subtitle).
+- **Stack:** Peak Performance (Active/Inactive pyramids now fit the width), Dancing Shoes above Drought Bars, nugget cards (single column in reading order, each card its own natural height — the authored 1200px grid stays on desktop).
+- **Records-tab treatment:** Longest Drought + Season Totals stack, each shows its own top 15 and scrolls (date line / right-aligned chip from Entries 93–94 already apply); Competence + Highest + Lowest stack, Highest/Lowest show top 15 of 40 and scroll, Competence keeps its legend handle.
+
+**Flip logic upgraded to Hanh's rules** (`RotateOnPhone`): (1) every flipped panel is scaled so its turned height = the phone's content width — one shared, device-dynamic height for all flipped panels; (2) no dead space under it — the layout length is chosen so the panel fills the visible length below the header at that scale; panels that need more length (score table, both ledgers) keep their natural width and run longer, so you scroll along them. Minimum content width is measured by laying the panel out at 1px first (a 100%-width table otherwise reports the layout width back). The H2H matrix keeps its Entry 103 result under the new logic (scale 1.07, fills).
+
+**Real bugs found and fixed along the way:**
+- `useElementSize` used `getBoundingClientRect()`, which returns the *transformed* box — inside a flipped panel charts measured swapped/scaled sizes and drew wrong. Now reads `borderBoxSize` (layout size; identical when untransformed, so desktop is unaffected).
+- Peak Performance had a 360px minimum width (wider than a phone's 312px) and its shrink formula ignored the fixed label margins, so pyramids ran ~110px off-screen. Phones now draw at the real width and the grid scales to what's left after the margins (`drawPeakChart.ts`; only affects charts that didn't fit — never desktop).
+
+New/changed: `RotateOnPhone.tsx` (equal-height fill), `lib/useElementSize.ts`, `lib/drawPeakChart.ts`, `PeakPerformance.tsx`, `NuggetGrid.tsx` (phone column), `SeasonExtremesRow.tsx/.module.css` (phone stack + 15-row caps), `SeasonPage.tsx` (wrappers, `pair-row`), `index.css` (`.pair-row`).
+
+**Verified on S25 (2020):** page width = viewport; nothing outside a flipped panel overflows except the intentionally clipped Competence legend; all 7 flipped panels exactly 312px tall when turned; charts fill the 687px visible length (scale 0.72–0.85), score table 1,106px / season ledger 940px long (scroll); Highest/Lowest 15 of 40 visible; ATDR/ATST 15 each. Zero console errors; clean build. Committed locally, not pushed.
+
+Noted: at phone width the pyramid charts' year labels along the base crowd/overlap (2011–2020 squeezed); flipping that panel instead of stacking would fix it — offered to Hanh.

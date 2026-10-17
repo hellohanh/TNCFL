@@ -25,8 +25,15 @@ export function useElementSize<T extends HTMLElement>(fallback: { width: number;
     const observer = new ResizeObserver((entries) => {
       const entry = entries[0]
       if (entry) {
-        const rect = entry.target.getBoundingClientRect()
-        setSize({ width: rect.width, height: rect.height })
+        // Entry 106: the element's own LAYOUT size (border box), not its
+        // on-screen box. getBoundingClientRect() reports the transformed box,
+        // so inside a flipped panel (RotateOnPhone: rotate(-90deg) + scale)
+        // width and height came back swapped and scaled, and charts drew at
+        // the wrong size. borderBoxSize is the same number when nothing is
+        // transformed, so un-flipped layouts (desktop) are unaffected.
+        const box = entry.borderBoxSize?.[0]
+        const el = entry.target as HTMLElement
+        setSize(box ? { width: box.inlineSize, height: box.blockSize } : { width: el.offsetWidth, height: el.offsetHeight })
       }
     })
     observer.observe(node)

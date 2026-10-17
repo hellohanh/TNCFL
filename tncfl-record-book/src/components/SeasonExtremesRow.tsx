@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef } from 'react'
+import { useIsPhone } from '../lib/useIsPhone'
 import type { CompetenceRow, WeekExtremeRow, Meta } from '../types/data'
 import CompetenceChart from './CompetenceChart'
 import WeekExtremeCard from './WeekExtremeCard'
@@ -47,6 +48,26 @@ function fitRowsToTarget(card: HTMLDivElement | null, list: HTMLDivElement | nul
   }
 }
 
+// Phones (Entry 106, Records-tab treatment): the three panels stack (CSS), so
+// there's no shared height to match — instead each list shows exactly its top
+// 15 rows and scrolls for the rest, like the Records tab.
+function capToRows(card: HTMLDivElement | null, list: HTMLDivElement | null, n: number) {
+  if (!card || !list) return
+  card.style.maxHeight = ''
+  card.style.minHeight = ''
+  const rows = Array.from(list.children) as HTMLElement[]
+  rows.forEach((r) => {
+    r.style.display = ''
+  })
+  list.style.overflowY = 'auto'
+  if (rows.length <= n) {
+    list.style.maxHeight = ''
+    return
+  }
+  const top = list.getBoundingClientRect().top - list.scrollTop
+  list.style.maxHeight = `${Math.ceil(rows[n - 1].getBoundingClientRect().bottom - top)}px`
+}
+
 export default function SeasonExtremesRow({ competence, topweeks, lowweeks, meta }: SeasonExtremesRowProps) {
   const competenceCardRef = useRef<HTMLDivElement>(null)
   const topCardRef = useRef<HTMLDivElement>(null)
@@ -54,8 +75,21 @@ export default function SeasonExtremesRow({ competence, topweeks, lowweeks, meta
   const lowCardRef = useRef<HTMLDivElement>(null)
   const lowListRef = useRef<HTMLDivElement>(null)
 
+  const isPhone = useIsPhone()
+
   useLayoutEffect(() => {
     function fit() {
+      if (isPhone) {
+        capToRows(topCardRef.current, topListRef.current, 15)
+        capToRows(lowCardRef.current, lowListRef.current, 15)
+        return
+      }
+      for (const l of [topListRef.current, lowListRef.current]) {
+        if (l) {
+          l.style.maxHeight = ''
+          l.style.overflowY = ''
+        }
+      }
       const ccCard = competenceCardRef.current
       if (!ccCard) return
       const target = ccCard.getBoundingClientRect().height
@@ -66,7 +100,7 @@ export default function SeasonExtremesRow({ competence, topweeks, lowweeks, meta
     const ro = new ResizeObserver(fit)
     if (competenceCardRef.current) ro.observe(competenceCardRef.current)
     return () => ro.disconnect()
-  }, [competence, topweeks, lowweeks])
+  }, [competence, topweeks, lowweeks, isPhone])
 
   return (
     <div className={styles.row}>
