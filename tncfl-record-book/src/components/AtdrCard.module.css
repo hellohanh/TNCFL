@@ -103,3 +103,23 @@
   margin-left: auto;
   text-align: right;
 }
+
+/* Phones (<=820px, Entry 93, per Hanh): the drought's date span
+   ("S2013 WK10 → S2019 WK03") drops to its own second line, left-aligned
+   with the manager's name — icon (16) + gap (6) + rank (16) + gap (6) = 44px
+   in. With the span off the first line, "96 wks" fits on one line too.
+   Desktop keeps everything on one line. */
+@media (max-width: 820px) {
+  .rec {
+    flex-wrap: wrap;
+    row-gap: 2px;
+  }
+  .val {
+    white-space: nowrap;
+  }
+  .span {
+    flex: 0 0 calc(100% - 44px);
+    margin-left: 44px;
+    text-align: left;
+  }
+}
