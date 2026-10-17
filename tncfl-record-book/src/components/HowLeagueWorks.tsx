@@ -105,7 +105,19 @@ export default function HowLeagueWorks() {
           return (
             <div className={styles.item} key={item.title}>
               <button type="button" className={styles.trigger} onClick={() => setOpenIndex(open ? null : i)}>
-                <span className={styles.triggerTitle}>{item.title}</span>
+                {/* Entry 101 (Hanh): titles with an em dash (HMOTW, DHMOTW) put the
+                    text after the dash on its own second line, left-aligned with
+                    the first line — desktop and phones. */}
+                <span className={styles.triggerTitle}>
+                  {item.title.includes(' \u2014 ') ? (
+                    <>
+                      <span>{item.title.split(' \u2014 ')[0]}</span>
+                      <span className={styles.triggerSub}>{item.title.split(' \u2014 ').slice(1).join(' \u2014 ')}</span>
+                    </>
+                  ) : (
+                    item.title
+                  )}
+                </span>
                 <span className={`${styles.chevron} ${open ? styles.chevronOpen : ''}`}>&#9662;</span>
               </button>
               {open && (

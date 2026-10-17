@@ -33,6 +33,16 @@
   font-size: 14px;
   font-weight: 600;
   color: #eee;
+  /* Entry 101: stacks a two-part title (first line / text after the dash)
+     with both lines on the same left edge. */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.triggerSub {
+  margin-top: 2px;
 }
 
 .chevron {

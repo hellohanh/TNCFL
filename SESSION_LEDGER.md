@@ -2856,3 +2856,7 @@ Note: while applying this, the edit landed on disk with a code comment different
 ## Entry 100 (2026-10-16) — Duel Picker: Finish header avatars on desktop too
 
 Per Hanh: the Finish column header shows the two managers' avatars (instead of "Finish (A/B)") on desktop as well as phones (Entry 98 was phones-only). `H2HDuelPicker.module.css`: the avatar header styles moved out of the ≤820px block into the base rules; the names version is hidden everywhere. Verified on S25 and 1440px desktop: header reads "Finish" over [H avatar] / [D avatar], names hidden. Clean build. Committed locally, not pushed.
+
+## Entry 101 (2026-10-16) — How Our League Works: HMOTW/DHMOTW titles on two lines (desktop + phones)
+
+Per Hanh: in the HMOTW and DHMOTW accordion titles, the text after the dash goes on a second line, left-justified with the first line — desktop and phones. `HowLeagueWorks.tsx`: a title containing " — " renders as two stacked spans ("🏆 HMOTW" / "High Man of the Week"; "⚡ DHMOTW" / "Double High Man (2017+)"), dash dropped; `HowLeagueWorks.module.css`: `.triggerTitle` is a left-aligned flex column (`align-items: flex-start; text-align: left`). Drought System and Payout Structure (no dash) unchanged. Verified on S25 and 1440px desktop: both lines start at the same x (41px / 216px), second line below the first. Clean build. Committed locally, not pushed.
