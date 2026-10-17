@@ -2970,3 +2970,10 @@ Session S040→S041 (2026-10-16/17) covered: docs catch-up (Entry 85), the full 
 12. **Unused `public/football/*.png` (~2.8 MB)** still ship in every build — Hanh's call whether to delete.
 13. **`TNCFL_Scope.html` / `TNCFL_TechRef.html`** not in the repo — find or retire.
 14. **Commit identity:** commits go out as `Hanh <hello.meetho@gmail.com>`, so GitHub shows them "Unverified"; an automated session check keeps asking to switch to Claude's noreply address. Hanh hasn't decided; nothing breaks either way.
+
+## Entry 115 (2026-10-17) — Open-items pass with Hanh; trophy cabinet swipe/drag everywhere
+
+Going through Entry 114's catalog one at a time (Hanh's calls):
+- **#1 Records medal-canvas speed — dropped.** **#2 Manager Profiles phone items — dropped.** **#3 Phone landscape audit — dropped.** **#4 Season-page scroll shift — dropped.** **#5 Nav handle over turned panels — dropped.**
+- **#6 Season Competence chart — checked all 15 years (S25):** every year OK — rows inside the panel, legend tucks/opens/tucks, zero errors (6 rows/3 medals in 2011 up to 18 rows/56 medals in 2025). Closed.
+- **#7 Trophy cabinet drag — fixed, all devices.** Hanh asked whether a touchscreen laptop could swipe: it couldn't (wider than 820px = desktop rules, and the old image `drag` never fired because the images have `pointer-events: none`). `TrophyCabinet.tsx`: the stage's pan handler now runs on every screen (finger and mouse), swipe/drag left = older year; dead image-drag code removed; `.stage` gets `user-select: none`. Verified: touch laptop (1440px + touch) swipe and mouse drag both ways; desktop mouse drag both ways; S25 unchanged; arrows still work; zero errors. Committed locally, not pushed.

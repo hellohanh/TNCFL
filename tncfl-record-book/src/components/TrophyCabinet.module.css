@@ -179,3 +179,10 @@
     color: #d9a521;
   }
 }
+
+/* Entry 115: the stage handles touch AND mouse drags; stop the browser
+   selecting text / starting an image drag while the mouse is held. */
+.stage {
+  user-select: none;
+  -webkit-user-select: none;
+}

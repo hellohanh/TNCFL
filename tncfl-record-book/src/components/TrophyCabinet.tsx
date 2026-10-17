@@ -91,9 +91,10 @@ export default function TrophyCabinet({ payouts, yearsDesc, meta }: TrophyCabine
     <div className={styles.card}>
       <motion.div
         className={styles.stage}
-        onPan={(_, info) => { if (isPhone) setSwipeX(info.offset.x * 0.6) }}
+        // Entry 115 (Hanh): swipe / drag works on every screen — phones,
+        // touchscreen laptops (finger) and desktop (mouse) — not phones only.
+        onPan={(_, info) => setSwipeX(info.offset.x * 0.6)}
         onPanEnd={(_, info) => {
-          if (!isPhone) return
           setSwipeX(0)
           // Swipe left brings in the trophy on the right (older year).
           if (info.offset.x < -50) go(1)
@@ -120,13 +121,6 @@ export default function TrophyCabinet({ payouts, yearsDesc, meta }: TrophyCabine
               alt={d === 0 ? `${entry.m}'s ${ord(entry.titleNum)} championship trophy, ${entry.year}` : ''}
               aria-hidden={d !== 0}
               className={styles.trophyImg}
-              drag={d === 0 ? 'x' : false}
-              dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0.6}
-              onDragEnd={(_, info) => {
-                if (info.offset.x < -60) go(-1)
-                else if (info.offset.x > 60) go(1)
-              }}
               animate={{
                 x: `calc(-50% + ${offset}px)`,
                 y: '-50%',
