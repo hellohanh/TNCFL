@@ -2994,3 +2994,7 @@ Facts taken from the current code (`App.tsx` routes, `package.json`, component/l
 - **#14 Commit identity — keep Hanh's name** (`Hanh <hello.meetho@gmail.com>`); GitHub's "Unverified" label is accepted. Closed.
 
 **Open-items pass complete.** Fixed: #7 (trophy swipe/drag everywhere), #10 (SeasonPage hooks), #13 (new Scope/TechRef). Checked OK: #6. Kept/closed: #12, #14. Dropped: #1, #2, #3, #4, #5, #8, #9. **Still open: #11 only — Milestone 19 polish (code splitting, reduced-motion, contrast/keyboard), deferred.**
+
+## Entry 118 (2026-10-17) — Stop protocol (S042)
+
+Session 2026-10-17 morning: open-items pass (Entries 115–117) — trophy cabinet swipe/drag on every device, SeasonPage hooks fix, new `TNCFL_Scope.html` / `TNCFL_TechRef.html`, Competence chart checked on all 15 seasons, decisions recorded for every catalog item. Only Milestone 19 polish remains open (deferred). Pushed at Hanh's "push and stop protocol". Snapshot zip: `S042_2026-10-17_TNCFL_RecordBook.zip`.

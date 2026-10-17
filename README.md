@@ -13,7 +13,7 @@ tracker is published separately from the `TNCFL_TRACKER` repo) — this project 
 
 ---
 
-## Current State (as of 2026-10-17, S041 → Entry 114)
+## Current State (as of 2026-10-17, S042 → Entry 118)
 
 - **Live:** https://hellohanh.github.io/TNCFL/ — React 19 + Vite + TypeScript, deployed by GitHub
   Actions on every push to `main` (~1 min). Installable as a PWA. **Push only when Hanh says "push."**
@@ -80,10 +80,11 @@ Repo: hellohanh/TNCFL (branch main) — attach it with push access, work from a 
 locally, and push ONLY when I say "push" (every push deploys live via GitHub Actions to
 https://hellohanh.github.io/TNCFL/). Optional local copy: D:\Websites\TNCFL Record Book.
 
-Status as of 2026-10-17 (Entry 114): all 15 seasons + all 5 LEAGUE pages built; full mobile pass
+Status as of 2026-10-17 (Entry 118): all 15 seasons + all 5 LEAGUE pages built; full mobile pass
 done (Galaxy S25 is the reference phone — emulate 360x780, 3x, touch): left-edge handle drawer,
 every tab tuned, season pages per my Keep/Flip/Stack choices with equal-height flipped panels, and a
-speed fix for tab taps. Open issues are catalogued in SESSION_LEDGER.md Entry 114.
+speed fix for tab taps. Open-items pass done (Entries 114–117); only Milestone 19 polish
+(code splitting, reduced-motion, contrast/keyboard) remains, deferred.
 
 Ways of working: show me a rendered preview (S25 screenshots, turned views for flipped panels)
 before I lock anything; ask questions as tappable choices, one at a time.
@@ -108,5 +109,5 @@ Cloudflare Worker.
    deploys live). After an approved push, confirm the Actions deploy succeeded.
 6. Also build a snapshot zip of the repo (excluding `.git` and `node_modules`) for the next
    session's upload: `S0XX_YYYY-MM-DD_TNCFL_RecordBook.zip`. `XX` continues this project's own
-   sequence (last: **S041**, 2026-10-17 → next is **S042**). Never share the counter with the
+   sequence (last: **S042**, 2026-10-17 → next is **S043**). Never share the counter with the
    original TNCFL project's `…_TNCFL_Tracker.zip` sequence.
