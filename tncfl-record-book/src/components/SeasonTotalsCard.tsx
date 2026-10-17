@@ -1,4 +1,6 @@
 import type { Meta } from '../types/data'
+import { useCapToRows } from '../lib/useCapToRows'
+import { useIsPhone } from '../lib/useIsPhone'
 import styles from './SeasonTotalsCard.module.css'
 
 export interface SeasonTotalEntry {
@@ -11,6 +13,7 @@ export interface SeasonTotalEntry {
 interface SeasonTotalsCardProps {
   rows: SeasonTotalEntry[]
   maxHeight: number
+  phoneRows?: number // phones only (Entry 92): show exactly this many rows, measured from this card's own rows
   meta: Meta
 }
 
@@ -39,11 +42,13 @@ interface SeasonTotalsCardProps {
 // card is used, not just Records): was plain default text; now uses
 // meta.manager_colors[m], matching the color convention every other
 // manager-name display in this app already follows.
-export default function SeasonTotalsCard({ rows, maxHeight, meta }: SeasonTotalsCardProps) {
+export default function SeasonTotalsCard({ rows, maxHeight, meta, phoneRows }: SeasonTotalsCardProps) {
+  const isPhone = useIsPhone()
+  const { capRef, capHeight } = useCapToRows(phoneRows ?? 0, isPhone && !!phoneRows)
   return (
     <div className={styles.card}>
       <div className={styles.title}>{'\u{1F947}'} All-Time Season Totals</div>
-      <div className={styles.scrollWrap} style={{ maxHeight, overflowY: 'auto' }}>
+      <div ref={capRef} className={styles.scrollWrap} style={{ maxHeight: capHeight ?? maxHeight, overflowY: 'auto' }}>
         <div className={styles.list}>
           {rows.map((r) => (
             <div key={`${r.m}-${r.year}`} className={styles.row}>

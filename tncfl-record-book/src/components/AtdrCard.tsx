@@ -1,6 +1,8 @@
 import type { RefObject } from 'react'
 import type { AtdrRow, Meta } from '../types/data'
 import { useHoveredManagerContext } from '../lib/HoveredManagerContext'
+import { useCapToRows } from '../lib/useCapToRows'
+import { useIsPhone } from '../lib/useIsPhone'
 import styles from './AtdrCard.module.css'
 
 interface AtdrCardProps {
@@ -9,6 +11,7 @@ interface AtdrCardProps {
   meta: Meta
   rowRef: RefObject<HTMLDivElement | null>
   maxHeight: number
+  phoneRows?: number // phones only (Entry 92): show exactly this many rows, measured from this card's own rows
 }
 
 // Ported from the old hub's real atdrBody() geometry (rank-color gradient,
@@ -45,12 +48,14 @@ function fmtWkLabel(label: string | null): string {
   return m ? `S${m[1]} WK${m[2]}` : label
 }
 
-export default function AtdrCard({ rows, statusByYear, meta, rowRef, maxHeight }: AtdrCardProps) {
+export default function AtdrCard({ rows, statusByYear, meta, rowRef, maxHeight, phoneRows }: AtdrCardProps) {
+  const isPhone = useIsPhone()
+  const { capRef, capHeight } = useCapToRows(phoneRows ?? 0, isPhone && !!phoneRows)
   const { setHovered, setPinned, displayed } = useHoveredManagerContext()
   return (
     <div className={styles.card}>
       <div className={styles.title}>{'\u{1F525}'} All-Time Longest Drought</div>
-      <div className={styles.scrollWrap} style={{ maxHeight, overflowY: 'auto' }}>
+      <div ref={capRef} className={styles.scrollWrap} style={{ maxHeight: capHeight ?? maxHeight, overflowY: 'auto' }}>
         <div className={styles.list}>
           {rows.map((r, i) => {
             const departed = statusByYear[r.m] === 'I' || statusByYear[r.m] === 'D'

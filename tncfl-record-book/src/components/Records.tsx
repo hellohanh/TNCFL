@@ -58,6 +58,7 @@ export default function Records() {
           entries={highest}
           meta={data.meta}
           scrollable
+          phoneRows={15}
         />
         <ScoreExtremesList
           title="All-Time Lowest Single Week Score"
@@ -66,6 +67,7 @@ export default function Records() {
           entries={lowest}
           meta={data.meta}
           scrollable
+          phoneRows={15}
         />
       </div>
       <div className={styles.row2}>
@@ -75,8 +77,9 @@ export default function Records() {
           meta={data.meta}
           rowRef={atdrRowRef}
           maxHeight={atdrMaxHeight}
+          phoneRows={15}
         />
-        <SeasonTotalsCard rows={seasonTotals} maxHeight={atdrMaxHeight} meta={data.meta} />
+        <SeasonTotalsCard rows={seasonTotals} maxHeight={atdrMaxHeight} meta={data.meta} phoneRows={15} />
       </div>
     </div>
   )

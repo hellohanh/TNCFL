@@ -1,4 +1,6 @@
 import type { Meta } from '../types/data'
+import { useCapToRows } from '../lib/useCapToRows'
+import { useIsPhone } from '../lib/useIsPhone'
 import styles from './RecordsExtraPanels.module.css'
 
 interface ScoreEntry {
@@ -14,13 +16,16 @@ interface ScoreExtremesListProps {
   accent: 'gold' | 'blue'
   entries: ScoreEntry[]
   meta: Meta
+  phoneRows?: number // phones only (Entry 92): show exactly this many rows, scroll for the rest
   scrollable?: boolean // when the list is long (e.g. "every score >= 200"), cap height and scroll instead of showing everything at once — same scrollWrap pattern as AtdrCard
 }
 
 // Shared row shape for the Records page's "All-Time Highest/Lowest Single
 // Week Score" panels (screenshot reference from the user) — same component,
 // different data/title/accent color per instance.
-export default function ScoreExtremesList({ title, icon, accent, entries, meta, scrollable }: ScoreExtremesListProps) {
+export default function ScoreExtremesList({ title, icon, accent, entries, meta, scrollable, phoneRows }: ScoreExtremesListProps) {
+  const isPhone = useIsPhone()
+  const { capRef, capHeight } = useCapToRows(phoneRows ?? 0, isPhone && !!phoneRows && !!scrollable)
   const rows = entries.map((s, i) => (
     <div className={styles.hlRow} key={`${s.m}-${s.yr}-${s.wk}`}>
       <span className={styles.hlRank}>{i + 1}.</span>
@@ -39,7 +44,7 @@ export default function ScoreExtremesList({ title, icon, accent, entries, meta, 
       <div className={styles.cardTitle}>
         {icon} {title}
       </div>
-      {scrollable ? <div className={styles.scrollWrap}>{rows}</div> : rows}
+      {scrollable ? <div ref={capRef} className={styles.scrollWrap} style={capHeight ? { maxHeight: capHeight } : undefined}>{rows}</div> : rows}
     </div>
   )
 }

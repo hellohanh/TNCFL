@@ -2802,3 +2802,13 @@ Noted for Hanh (not changed): on phones the Cumulative Competence Chart's floati
 Records tab. Per Hanh: on phones the "Points per finish" legend (which sat on top of ranks 12–18's medals) now lives on a pull-out handle inside the panel. `CumulativeCompetenceChart.tsx` wraps the legend in a dock with a handle button; at ≤820px the dock is pinned to the panel's right edge and slid off-screen except for the handle — the same yellow pill as the site's nav handle (mustard, three dots), rounded on its left since it pulls leftward. Tap the handle or swipe it left → legend slides out (opaque `#1c1c1c`, mustard-tinted border); tap the handle or the legend, or swipe right → tucks back. Desktop: dock is `display: contents`, handle hidden — legend still sits 16px/14px from the panel's bottom-right exactly as before.
 
 Verified on S25: closed → legend fully off-panel, only the handle showing; tap opens, tap on legend closes, swipe left opens, swipe right closes. Desktop position unchanged. Zero console errors; clean build. Committed locally, not pushed. (The per-season `CompetenceChart.tsx` on each Season page has the same floating legend — not changed.)
+
+## Entry 92 (2026-10-16) — Mobile: Records lists show exactly the top 15, scroll for the rest
+
+Records tab. Per Hanh: on phones, All-Time Highest Single Week Score, All-Time Lowest Single Week Score, All-Time Longest Drought and All-Time Season Totals each show only the top 15, with scrolling for the rest. Before: Highest/Lowest showed 20 (fixed 480px cap), Drought 15, and Season Totals ~23 — it borrowed Drought's one-row height × 15, but Drought's rows are two lines tall on a phone ("96 / wks"), so Season Totals' window was too tall.
+
+New `lib/useCapToRows.ts`: measures where a list's own 15th row actually ends and caps the scroll window there (re-measures on resize), so mixed row heights still show exactly 15. `ScoreExtremesList`, `AtdrCard`, `SeasonTotalsCard` take an optional `phoneRows` prop; only `Records.tsx` passes `phoneRows={15}`, and it only applies at ≤820px. Desktop Records (20 / 20 / shared ATDR height) and the Season pages' ATDR/ATST are unchanged.
+
+Verified on S25: all four panels show exactly 15 fully-visible rows and scroll (73 / 199 / 146 / 146 rows total). Desktop and Season 2016 unchanged. Clean build. Committed locally, not pushed.
+
+Noted (not changed): on phones the Season pages still lay ATDR and ATST side by side (50/50) — for the season-page pass.
