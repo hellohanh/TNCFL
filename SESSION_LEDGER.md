@@ -2832,3 +2832,9 @@ Before: the 545px-wide matrix sat in a 312px sideways-scrolling box. Verified on
 ## Entry 96 (2026-10-16) — Mobile: rotated H2H matrix name column tightened
 
 Per Hanh: too much dead space in the rotated matrix's first (name) column. Cause: with the table stretched to the full turned width (Entry 95), the name column kept its 90px `min-width` and also took a share of the extra width. Fix (`H2HMatrix.module.css`, `[data-rotated]` only): `.corner`/`.rowHdr` get `min-width: 0; width: 1%; white-space: nowrap` so the column shrinks to its longest name and the extra width goes to the record columns. Verified on S25: name column ~108px → 51px (longest name "Damian" fits on one line); desktop first column unchanged at 90px. Committed locally, not pushed.
+
+## Entry 97 (2026-10-16) — H2H matrix: name column = longest name + 20px (phones and desktop)
+
+Per Hanh: exactly 20px between the longest name ("Damian") and the 2nd column, on both phones and desktop. `H2HMatrix.module.css`: `.corner` loses its fixed `min-width: 90px` (now `white-space: nowrap`), `.rowHdr` padding-right 10px → 20px; rotated view's `.rowHdr` padding-right 8px → 20px. `width: 1%` (shrink to content) is kept for the rotated view only — tried on desktop first and it made the un-stretched table grow to the full page width (an unrequested change), so it was scoped back to `[data-rotated]`. Replaces Entry 96's rotated-only column rule.
+
+Verified by layout measurement: phone (rotated) and desktop both — longest name 43px, name column 63px, gap from "Damian" to the 2nd column exactly 20px. Desktop table 637px → 610px wide (first column no longer padded to 90px), otherwise unchanged. Committed locally, not pushed.

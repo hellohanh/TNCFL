@@ -14,7 +14,8 @@
 }
 
 .corner {
-  min-width: 90px;
+  /* Entry 97: name column = longest name + 20px (was a fixed 90px min-width). */
+  white-space: nowrap;
   text-align: left;
   color: #666;
   font-weight: 500;
@@ -28,7 +29,10 @@
 }
 
 .rowHdr {
-  padding: 6px 10px 6px 0;
+  /* Entry 97 (Hanh): exactly 20px between the longest name and the 2nd
+     column, on desktop and phones — padding-right 20px, column shrinks to
+     the longest name (width: 1%). */
+  padding: 6px 20px 6px 0;
   font-weight: 700;
   text-align: left;
   white-space: nowrap;
@@ -62,14 +66,12 @@
   padding: 4px 4px;
 }
 :global([data-rotated]) .rowHdr {
-  padding: 4px 8px 4px 0;
+  padding: 4px 20px 4px 0;
 }
-/* Entry 96: while rotated, the name column shrinks to its longest name
-   (width:1% + nowrap) instead of taking a share of the stretched table's
-   extra width — the extra goes to the record columns. */
+/* Rotated only: the table is stretched to the full turned width there, so the
+   name column must be told to stay at its content width (width: 1%). Not on
+   desktop — there it would make the table grow to the full page width. */
 :global([data-rotated]) .corner,
 :global([data-rotated]) .rowHdr {
-  min-width: 0;
   width: 1%;
-  white-space: nowrap;
 }
