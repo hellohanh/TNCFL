@@ -63,20 +63,16 @@ not get a pass on it just because the visuals are changing.
 
 ## Status
 
-### Current snapshot (as of 2026-10-16, Entry 85)
+### Current snapshot (as of 2026-10-17, Entry 114)
 
 - **Live:** https://hellohanh.github.io/TNCFL/ — deployed by GitHub Actions on every push to
-  `main` of `hellohanh/TNCFL` (see "Deploy & workflow" below).
-- **Done:** Milestones 0–18, 20, 21 (and sub-rounds 7a–7p). **Cancelled:** 12. **Not started:** 19
-  (polish pass). `ROADMAP.md` has the status table.
-- **All 15 seasons (2011–2025) live** on the locked 2011 template; **all 5 LEAGUE sub-pages** built.
-- **FleaFlicker FF2** (18-frame flea-flicker play diagram) plays between recap and scoreboard on the
-  latest season only; `FootballTransition` is deleted.
-- **Mobile:** left-edge handle drawer replaces the rail at ≤820px (Entry 86).
-- **Top outstanding item:** screenshot-based visual review of every season's nugget layout under the
-  Milestone 20 model. Headless Chromium works (since Entry 65) — the review just hasn't been done.
-- **Open housekeeping (Hanh's call):** unused `public/football/*.png` (~2.8 MB) still ship;
-  `TNCFL_Scope.html` / `TNCFL_TechRef.html` are not in the repo.
+  `main` of `hellohanh/TNCFL`. **Push only on Hanh's "push"** (see "Deploy & workflow").
+- **Done:** Milestones 0–18, 20, 21 (and sub-rounds 7a–7p). **Cancelled:** 12. **In progress:** 19
+  (polish) — the full mobile pass is done. `ROADMAP.md` has the status table.
+- **All 15 seasons (2011–2025)** on the locked 2011 template; **all 5 LEAGUE sub-pages** built.
+- **Mobile (≤820px; Galaxy S25 reference):** see "Mobile navigation" and "Mobile layout rules"
+  below. FleaFlicker is desktop-only, latest season only.
+- **Open issues:** catalogued in `SESSION_LEDGER.md` Entry 114.
 
 The paragraphs below are the milestone-by-milestone history behind that snapshot.
 
@@ -422,6 +418,24 @@ season. Tap or drag right to open; drag left, tap the scrim, Escape, or pick a l
 Desktop is unchanged. If the Tracker's drawer changes, mirror the change here.
 The site header shrinks to fit on phones (Entry 87) rather than hiding. **Reference phone for all
 mobile checks: Galaxy S25** — emulate as 360×780, 3× density, touch, Android Chrome UA.
+
+## Mobile layout rules — LOCKED (2026-10-17, Entries 88–113)
+
+- **Phones = ≤820px** everywhere (CSS media query and `lib/useIsPhone.ts`). Desktop must not change
+  when doing phone work; verify both.
+- **Reference phone: Galaxy S25** — emulate 360×780, 3× density, touch, Android Chrome UA. Show
+  Hanh S25 screenshots (and turned views of flipped panels) before locking.
+- **Keep / Flip / Stack** per section, chosen by Hanh (Season pages: Entry 106/107 list).
+- **Flip** = `RotateOnPhone` (port of the Tracker's auto-rotate, upright phones only): every flipped
+  panel has the SAME turned height (= phone content width) and no dead space under it; length fills
+  the visible screen below the header; panels that need more length (tables, pyramids) run longer
+  and scroll. Measured lazily near the viewport (speed).
+- **Records-tab treatment** for long lists: show exactly the top 15 (`useCapToRows` / batched caps),
+  scroll for the rest; drought date on a 2nd line under the name, status chip right-aligned;
+  Competence legend on the pull-out handle (`PointsLegendDock`, desktop too).
+- **No bottom dead space on phones** (24px page padding; desktop keeps its 1000px buffer).
+- **Speed:** season sections build only near the viewport on phones (`RevealOnScroll`); never
+  measure/lay out the whole page in a loop.
 
 ## FleaFlicker scroll animation — LOCKED (Milestone 21)
 

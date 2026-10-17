@@ -10,7 +10,7 @@ that's flagged so you know what you already have muscle memory for vs. what's ge
 
 ---
 
-## Status at a glance (as of 2026-10-16)
+## Status at a glance (as of 2026-10-17)
 
 | Milestone | Status |
 |-----------|--------|
@@ -26,7 +26,7 @@ that's flagged so you know what you already have muscle memory for vs. what's ge
 | 16 — Roll out 2012–2025 | ✅ Done (2026-09-06) |
 | 17 — League / Hall of Fame section | ✅ Done (2026-09-08) |
 | 18 — PWA + deploy pipeline | ✅ Done (2026-09-08/09) |
-| 19 — Polish pass | ⏳ Started — mobile tab drawer done (Entry 86); rest not started |
+| 19 — Polish pass | ⏳ In progress — full mobile pass done (Entries 86–113); code splitting, a11y, reduced-motion remain |
 | 20 — Nugget system rebuild | ✅ Done (2026-09-08) — **visual review of every season's nuggets still outstanding** |
 | 21 — FleaFlicker scroll animation (replaces FootballTransition) | ✅ Done (2026-09-11/12; old component deleted 2026-10-16; latest season only since Entry 86) |
 
@@ -2059,8 +2059,11 @@ Original plan, kept for reference:
 
 ## Milestone 19 — Polish pass — STARTED
 
-**Done so far:** mobile tab drawer — the 2026 Tracker's yellow edge handle, mirrored to the left edge;
-the rail hides at ≤820px (Entry 86).
+**Done so far (2026-10-16/17, Entries 86–113):** the full mobile pass — left-edge handle drawer,
+header fit, every LEAGUE tab and every Season page tuned for phones (Galaxy S25 reference), equal-
+height flipped panels (`RotateOnPhone`), bottom dead space removed, and a tab-tap speed fix (lazy
+section building). Remaining: route-based code splitting, reduced-motion/contrast/keyboard checks.
+Open issues: SESSION_LEDGER Entry 114.
 
 
 Performance (route-based code splitting so visiting `/season/2011` doesn't load all 15 seasons'

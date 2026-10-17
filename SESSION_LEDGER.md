@@ -2943,3 +2943,30 @@ Results (4× slowdown): season→season 1.3s → ~0.4s; records→season 2.5s �
 ## Entry 113 (2026-10-17) — Flip height fix for the pyramids after the speed change
 
 After Entry 112, the two Peak Performance panels came out 288–306px tall when turned instead of the shared 312px (they keep their proportions, so narrowing them shrank their height until the 1.6× scale cap). `RotateOnPhone`: if filling the turned height would need more than the cap, the panel is widened instead (then runs a little longer, like the score table); 4 passes. Verified after a full slow scroll on 2011/2020/2025: every flipped panel exactly 312px. Speed unchanged (season→season ~0.4s at 4× slowdown); H2H matrix unaffected. Pushed (Hanh: push progress while working the lag problem).
+
+
+## Entry 114 (2026-10-17) — Stop protocol; open issues catalogued
+
+Session S040→S041 (2026-10-16/17) covered: docs catch-up (Entry 85), the full mobile pass — tab drawer, header, every LEAGUE tab, every Season page (Entries 86–111) — and a phone speed fix (Entries 112–113). Pushed live through Entry 113; this entry's doc updates are committed locally (push only on Hanh's go-ahead). Snapshot zip: `S041_2026-10-17_TNCFL_RecordBook.zip`.
+
+**Open issues catalog (as of 2026-10-17, Entry 114)** — nothing below is a known data error; all are UX, polish or housekeeping.
+
+*Mobile (phones, S25 reference)*
+1. **Records tab still the slowest tap (~1.4s at 4× CPU slowdown vs ~0.4s elsewhere).** Remaining cost is browser paint/compositing of the Cumulative Competence chart's ~60 per-medal `<canvas>` elements. Proposed fix: draw each medal type once, reuse as an image. Offered, not started.
+2. **Manager Profiles — items flagged, not yet done:** manager picker pills fill most of the first screen; Best/Worst Week values wrap to 3 lines; season table hides Transactions/Trades off the right edge (sideways scroll, no hint).
+3. **Phone landscape untested** for the season pages and other tabs (flips switch off in landscape by design; the H2H matrix was checked, the rest wasn't).
+4. **Lazy-built season sections** use a 640px placeholder until built — the page length shifts slightly while scrolling down (content below the viewport only).
+5. **Yellow nav handle** sits over the top edge of a turned (flipped) panel's caption line when the phone is turned — no data hidden.
+6. **Cumulative Competence chart on Season pages** — legend handle works; not separately reviewed beyond 2011/2020/2025.
+
+*Desktop*
+7. **Trophy cabinet drag never worked** on desktop (trophy `<img>`s have `pointer-events: none`); arrows/keyboard work. Phones fixed (Entry 88). Offered, not requested.
+8. **Nugget layout visual review** under the Milestone 20 pixel-position model — still not done for any season on desktop (top item since 2026-09-08; phones now stack nuggets instead).
+9. **2025 FleaFlicker fireworks** spill ~30px past the right edge during the TD animation (no scrollbar — clipped by `overflow-x: hidden`). Desktop only now.
+
+*Code / housekeeping*
+10. **`SeasonPage.tsx` has hooks after an early `return`** (`useRowCapHeight`, `useMemo`, `useCrossedLine` — pre-existing). Only matters for an invalid year URL, but it's a React rules-of-hooks violation worth tidying.
+11. **Milestone 19 polish remaining:** route-based code splitting, reduced-motion audit, colour-contrast check, keyboard navigation of the rail.
+12. **Unused `public/football/*.png` (~2.8 MB)** still ship in every build — Hanh's call whether to delete.
+13. **`TNCFL_Scope.html` / `TNCFL_TechRef.html`** not in the repo — find or retire.
+14. **Commit identity:** commits go out as `Hanh <hello.meetho@gmail.com>`, so GitHub shows them "Unverified"; an automated session check keeps asking to switch to Claude's noreply address. Hanh hasn't decided; nothing breaks either way.

@@ -13,41 +13,29 @@ tracker is published separately from the `TNCFL_TRACKER` repo) — this project 
 
 ---
 
-## Current State (as of 2026-10-16, S040 → Entry 87)
+## Current State (as of 2026-10-17, S041 → Entry 114)
 
-- **Live site:** https://hellohanh.github.io/TNCFL/ — React 19 + Vite + TypeScript, deployed by
-  GitHub Actions on every push to `main` (~1–2 min to live). Installable as a PWA.
-- **Seasons:** all 15 (2011–2025) live on the template locked on 2011, each verified against the
-  engine. Zero code changes were needed for any season after 2011.
-- **LEAGUE section:** all 5 sub-pages built with real data — Hall of Fame (trophy cabinet + hero
-  essay), Manager Profiles (18 confirmed bios, avatars, `/league/profiles/:manager`), Records,
-  Head-to-Head (matrix + duel picker), How Our League Works.
-- **Scroll animation:** FleaFlicker (FF2, 18-frame flea-flicker play diagram with fireworks on the
-  TD) plays between the recap and scoreboard of the **latest season only** (2025 today). The old
-  `FootballTransition` was deleted 2026-10-16.
-- **Mobile (≤820px):** the rail is replaced by a yellow handle on the left edge that opens a tab
-  drawer — the Tracker's mobile treatment, mirrored left. The site header shrinks to fit. Mobile checks use a
-  Galaxy S25 (360×780).
-- **Nav rail (desktop):** LEAGUE (expandable) → "2026 ↗" external tracker link → years 2025…2011.
-- **Milestones:** 0–18, 20 and 21 done; 12 cancelled; **19 (polish pass) started** (mobile drawer done). See the
-  status table at the top of `ROADMAP.md`.
-- **Most recent work:** direct GitHub push workflow set up (Entry 82); `FootballTransition` deleted
-  (Entry 83); 200+-point streak analysis (Entry 84); docs brought current and a stray duplicate
-  lockfile removed (Entry 85); mobile left-handle drawer + FleaFlicker on latest season only (Entry 86).
+- **Live:** https://hellohanh.github.io/TNCFL/ — React 19 + Vite + TypeScript, deployed by GitHub
+  Actions on every push to `main` (~1 min). Installable as a PWA. **Push only when Hanh says "push."**
+- **Seasons:** all 15 (2011–2025) on the locked 2011 template. **LEAGUE:** all 5 sub-pages built.
+- **Mobile (≤820px, Galaxy S25 is the reference phone) — done 2026-10-16/17 (Entries 86–113):**
+  - Left-edge yellow handle drawer replaces the rail (Tracker's drawer, mirrored); tapped tab
+    highlights instantly; header shrinks to fit; no bottom dead space on any tab.
+  - Every tab tuned: Hall of Fame trophy cabinet (one trophy, glide, swipe), Manager Profiles stats
+    (2 + 3), Records (3×3 grid, top-15 lists, legend handle), Head-to-Head (matrix flipped, duel
+    table fits), How Our League Works (two-line titles).
+  - Season pages: Hanh's per-section Keep / Flip / Stack choices, Records-tab treatment for the
+    records panels. **Flip** = drawn sideways (`RotateOnPhone`), every flipped panel the same
+    turned height, no dead space. FleaFlicker animation off on phones.
+  - Speed: sections build as you scroll near them; tab taps respond in ~0.4s (Records ~1.4s at
+    4× slowdown — open issue).
+- **Desktop:** FleaFlicker plays on the latest season only (2025). Duel Picker win counts in
+  manager colours and avatars in the Finish header; H2H name column = longest name + 20px.
+- **Milestones:** 0–18, 20, 21 done; 12 cancelled; 19 (polish) in progress. See `ROADMAP.md`.
 
-**Next concrete step:** the **screenshot-based visual review of every season's nugget section**
-under the Milestone 20 pixel-position model (2011 included). Headless Chromium has been available
-since Entry 65, so nothing blocks it — it has just never been done. Do this before any further
-nugget content work. After that: Milestone 19 polish, new features, or the post-RB plan (Hanh's
-Chord Book rebuild).
-
-**Open housekeeping calls (Hanh's decision):**
-- `public/football/football-1…5.png` (~2.8 MB) are unused since `FootballTransition` was deleted but
-  still ship in every build.
-- `TNCFL_Scope.html` / `TNCFL_TechRef.html` (living docs about the old hub) aren't in the repo —
-  find or retire them.
-
----
+**Open issues:** catalogued in `SESSION_LEDGER.md` Entry 114 (14 items — mobile, desktop,
+housekeeping). Top candidates: Records medal canvases (speed), the remaining Manager Profiles phone
+items, and the long-standing desktop nugget visual review.
 
 ## Working setup
 
@@ -89,22 +77,22 @@ Continuing work on the TNCFL Record Book (the standalone archive site, split off
 TNCFL project on 2026-09-04). Read all .md files to get caught up.
 
 Repo: hellohanh/TNCFL (branch main) — attach it with push access, work from a cloud clone, commit
-and push directly. GitHub Actions builds and deploys to https://hellohanh.github.io/TNCFL/.
-Optional local copy on my machine: D:\Websites\TNCFL Record Book (git pull before npm run dev).
+locally, and push ONLY when I say "push" (every push deploys live via GitHub Actions to
+https://hellohanh.github.io/TNCFL/). Optional local copy: D:\Websites\TNCFL Record Book.
 
-Status as of 2026-10-16 (Entry 85): all 15 seasons (2011-2025) live on the locked 2011 template;
-all 5 LEAGUE sub-pages built; deploy pipeline + PWA done (Milestone 18); FleaFlicker FF2 scroll
-animation live (Milestone 21), old FootballTransition deleted. Milestone 19 (polish) not started.
+Status as of 2026-10-17 (Entry 114): all 15 seasons + all 5 LEAGUE pages built; full mobile pass
+done (Galaxy S25 is the reference phone — emulate 360x780, 3x, touch): left-edge handle drawer,
+every tab tuned, season pages per my Keep/Flip/Stack choices with equal-height flipped panels, and a
+speed fix for tab taps. Open issues are catalogued in SESSION_LEDGER.md Entry 114.
 
-Top priority: screenshot-based visual review of every season's nugget section under the
-Milestone 20 pixel-position model — headless Chromium is available, it just hasn't been done.
+Ways of working: show me a rendered preview (S25 screenshots, turned views for flipped panels)
+before I lock anything; ask questions as tappable choices, one at a time.
 
 Data rule: every number on the site is derived from the verified engine (tncfl-hmotw-engine) —
 never hand-typed. Only prose is hand-written.
 
-Post-RB plan: Hanh's Chord Book is the next React/Vite rebuild candidate.
-
-This project does NOT include the 2026 season tracker, its rules doc, or the Cloudflare Worker.
+This project does NOT include the 2026 season tracker (TNCFL_TRACKER repo), its rules doc, or the
+Cloudflare Worker.
 ```
 
 ---
@@ -120,5 +108,5 @@ This project does NOT include the 2026 season tracker, its rules doc, or the Clo
    deploys live). After an approved push, confirm the Actions deploy succeeded.
 6. Also build a snapshot zip of the repo (excluding `.git` and `node_modules`) for the next
    session's upload: `S0XX_YYYY-MM-DD_TNCFL_RecordBook.zip`. `XX` continues this project's own
-   sequence (last: **S040**, 2026-10-16 → next is **S041**). Never share the counter with the
+   sequence (last: **S041**, 2026-10-17 → next is **S042**). Never share the counter with the
    original TNCFL project's `…_TNCFL_Tracker.zip` sequence.
