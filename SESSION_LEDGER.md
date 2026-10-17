@@ -2900,3 +2900,11 @@ New/changed: `RotateOnPhone.tsx` (equal-height fill), `lib/useElementSize.ts`, `
 **Verified on S25 (2020):** page width = viewport; nothing outside a flipped panel overflows except the intentionally clipped Competence legend; all 7 flipped panels exactly 312px tall when turned; charts fill the 687px visible length (scale 0.72–0.85), score table 1,106px / season ledger 940px long (scroll); Highest/Lowest 15 of 40 visible; ATDR/ATST 15 each. Zero console errors; clean build. Committed locally, not pushed.
 
 Noted: at phone width the pyramid charts' year labels along the base crowd/overlap (2011–2020 squeezed); flipping that panel instead of stacking would fix it — offered to Hanh.
+
+## Entry 107 (2026-10-17) — Mobile: Peak Performance — Active and Inactive each stacked and flipped
+
+Per Hanh: "for peak performance — stack both and flip both." `PeakPerformance.tsx`: Active and Inactive are each wrapped in their own `RotateOnPhone` (two separate sideways panels, stacked); each chart draws at its own section's width (`secW`) and redraws when that section resizes. `PeakPerformance.module.css` (phones): card side padding removed so both share the same 312px flip height as every other flipped panel; section label inset 8px inside a flipped panel (first letter was clipped). The pyramids need more length than the screen at full height, so — like the score table — they keep the shared height and run a little longer (757–918px; scroll). Seasons with no inactive managers (2011) keep the upright "No inactive managers…" note.
+
+Verified on S25 (2020, 2011, 2025): every flipped panel on the page exactly 312px turned height; year labels along the base now readable (were crowded/overlapping when stacked upright). Zero console errors; clean build. Committed locally, not pushed.
+
+**Audit of all 15 seasons (S25, after Entry 106):** every season has exactly the same section set as 2020 — no element 2020 didn't cover. Page width = viewport for all 15; 7 (now 9 with the pyramids) flipped panels each, all the same height; nugget counts 9–13, all render in the phone column. Only overflow found: 2025's FleaFlicker fireworks sparks/canvas reaching up to ~33px past the right edge during the TD animation — html/body `overflow-x: hidden` already prevents any sideways scroll.

@@ -6,6 +6,7 @@ import { useHoveredManagerContext } from '../lib/HoveredManagerContext'
 import { useManagerFilterContext } from '../lib/ManagerFilterContext'
 import ChartTooltip from './ChartTooltip'
 import type { ChartTooltipState } from './ChartTooltip'
+import RotateOnPhone from './RotateOnPhone'
 import styles from './PeakPerformance.module.css'
 
 interface PeakPerformanceProps {
@@ -56,10 +57,14 @@ export default function PeakPerformance({ season, meta }: PeakPerformanceProps) 
       const spotlit =
         mode === 'moneyCircle' ? new Set(season.money_circle) : new Set(meta.hmotw.all_players)
 
+      // Entry 107: each chart sizes to its OWN section's width — on phones each
+      // section is its own flipped panel (RotateOnPhone), laid out at the turned
+      // length, not the page width.
+      const secW = (c: HTMLCanvasElement | null) => Math.max(floor, c?.parentElement?.clientWidth ?? containerW)
       if (activeCanvasRef.current) {
         activeHits.current = drawPeakChart({
           canvas: activeCanvasRef.current,
-          containerW,
+          containerW: secW(activeCanvasRef.current),
           DPR,
           year,
           candidateManagers: active,
@@ -75,7 +80,7 @@ export default function PeakPerformance({ season, meta }: PeakPerformanceProps) 
       if (depWithTally.length && inactiveCanvasRef.current) {
         inactiveHits.current = drawPeakChart({
           canvas: inactiveCanvasRef.current,
-          containerW,
+          containerW: secW(inactiveCanvasRef.current),
           DPR,
           year,
           candidateManagers: departed,
@@ -93,6 +98,7 @@ export default function PeakPerformance({ season, meta }: PeakPerformanceProps) 
     draw()
     const observer = new ResizeObserver(draw)
     observer.observe(container)
+    for (const c of [activeCanvasRef.current, inactiveCanvasRef.current]) if (c?.parentElement) observer.observe(c.parentElement)
     return () => observer.disconnect()
     // eslint-disable-next-line react-hooks/exhaustive-deps -- re-draws on season/expand/hover change via the deps below
   }, [year, expanded, active.join(','), departed.join(','), depWithTally.length, meta, displayed, mode, season.money_circle])
@@ -162,33 +168,46 @@ export default function PeakPerformance({ season, meta }: PeakPerformanceProps) 
         {subExtra}
       </div>
       <div className={styles.card} ref={containerRef}>
-        <div className={styles.secLabel} style={{ marginTop: 2 }}>
-          Active Managers
-        </div>
-        <canvas
-          ref={activeCanvasRef}
-          className={styles.canvas}
-          onMouseMove={(e) => handleMove(activeHits, e)}
-          onMouseLeave={() => {
-            setHovered(null)
-            setTip(null)
-          }}
-          onClick={(e) => handleClick(activeHits, e)}
-        />
-        <div className={styles.secLabel}>Inactive Managers</div>
+        {/* Entry 107 (Hanh): on phones Active and Inactive are stacked AND each
+            flipped — two separate sideways panels, same shared flip height. */}
+        <RotateOnPhone>
+          <div>
+            <div className={styles.secLabel} style={{ marginTop: 2 }}>
+              Active Managers
+            </div>
+            <canvas
+              ref={activeCanvasRef}
+              className={styles.canvas}
+              onMouseMove={(e) => handleMove(activeHits, e)}
+              onMouseLeave={() => {
+                setHovered(null)
+                setTip(null)
+              }}
+              onClick={(e) => handleClick(activeHits, e)}
+            />
+          </div>
+        </RotateOnPhone>
         {depWithTally.length ? (
-          <canvas
-            ref={inactiveCanvasRef}
-            className={styles.canvas}
-            onMouseMove={(e) => handleMove(inactiveHits, e)}
-            onMouseLeave={() => {
-              setHovered(null)
-              setTip(null)
-            }}
-            onClick={(e) => handleClick(inactiveHits, e)}
-          />
+          <RotateOnPhone>
+            <div>
+              <div className={styles.secLabel}>Inactive Managers</div>
+              <canvas
+                ref={inactiveCanvasRef}
+                className={styles.canvas}
+                onMouseMove={(e) => handleMove(inactiveHits, e)}
+                onMouseLeave={() => {
+                  setHovered(null)
+                  setTip(null)
+                }}
+                onClick={(e) => handleClick(inactiveHits, e)}
+              />
+            </div>
+          </RotateOnPhone>
         ) : (
-          <div className={styles.empty}>No inactive managers with HMOTW wins through {year}.</div>
+          <>
+            <div className={styles.secLabel}>Inactive Managers</div>
+            <div className={styles.empty}>No inactive managers with HMOTW wins through {year}.</div>
+          </>
         )}
       </div>
       <ChartTooltip state={tip} />

@@ -52,3 +52,20 @@
   color: #e8e8e8;
   background: #2a2a2a;
 }
+
+/* Phones (Entry 107): Active and Inactive are each a flipped panel. The card's
+   side padding would make their turned height 28px shorter than every other
+   flipped panel (they must all share one height), so it goes on phones. The
+   pyramids are wider than the turned screen at full height, so — like the
+   score table — they keep the shared height and run a little longer. */
+@media (max-width: 820px) {
+  .card {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+/* Entry 107: inside a flipped panel the section label sat flush on the
+   panel's edge and lost its first letter — small inset. */
+:global([data-rotated]) .secLabel {
+  padding-left: 8px;
+}
