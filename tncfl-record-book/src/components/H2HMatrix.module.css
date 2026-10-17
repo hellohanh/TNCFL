@@ -64,3 +64,12 @@
 :global([data-rotated]) .rowHdr {
   padding: 4px 8px 4px 0;
 }
+/* Entry 96: while rotated, the name column shrinks to its longest name
+   (width:1% + nowrap) instead of taking a share of the stretched table's
+   extra width — the extra goes to the record columns. */
+:global([data-rotated]) .corner,
+:global([data-rotated]) .rowHdr {
+  min-width: 0;
+  width: 1%;
+  white-space: nowrap;
+}
