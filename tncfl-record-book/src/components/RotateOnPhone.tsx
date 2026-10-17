@@ -71,13 +71,21 @@ export default function RotateOnPhone({ children }: { children: ReactNode }) {
       let Wd = Math.max(minW, Math.ceil(Math.min(Math.max(window.innerHeight, window.screen?.height || 0) - 24, 900)))
       let H = 0
       let s = 1
-      for (let pass = 0; pass < 3; pass++) {
+      for (let pass = 0; pass < 4; pass++) {
         unit.style.width = `${Wd}px`
         H = unit.offsetHeight
         s = Math.min(wrapW / H, MAX_SCALE)
         // Layout length that fills the visible length at this scale — never
         // narrower than the content needs.
-        const target = Math.max(minW, Math.floor(visibleLong / s))
+        // A panel that keeps its proportions (the pyramids) gets shorter as it
+        // gets narrower; if filling the turned height would need more than
+        // MAX_SCALE, widen it instead so it still reaches the shared height
+        // (it then runs a little longer, like the score table). Entry 112.
+        const sFill = wrapW / H
+        const target =
+          sFill > MAX_SCALE + 0.001
+            ? Math.ceil(Wd * (sFill / MAX_SCALE))
+            : Math.max(minW, Math.floor(visibleLong / s))
         if (Math.abs(target - Wd) <= 2) break
         Wd = target
       }

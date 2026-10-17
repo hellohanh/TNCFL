@@ -2939,3 +2939,7 @@ Causes found by CPU profiling, and fixes:
 5. Drawer (Entry 111): tapped tab highlights instantly.
 
 Results (4× slowdown): season→season 1.3s → ~0.4s; records→season 2.5s → ~0.4s; hof→profiles ~0.4s (unchanged, already fast); season→records 1.5s → ~1.4s first paint (remaining cost is browser paint/compositing of the Competence chart's ~60 medal canvases and the grid — next candidate: draw medals once and reuse as images). Regression checks: Records lists still reach full length (73/199/146/146) with 15 visible; seasons 2011/2020/2025 no overflow; zero console errors. Pushed at Hanh's request ("push what you have so I can see the progress").
+
+## Entry 113 (2026-10-17) — Flip height fix for the pyramids after the speed change
+
+After Entry 112, the two Peak Performance panels came out 288–306px tall when turned instead of the shared 312px (they keep their proportions, so narrowing them shrank their height until the 1.6× scale cap). `RotateOnPhone`: if filling the turned height would need more than the cap, the panel is widened instead (then runs a little longer, like the score table); 4 passes. Verified after a full slow scroll on 2011/2020/2025: every flipped panel exactly 312px. Speed unchanged (season→season ~0.4s at 4× slowdown); H2H matrix unaffected. Pushed (Hanh: push progress while working the lag problem).
