@@ -46,3 +46,21 @@
   font-variant-numeric: tabular-nums;
   border-radius: 4px;
 }
+
+/* While drawn sideways on an upright phone (RotateOnPhone, Entry 95): the
+   table stretches across the full turned width and rows tighten a little, so
+   the whole matrix fits the turned screen at (or near) full size. */
+:global([data-rotated]) .note {
+  margin: 4px 0 8px;
+}
+:global([data-rotated]) .table {
+  width: 100%;
+}
+:global([data-rotated]) .colHdr,
+:global([data-rotated]) .self,
+:global([data-rotated]) .cell {
+  padding: 4px 4px;
+}
+:global([data-rotated]) .rowHdr {
+  padding: 4px 8px 4px 0;
+}

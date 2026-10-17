@@ -2822,3 +2822,9 @@ Verified on S25: all 15 visible rows have the span directly below and aligned wi
 ## Entry 94 (2026-10-16) — Mobile: Longest Drought status chip right-aligned
 
 Per Hanh: on phones the ended/ongoing chip is pushed to the right edge of each row's first line (`margin-left: auto` at ≤820px in `AtdrCard.module.css`), spaced away from "NN wks". Verified on S25: all 15 rows have the chip flush right (0px from the row's edge), chip on the same line as the weeks, date span still aligned under the name. Desktop unchanged. Committed locally, not pushed.
+
+## Entry 95 (2026-10-16) — Mobile: Head-to-Head All-vs-All matrix drawn sideways (Tracker auto-rotate)
+
+Per Hanh: the All-vs-All matrix rotates on phones "just like the tracker." New reusable `RotateOnPhone.tsx` — a React port of the 2026 Tracker's `applyRotation` (MOBILE LAYOUT): only while the phone is upright (`max-width: 820px` AND portrait), the panel is laid out at landscape width (phone's long side − 24, capped at 900px — the Tracker's numbers) and drawn `translateY(W·s) rotate(-90deg) scale(s)`, so turning the phone 90° clockwise shows it upright. "Fit" like the Tracker's FIT tabs: scale `s = min(1, phone width / panel height, visible height below the header / panel length)` — never scaled up. Landscape and desktop render untouched. `HeadToHead.tsx` wraps `H2HMatrix` in it; `H2HMatrix.module.css` adds `[data-rotated]` rules (table stretches to the full turned width, rows tightened to 4px padding) so it fits near full size.
+
+Before: the 545px-wide matrix sat in a 312px sideways-scrolling box. Verified on S25: rotated, laid out 756×292px, scale 0.91 (limited by the visible length under the header), occupies 265×687px — whole matrix visible at once when turned, no sideways scroll on the page; S25 landscape (780×360) and desktop: not rotated, unchanged. Zero console errors; clean build. Committed locally, not pushed.

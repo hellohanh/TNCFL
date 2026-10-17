@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import type { RecordBookData } from '../types/data'
 import H2HMatrix from './H2HMatrix'
+import RotateOnPhone from './RotateOnPhone'
 import H2HDuelPicker from './H2HDuelPicker'
 import styles from './HeadToHead.module.css'
 
@@ -29,7 +30,10 @@ export default function HeadToHead() {
       </div>
 
       {tab === 'matrix' ? (
-        <H2HMatrix h2h={data.h2h} career={data.career} meta={data.meta} />
+        // Upright phone: the matrix is drawn sideways (Tracker-style) — Entry 95.
+        <RotateOnPhone>
+          <H2HMatrix h2h={data.h2h} career={data.career} meta={data.meta} />
+        </RotateOnPhone>
       ) : (
         <H2HDuelPicker h2h={data.h2h} career={data.career} meta={data.meta} allPlayers={data.meta.hmotw.all_players} />
       )}
