@@ -2926,3 +2926,16 @@ Per Hanh: keep the left drawer's spacing, make the tab text a little bigger for 
 ## Entry 111 (2026-10-17) — Mobile drawer: tapped tab highlights instantly, like the Tracker
 
 Per Hanh: highlight the tapped tab like the Tracker does. The active style already matched the Tracker exactly (white text, `#222` background, red `#C0252B` left bar); what differed was timing — the drawer closed and the route changed in the same tap, so the new highlight was never seen. `MobileTabDrawer.tsx`: tapping a tab now moves the highlight to it immediately (`pending` state), holds 160ms, then closes the drawer and navigates; `pending` clears on route change. Inactive item text `#999` → `#aaa` (the Tracker's `--text2`). Verified on S25: before tap 2020 active; 60ms after tapping Records → Records highlighted while still on 2020; then navigates to /league/records and closes; reopening shows Records active. Zero console errors; clean build. Committed locally, not pushed.
+
+## Entry 112 (2026-10-17) — Mobile speed: tab taps no longer freeze the phone
+
+Hanh asked whether the lag after tapping a tab was a coding issue — it was. Measured with headless Chromium at 4× CPU slowdown (≈ mid-range phone), S25 viewport: opening a season page blocked the main thread 0.5–1s (up to 2.5s total before the page responded); the highlight/drawer couldn't repaint until it finished.
+
+Causes found by CPU profiling, and fixes:
+1. **`RotateOnPhone` measured all 9 flipped panels at page open** (~610ms), each walking every element with `getComputedStyle` over up to 5 passes. Now: measures only when a panel is within ~900px of the viewport (IntersectionObserver), reads just the panel and its `<table>`s, 3 passes max; before measuring it reserves the usual flipped length so the page doesn't jump.
+2. **`SeasonExtremesRow` 15-row cap forced two full-page layouts** (~480ms). Now one batched write-then-read pass (`capListsToRows`).
+3. **Every section of a ~20,000px season page was built at once.** `RevealOnScroll` (wraps every season section) now builds a section only when it's within ~1.5 screens on phones (placeholder until then; stays built; resets on season change). Desktop unchanged.
+4. **Records built all 564 list rows at once.** Phones build the first 20 of each list immediately, the rest 350ms later; `computeLeagueRecords`/`computeLowestScores` memoized.
+5. Drawer (Entry 111): tapped tab highlights instantly.
+
+Results (4× slowdown): season→season 1.3s → ~0.4s; records→season 2.5s → ~0.4s; hof→profiles ~0.4s (unchanged, already fast); season→records 1.5s → ~1.4s first paint (remaining cost is browser paint/compositing of the Competence chart's ~60 medal canvases and the grid — next candidate: draw medals once and reuse as images). Regression checks: Records lists still reach full length (73/199/146/146) with 15 visible; seasons 2011/2020/2025 no overflow; zero console errors. Pushed at Hanh's request ("push what you have so I can see the progress").

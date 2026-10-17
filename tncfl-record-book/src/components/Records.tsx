@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import type { RecordBookData } from '../types/data'
 import { computeLeagueRecords } from '../lib/computeLeagueRecords'
@@ -11,6 +11,7 @@ import CumulativeCompetenceChart from './CumulativeCompetenceChart'
 import ScoreExtremesList from './ScoreExtremesList'
 import AtdrCard from './AtdrCard'
 import SeasonTotalsCard from './SeasonTotalsCard'
+import { useIsPhone } from '../lib/useIsPhone'
 import styles from './Records.module.css'
 
 // LEAGUE sub-page. "All-Time Longest Drought" and "All-Time Season Totals"
@@ -24,13 +25,28 @@ import styles from './Records.module.css'
 // actual current `career[m].status` instead.
 export default function Records() {
   const data = useOutletContext<RecordBookData>()
-  const records = computeLeagueRecords(data.career, data.payouts, data.meta.hmotw.top5_streaks, data.meta.years_desc)
+  // Entry 112 (speed, phones): the four long lists hold 564 rows between them
+  // but a phone shows 15 of each — build the first 20 of each immediately and
+  // the rest a moment after the page has appeared, so tapping Records doesn't
+  // freeze the phone while every row is laid out.
+  const isPhone = useIsPhone()
+  const [allRows, setAllRows] = useState(!isPhone)
+  useEffect(() => {
+    if (!isPhone) return
+    const t = window.setTimeout(() => setAllRows(true), 350)
+    return () => window.clearTimeout(t)
+  }, [isPhone])
+  const firstRows = <T,>(rows: T[]) => (allRows ? rows : rows.slice(0, 20))
+  const records = useMemo(
+    () => computeLeagueRecords(data.career, data.payouts, data.meta.hmotw.top5_streaks, data.meta.years_desc),
+    [data.career, data.payouts, data.meta.hmotw.top5_streaks, data.meta.years_desc],
+  )
   // Every real score >= 200, not just the top 21 — the premade
   // `all_time_scores` field only carries the top 25 (checked first, min
   // value 210.32), short of the 73 real weeks that actually clear 200.
   const highest = useMemo(() => computeHighScores(data.seasons, 200), [data.seasons])
   // Every real score <= 99.999, not a fixed top-21.
-  const lowest = computeLowestScores(data.seasons, 99.999)
+  const lowest = useMemo(() => computeLowestScores(data.seasons, 99.999), [data.seasons])
 
   const mostRecentYear = data.meta.years_desc[0]
   const atdrRows = (data.meta.hmotw.atdr_snapshots[mostRecentYear] || []).slice(0, 200)
@@ -55,7 +71,7 @@ export default function Records() {
           title="All-Time Highest Single Week Score"
           icon="🏆"
           accent="gold"
-          entries={highest}
+          entries={firstRows(highest)}
           meta={data.meta}
           scrollable
           phoneRows={15}
@@ -64,7 +80,7 @@ export default function Records() {
           title="All-Time Lowest Single Week Score"
           icon="💀"
           accent="blue"
-          entries={lowest}
+          entries={firstRows(lowest)}
           meta={data.meta}
           scrollable
           phoneRows={15}
@@ -72,14 +88,14 @@ export default function Records() {
       </div>
       <div className={styles.row2}>
         <AtdrCard
-          rows={atdrRows}
+          rows={firstRows(atdrRows)}
           statusByYear={currentStatusByManager}
           meta={data.meta}
           rowRef={atdrRowRef}
           maxHeight={atdrMaxHeight}
           phoneRows={15}
         />
-        <SeasonTotalsCard rows={seasonTotals} maxHeight={atdrMaxHeight} meta={data.meta} phoneRows={15} />
+        <SeasonTotalsCard rows={firstRows(seasonTotals)} maxHeight={atdrMaxHeight} meta={data.meta} phoneRows={15} />
       </div>
     </div>
   )

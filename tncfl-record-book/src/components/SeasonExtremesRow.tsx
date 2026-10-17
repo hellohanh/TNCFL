@@ -51,21 +51,29 @@ function fitRowsToTarget(card: HTMLDivElement | null, list: HTMLDivElement | nul
 // Phones (Entry 106, Records-tab treatment): the three panels stack (CSS), so
 // there's no shared height to match — instead each list shows exactly its top
 // 15 rows and scrolls for the rest, like the Records tab.
-function capToRows(card: HTMLDivElement | null, list: HTMLDivElement | null, n: number) {
-  if (!card || !list) return
-  card.style.maxHeight = ''
-  card.style.minHeight = ''
-  const rows = Array.from(list.children) as HTMLElement[]
-  rows.forEach((r) => {
-    r.style.display = ''
-  })
-  list.style.overflowY = 'auto'
-  if (rows.length <= n) {
+// Entry 112 (speed): all style WRITES for both lists first, then all READS —
+// one page layout instead of one per list (each forced layout of a full
+// season page cost ~240ms on a phone). Rows are only un-hidden if a desktop
+// fit had hidden them.
+function capListsToRows(pairs: Array<[HTMLDivElement | null, HTMLDivElement | null]>, n: number) {
+  const lists: HTMLDivElement[] = []
+  for (const [card, list] of pairs) {
+    if (!card || !list) continue
+    card.style.maxHeight = ''
+    card.style.minHeight = ''
+    for (const r of Array.from(list.children) as HTMLElement[]) if (r.style.display) r.style.display = ''
+    list.style.overflowY = 'auto'
     list.style.maxHeight = ''
-    return
+    lists.push(list)
   }
-  const top = list.getBoundingClientRect().top - list.scrollTop
-  list.style.maxHeight = `${Math.ceil(rows[n - 1].getBoundingClientRect().bottom - top)}px`
+  const caps = lists.map((list) => {
+    const rows = list.children
+    if (rows.length <= n) return ''
+    return `${Math.ceil((rows[n - 1] as HTMLElement).offsetTop + (rows[n - 1] as HTMLElement).offsetHeight - (rows[0] as HTMLElement).offsetTop)}px`
+  })
+  lists.forEach((list, i) => {
+    list.style.maxHeight = caps[i]
+  })
 }
 
 export default function SeasonExtremesRow({ competence, topweeks, lowweeks, meta }: SeasonExtremesRowProps) {
@@ -80,8 +88,13 @@ export default function SeasonExtremesRow({ competence, topweeks, lowweeks, meta
   useLayoutEffect(() => {
     function fit() {
       if (isPhone) {
-        capToRows(topCardRef.current, topListRef.current, 15)
-        capToRows(lowCardRef.current, lowListRef.current, 15)
+        capListsToRows(
+          [
+            [topCardRef.current, topListRef.current],
+            [lowCardRef.current, lowListRef.current],
+          ],
+          15,
+        )
         return
       }
       for (const l of [topListRef.current, lowListRef.current]) {

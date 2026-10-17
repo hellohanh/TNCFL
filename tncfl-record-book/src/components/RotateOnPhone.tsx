@@ -58,24 +58,20 @@ export default function RotateOnPhone({ children }: { children: ReactNode }) {
       // (charts, donuts). Scale is capped at MAX_SCALE for very short panels.
       const wrapW = wrap.clientWidth
       const visibleLong = window.innerHeight - headerHeight - 24
-      const neededWidth = () => {
-        // Widest content, including tables sitting inside their own
-        // sideways-scrolling boxes (scrollWidth beyond the box).
-        let need = unit.scrollWidth
-        unit.querySelectorAll<HTMLElement>('*').forEach((el) => {
-          const extra = el.scrollWidth - el.clientWidth
-          if (extra > 1 && getComputedStyle(el).overflowX !== 'visible') need = Math.max(need, unit.offsetWidth + extra)
-        })
-        return need
-      }
       // The narrowest the content can go (tables' natural width; charts ~0):
-      // lay the panel out at 1px and read what overflows.
+      // lay the panel out at 1px and read how wide it and its tables insist on
+      // being. Entry 112 (speed): only the panel and its <table>s are read —
+      // was every element + getComputedStyle, the single biggest cost of
+      // opening a season page on a phone.
       unit.style.width = '1px'
-      const minW = Math.max(1, neededWidth())
+      let minW = Math.max(1, unit.scrollWidth)
+      unit.querySelectorAll('table').forEach((t) => {
+        minW = Math.max(minW, t.offsetWidth)
+      })
       let Wd = Math.max(minW, Math.ceil(Math.min(Math.max(window.innerHeight, window.screen?.height || 0) - 24, 900)))
       let H = 0
       let s = 1
-      for (let pass = 0; pass < 5; pass++) {
+      for (let pass = 0; pass < 3; pass++) {
         unit.style.width = `${Wd}px`
         H = unit.offsetHeight
         s = Math.min(wrapW / H, MAX_SCALE)
@@ -90,15 +86,29 @@ export default function RotateOnPhone({ children }: { children: ReactNode }) {
       s = Math.min(wrapW / H, MAX_SCALE)
       setGeo((g) => (g && g.Wd === Wd && g.H === H && Math.abs(g.s - s) < 0.001 ? g : { Wd, H, s }))
     }
-    measure()
-    const ro = new ResizeObserver(() => {
-      cancelAnimationFrame(raf)
-      raf = requestAnimationFrame(measure)
-    })
-    ro.observe(unit)
-    ro.observe(wrap)
+    // Entry 112 (speed): measure only when the panel is within about a screen
+    // of the viewport — not all 9 flipped panels the moment a season page
+    // opens. Until then it reserves the usual flipped height (see below), so
+    // the page doesn't jump. Re-measures on resize once it has been seen.
+    let ro: ResizeObserver | null = null
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return
+        io.disconnect()
+        measure()
+        ro = new ResizeObserver(() => {
+          cancelAnimationFrame(raf)
+          raf = requestAnimationFrame(measure)
+        })
+        ro.observe(unit)
+        ro.observe(wrap)
+      },
+      { rootMargin: '900px 0px' },
+    )
+    io.observe(wrap)
     return () => {
-      ro.disconnect()
+      io.disconnect()
+      ro?.disconnect()
       cancelAnimationFrame(raf)
     }
   }, [upright, headerHeight])
@@ -110,7 +120,15 @@ export default function RotateOnPhone({ children }: { children: ReactNode }) {
   const H = geo?.H ?? 0
   return (
     <div ref={wrapRef} style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
-      <div style={{ position: 'relative', width: H * s, height: Wd * s }}>
+      <div
+        style={{
+          position: 'relative',
+          width: H * s,
+          // Before it's measured, hold the usual flipped length (the visible
+          // screen height below the header) so nothing below jumps.
+          height: geo ? Wd * s : Math.max(0, window.innerHeight - headerHeight - 24),
+        }}
+      >
         <div
           ref={unitRef}
           data-rotated=""
