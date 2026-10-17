@@ -30,6 +30,7 @@ import SalaryLedgerTable from './SalaryLedgerTable'
 import SeasonExtremesRow from './SeasonExtremesRow'
 import ManagerHoverCard from './ManagerHoverCard'
 import RotateOnPhone from './RotateOnPhone'
+import { useIsPhone } from '../lib/useIsPhone'
 
 // Milestone 7: the recap's full prose body now renders right under the hero
 // (still part of the "story" read, not gated behind a scroll-reveal — same
@@ -44,6 +45,8 @@ export default function SeasonPage() {
   const season = year ? data.seasons[year] : undefined
   const fallbackYear = String(data.meta.years_desc[0])
   const summary = useSeasonSummary(season ?? data.seasons[fallbackYear])
+
+  const isPhone = useIsPhone()
 
   if (!season || !year) {
     return <p>No data for season {year}.</p>
@@ -83,7 +86,8 @@ export default function SeasonPage() {
           season only (years_desc[0] — 2025 today, rolls forward automatically
           when the next season is added to the data). Every earlier season goes
           straight from the recap to the scoreboard. Per Hanh, 2026-10-16. */}
-      {isLatestSeason && <FleaFlicker key={year} />}
+      {/* Entry 109 (Hanh): not on phones at all. */}
+      {isLatestSeason && !isPhone && <FleaFlicker key={year} />}
       <RevealOnScroll marginTop={0}>
         <SeasonStatTiles season={season} summary={summary} meta={data.meta} />
         <ManagerFilterToggle />

@@ -2914,3 +2914,7 @@ Verified on S25 (2020, 2011, 2025): every flipped panel on the page exactly 312p
 Per Hanh (first under the career donuts, then "for all tabs"): the site-wide 1000px bottom reading buffer (`.layout-content`, Entry 81d) drops to the normal 24px page padding on phones (`index.css`, ≤820px), and the career donuts' 24px bottom margin is dropped on phones (`SalaryDonuts.module.css`, `.wrap:last-child`). Verified on S25: exactly 24px below the last content on Hall of Fame, Manager Profiles, Records, Head-to-Head matrix, How Our League Works, and Season 2011/2020/2025 (was 780–1000px). Duel Picker's default pairing is shorter than the screen, so the remaining screen below it isn't scrollable space. Desktop keeps its 1000px buffer. Committed locally, not pushed.
 
 (Entries 103–107 pushed live 2026-10-17 at Hanh's "push"; deploy succeeded.)
+
+## Entry 109 (2026-10-17) — Mobile: FleaFlicker scroll animation removed on phones
+
+Per Hanh: "remove the hero scroll on mobile device only." `SeasonPage.tsx`: `<FleaFlicker>` now renders only when it's the latest season AND not a phone (`useIsPhone`, ≤820px; hook placed above the early return). Phones go straight from the recap to the scoreboard on every season, 2025 included. Verified: 2025 on S25 — no FleaFlicker; on desktop — still present. Zero console errors; clean build. Pushed with Entry 108 at Hanh's "push".
