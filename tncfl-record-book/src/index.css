@@ -169,3 +169,12 @@ body {
     align-items: stretch;
   }
 }
+
+/* Phones (Entry 108, per Hanh): no dead space under the last panel (e.g. the
+   career donuts at the bottom of every Season page). The desktop 1000px
+   reading buffer drops to the normal 24px page padding on phones. */
+@media (max-width: 820px) {
+  .layout-content {
+    padding-bottom: 24px;
+  }
+}

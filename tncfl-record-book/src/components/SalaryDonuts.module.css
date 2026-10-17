@@ -57,3 +57,11 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Phones (Entry 108): the career donuts close every Season page — drop their
+   bottom margin there so only the standard 24px page padding remains. */
+@media (max-width: 820px) {
+  .wrap:last-child {
+    margin-bottom: 0;
+  }
+}

@@ -2908,3 +2908,9 @@ Per Hanh: "for peak performance — stack both and flip both." `PeakPerformance.
 Verified on S25 (2020, 2011, 2025): every flipped panel on the page exactly 312px turned height; year labels along the base now readable (were crowded/overlapping when stacked upright). Zero console errors; clean build. Committed locally, not pushed.
 
 **Audit of all 15 seasons (S25, after Entry 106):** every season has exactly the same section set as 2020 — no element 2020 didn't cover. Page width = viewport for all 15; 7 (now 9 with the pyramids) flipped panels each, all the same height; nugget counts 9–13, all render in the phone column. Only overflow found: 2025's FleaFlicker fireworks sparks/canvas reaching up to ~33px past the right edge during the TD animation — html/body `overflow-x: hidden` already prevents any sideways scroll.
+
+## Entry 108 (2026-10-17) — Mobile: bottom dead space removed on every tab
+
+Per Hanh (first under the career donuts, then "for all tabs"): the site-wide 1000px bottom reading buffer (`.layout-content`, Entry 81d) drops to the normal 24px page padding on phones (`index.css`, ≤820px), and the career donuts' 24px bottom margin is dropped on phones (`SalaryDonuts.module.css`, `.wrap:last-child`). Verified on S25: exactly 24px below the last content on Hall of Fame, Manager Profiles, Records, Head-to-Head matrix, How Our League Works, and Season 2011/2020/2025 (was 780–1000px). Duel Picker's default pairing is shorter than the screen, so the remaining screen below it isn't scrollable space. Desktop keeps its 1000px buffer. Committed locally, not pushed.
+
+(Entries 103–107 pushed live 2026-10-17 at Hanh's "push"; deploy succeeded.)
