@@ -2991,3 +2991,6 @@ Per Hanh: write new ones (the old hub-era files were never in the repo). Added a
 - **`TNCFL_Scope.html`** — product scope: what the Record Book is, the data rule, who it's for, every season section and League page, how it behaves on a phone, out of scope, status.
 - **`TNCFL_TechRef.html`** — developer reference: stack, repo layout, routes, `site_data.json` keys, derived computations, key components, the mobile system (`MobileTabDrawer`, `RotateOnPhone` equal-height fill, list caps, lazy sections), hard-won gotchas, build/push workflow.
 Facts taken from the current code (`App.tsx` routes, `package.json`, component/lib listing, data keys). README file map and SKILL "Living docs" updated. Committed locally, not pushed.
+- **#14 Commit identity — keep Hanh's name** (`Hanh <hello.meetho@gmail.com>`); GitHub's "Unverified" label is accepted. Closed.
+
+**Open-items pass complete.** Fixed: #7 (trophy swipe/drag everywhere), #10 (SeasonPage hooks), #13 (new Scope/TechRef). Checked OK: #6. Kept/closed: #12, #14. Dropped: #1, #2, #3, #4, #5, #8, #9. **Still open: #11 only — Milestone 19 polish (code splitting, reduced-motion, contrast/keyboard), deferred.**

@@ -33,9 +33,8 @@ tracker is published separately from the `TNCFL_TRACKER` repo) — this project 
   manager colours and avatars in the Finish header; H2H name column = longest name + 20px.
 - **Milestones:** 0–18, 20, 21 done; 12 cancelled; 19 (polish) in progress. See `ROADMAP.md`.
 
-**Open issues:** catalogued in `SESSION_LEDGER.md` Entry 114 (14 items — mobile, desktop,
-housekeeping). Top candidates: Records medal canvases (speed), the remaining Manager Profiles phone
-items, and the long-standing desktop nugget visual review.
+**Open issues:** the Entry 114 catalog was worked through with Hanh in Entries 115–117 — the only
+item still open is Milestone 19 polish (code splitting, reduced-motion, contrast/keyboard), deferred.
 
 ## Working setup
 

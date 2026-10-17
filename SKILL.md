@@ -72,7 +72,8 @@ not get a pass on it just because the visuals are changing.
 - **All 15 seasons (2011–2025)** on the locked 2011 template; **all 5 LEAGUE sub-pages** built.
 - **Mobile (≤820px; Galaxy S25 reference):** see "Mobile navigation" and "Mobile layout rules"
   below. FleaFlicker is desktop-only, latest season only.
-- **Open issues:** catalogued in `SESSION_LEDGER.md` Entry 114.
+- **Open issues:** only Milestone 19 polish remains (deferred) — see `SESSION_LEDGER.md` Entries 114–117.
+- **Commit identity:** keep `Hanh <hello.meetho@gmail.com>` (Hanh's call, Entry 117); "Unverified" on GitHub is accepted.
 
 The paragraphs below are the milestone-by-milestone history behind that snapshot.
 
