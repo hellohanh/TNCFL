@@ -86,6 +86,27 @@
   margin-top: 2px;
 }
 
+/* Phones (<=820px, Entry 89, per Hanh): the 5 stat panels split over two
+   lines — Seasons + Career Net on the first, HMOTW Tally + Career Pts + Best
+   Season on the second. A 6-column grid lets the top two span 3 columns each
+   and the bottom three span 2 each, so both lines fill the full width.
+   Desktop keeps its single row of 5. */
+@media (max-width: 820px) {
+  .statsRow {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    row-gap: 14px;
+    column-gap: 10px;
+  }
+  .statsRow > .stat {
+    grid-column: span 2;
+    padding: 6px 8px;
+    min-width: 0;
+  }
+  .statsRow > .stat:nth-child(-n + 2) {
+    grid-column: span 3;
+  }
+}
+
 .streaksBlock {
   margin-top: 28px;
 }

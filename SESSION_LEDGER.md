@@ -2784,3 +2784,9 @@ Hall of Fame tab, first stop in the tab-by-tab mobile pass (Galaxy S25). Preview
 **Real bug found: swiping the cabinet never worked, desktop included.** The trophy `<img>`s carry `pointer-events: none`, so framer-motion's `drag` on them never receives a pointer. On phones the swipe now lives on the stage (`motion.div` `onPan`/`onPanEnd`): the trophy follows the finger, and swipe left → older year (right side), swipe right → more recent — normal phone direction. (The dead desktop `drag` code, which also had the reversed mapping, is left as-is; flagged to Hanh.)
 
 **Verified on S25 emulation:** at rest exactly 1 trophy visible (opacity > 0); mid-transition the outgoing one is fading at the left edge while the incoming glides in; arrows and both swipe directions change year correctly; desktop still shows 3 (1 / 0.25 / 0.1). Zero console errors; clean build.
+
+## Entry 89 (2026-10-16) — Mobile: Manager Profile stats strip on two lines
+
+Manager Profiles tab, worked on Damian as the example (applies to every manager). Per Hanh: on phones (≤820px) the 5 stat panels split over two lines — **Seasons + Career Net** on line 1, **HMOTW Tally + Career Pts + Best Season** on line 2. `ManagerProfileCard.module.css`: 6-column grid at ≤820px, first two panels span 3, last three span 2, both lines fill the width; panel padding tightened to `6px 8px`. Desktop keeps its single row of 5.
+
+Before: on the S25 only 3 of 5 panels fit — Career Pts was sliced and Best Season was off-screen with no way to reach it. **Verified on S25 emulation** across Damian, Hanh, D'lyn (widest value, −$2,248.40), Lonny (1 season) and Randy ($5,583.20): every panel on screen, no value clipped; desktop still one row. Clean build. **Committed locally, not pushed** (push only on Hanh's go-ahead).
