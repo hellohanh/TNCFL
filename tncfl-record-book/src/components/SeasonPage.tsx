@@ -48,6 +48,7 @@ export default function SeasonPage() {
     return <p>No data for season {year}.</p>
   }
 
+  const isLatestSeason = year === fallbackYear
   const recap = data.recaps[year]
   const dance = data.dance[year]
   const nuggets = data.nuggets[year]
@@ -77,7 +78,11 @@ export default function SeasonPage() {
         <RecapBody recap={recap} />
       </div>
       <ScrollCue />
-      <FleaFlicker key={year} />
+      {/* The FleaFlicker scroll animation plays on the most recent completed
+          season only (years_desc[0] — 2025 today, rolls forward automatically
+          when the next season is added to the data). Every earlier season goes
+          straight from the recap to the scoreboard. Per Hanh, 2026-10-16. */}
+      {isLatestSeason && <FleaFlicker key={year} />}
       <RevealOnScroll marginTop={0}>
         <SeasonStatTiles season={season} summary={summary} meta={data.meta} />
         <ManagerFilterToggle />

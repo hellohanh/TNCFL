@@ -2751,3 +2751,17 @@ All four project docs brought current with what's actually in the repo, checked 
 **Stop:** committed and pushed to `main`; snapshot zip `S040_2026-10-16_TNCFL_RecordBook.zip` produced.
 
 **Still the top outstanding item:** a screenshot-based visual review of every season's nugget layout under the Milestone 20 positioning model.
+
+---
+
+## Entry 86 (2026-10-16) — Mobile: left-edge tab drawer (ported from the Tracker); FleaFlicker limited to the latest season
+
+**Mobile tab drawer.** Same treatment Hanh just gave the 2026 Tracker (its `tdw-*` "MOBILE LAYOUT" block — yellow pill handle, drawer, scrim, swipe/tap), **mirrored to the LEFT edge** for the Record Book per Hanh's call (the Tracker's handle is on the right; the RB's rail already lives on the left). New `MobileTabDrawer.tsx` / `.module.css`, mounted in `Layout.tsx`. At ≤820px (the Tracker's breakpoint) `index.css` hides `.timeline-rail` and sets `overflow-x: hidden` on html/body; the drawer lists LEAGUE's 5 pages, "2026 ↗", and every season (active item: white text, red left border, like the Tracker). Open by tapping the handle or dragging it right; close by dragging the panel left, tapping the scrim, Escape, or picking a link (which also scrolls to top). Closes on any route change. Above 820px the drawer renders nothing; desktop is unchanged.
+
+**Real bug caught in testing:** a tap on the handle opened the drawer, then the browser's synthetic follow-up `click` landed on the scrim (which slides in over the handle) and closed it instantly. Fixed with `preventDefault()` in the handle's `touchend`.
+
+**FleaFlicker on the latest season only.** `SeasonPage.tsx` renders `<FleaFlicker>` only when the route's year is `meta.years_desc[0]` (2025 today — rolls forward automatically when the next completed season is added). Every earlier season goes straight from the recap → scroll cue → scoreboard. Applies at every screen size.
+
+**Verified (headless Chromium, `vite preview` at `/TNCFL/`):** iPhone 13 viewport — rail hidden, page width = viewport (no sideways scroll), swipe-open, tap-open, swipe-close and tap-to-navigate all work, drawer closes after navigating; desktop 1440px — rail visible, drawer hidden; 2024 page is ~3,300px shorter than 2025 (the 380vh animation gone), recap-to-scoreboard transition looks clean. Zero console errors. Clean `tsc -b` + `vite build` (537 modules).
+
+**Noted, not changed:** on a phone the sticky site header's title ("FANTASY FOOTBALL LEAGUE RECORD BOOK") is cut off at the right edge, and the header takes ~1/6 of the screen. The Tracker hides its top bar on phones — not requested here.

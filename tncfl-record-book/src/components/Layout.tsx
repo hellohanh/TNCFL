@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import type { CSSProperties } from 'react'
 import TimelineRail from './TimelineRail'
+import MobileTabDrawer from './MobileTabDrawer'
 import SiteHeader from './SiteHeader'
 import { useElementSize } from '../lib/useElementSize'
 import { HeaderHeightProvider } from '../lib/HeaderHeightContext'
@@ -62,6 +63,9 @@ export default function Layout({ data }: LayoutProps) {
               temporary batch-by-batch windowing filter has been removed; this now
               just renders the full year list directly. */}
           <TimelineRail years={data.meta.years_desc} />
+          {/* Phones (<=820px): the rail is hidden and this left-edge handle drawer
+              takes over navigation — see MobileTabDrawer.tsx. Renders nothing on desktop. */}
+          <MobileTabDrawer years={data.meta.years_desc} />
           <main className="layout-content">
             {/* Outlet renders whichever nested route matched — SeasonPage right
                 now, more route types later (e.g. a League/Hall of Fame page in

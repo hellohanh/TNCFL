@@ -26,9 +26,9 @@ that's flagged so you know what you already have muscle memory for vs. what's ge
 | 16 — Roll out 2012–2025 | ✅ Done (2026-09-06) |
 | 17 — League / Hall of Fame section | ✅ Done (2026-09-08) |
 | 18 — PWA + deploy pipeline | ✅ Done (2026-09-08/09) |
-| 19 — Polish pass | ⏳ Not started |
+| 19 — Polish pass | ⏳ Started — mobile tab drawer done (Entry 86); rest not started |
 | 20 — Nugget system rebuild | ✅ Done (2026-09-08) — **visual review of every season's nuggets still outstanding** |
-| 21 — FleaFlicker scroll animation (replaces FootballTransition) | ✅ Done (2026-09-11/12; old component deleted 2026-10-16) |
+| 21 — FleaFlicker scroll animation (replaces FootballTransition) | ✅ Done (2026-09-11/12; old component deleted 2026-10-16; latest season only since Entry 86) |
 
 ---
 
@@ -2057,7 +2057,11 @@ Original plan, kept for reference:
 
 ---
 
-## Milestone 19 — Polish pass — NOT STARTED
+## Milestone 19 — Polish pass — STARTED
+
+**Done so far:** mobile tab drawer — the 2026 Tracker's yellow edge handle, mirrored to the left edge;
+the rail hides at ≤820px (Entry 86).
+
 
 Performance (route-based code splitting so visiting `/season/2011` doesn't load all 15 seasons'
 components at once), a real mobile QA pass across the swipeable season-chapter flow, and a final
@@ -2158,6 +2162,8 @@ Entries 81e–81g for the build history.
   blue→mustard as the TD fades in; fireworks are 2–4 random bursts per cycle at random positions,
   chained with `setTimeout` at a random 2400–4800ms (not `setInterval`), using the trophy-cabinet
   spark mechanic.
+- **Latest season only (2026-10-16, Entry 86):** renders only when the year is `meta.years_desc[0]`;
+  earlier seasons skip it.
 - **Old component:** `FootballTransition` was kept as a commented-out fallback until
   2026-10-16, then deleted (Entry 83).
 

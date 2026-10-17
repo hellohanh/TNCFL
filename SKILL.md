@@ -70,8 +70,9 @@ not get a pass on it just because the visuals are changing.
 - **Done:** Milestones 0–18, 20, 21 (and sub-rounds 7a–7p). **Cancelled:** 12. **Not started:** 19
   (polish pass). `ROADMAP.md` has the status table.
 - **All 15 seasons (2011–2025) live** on the locked 2011 template; **all 5 LEAGUE sub-pages** built.
-- **FleaFlicker FF2** (18-frame flea-flicker play diagram) is the scroll animation between recap
-  and scoreboard; `FootballTransition` is deleted.
+- **FleaFlicker FF2** (18-frame flea-flicker play diagram) plays between recap and scoreboard on the
+  latest season only; `FootballTransition` is deleted.
+- **Mobile:** left-edge handle drawer replaces the rail at ≤820px (Entry 86).
 - **Top outstanding item:** screenshot-based visual review of every season's nugget layout under the
   Milestone 20 model. Headless Chromium works (since Entry 65) — the review just hasn't been done.
 - **Open housekeeping (Hanh's call):** unused `public/football/*.png` (~2.8 MB) still ship;
@@ -410,10 +411,19 @@ ship and required no new tooling, but the user chose to accept the added build-p
   (`S0XX_YYYY-MM-DD_TNCFL_RecordBook.zip`) is still produced at each stop for the next session's
   upload — see `README.md`'s Stop Protocol.
 
+## Mobile navigation — LOCKED (2026-10-16, Entry 86)
+
+At ≤820px (same breakpoint as the 2026 Tracker) the left `TimelineRail` is hidden and
+`MobileTabDrawer.tsx` takes over: the Tracker's yellow pill handle and drawer, **mirrored to the
+LEFT edge** (Hanh's call — the Tracker's is on the right). Lists LEAGUE pages, "2026 ↗", and every
+season. Tap or drag right to open; drag left, tap the scrim, Escape, or pick a link to close.
+Desktop is unchanged. If the Tracker's drawer changes, mirror the change here.
+
 ## FleaFlicker scroll animation — LOCKED (Milestone 21)
 
 `FleaFlicker.tsx` replaces the old `FootballTransition` (deleted 2026-10-16). It renders between
-each season's recap and scoreboard (`<FleaFlicker key={year} />`), in a `380vh` wrapper with a
+the recap and scoreboard of the **latest completed season only** (`meta.years_desc[0]`, Entry 86 — earlier
+seasons skip it), in a `380vh` wrapper with a
 sticky frame pinned below the site header. The shipped play is **FF2**: 18 hand-authored frames
 (Huddle → … → TD), greyscale tokens, defenders tracked by permanent `num` via
 `buildDefenderTracks()`, 🏈 emoji ball, cadence words that grow then fade, a line of scrimmage

@@ -13,7 +13,7 @@ tracker is published separately from the `TNCFL_TRACKER` repo) — this project 
 
 ---
 
-## Current State (as of 2026-10-16, S040 → Entry 85)
+## Current State (as of 2026-10-16, S040 → Entry 86)
 
 - **Live site:** https://hellohanh.github.io/TNCFL/ — React 19 + Vite + TypeScript, deployed by
   GitHub Actions on every push to `main` (~1–2 min to live). Installable as a PWA.
@@ -23,14 +23,16 @@ tracker is published separately from the `TNCFL_TRACKER` repo) — this project 
   essay), Manager Profiles (18 confirmed bios, avatars, `/league/profiles/:manager`), Records,
   Head-to-Head (matrix + duel picker), How Our League Works.
 - **Scroll animation:** FleaFlicker (FF2, 18-frame flea-flicker play diagram with fireworks on the
-  TD) sits between each season's recap and scoreboard. The old `FootballTransition` was deleted
-  2026-10-16.
-- **Nav rail:** LEAGUE (expandable) → "2026 ↗" external tracker link → years 2025…2011.
-- **Milestones:** 0–18, 20 and 21 done; 12 cancelled; **19 (polish pass) not started.** See the
+  TD) plays between the recap and scoreboard of the **latest season only** (2025 today). The old
+  `FootballTransition` was deleted 2026-10-16.
+- **Mobile (≤820px):** the rail is replaced by a yellow handle on the left edge that opens a tab
+  drawer — the Tracker's mobile treatment, mirrored left.
+- **Nav rail (desktop):** LEAGUE (expandable) → "2026 ↗" external tracker link → years 2025…2011.
+- **Milestones:** 0–18, 20 and 21 done; 12 cancelled; **19 (polish pass) started** (mobile drawer done). See the
   status table at the top of `ROADMAP.md`.
 - **Most recent work:** direct GitHub push workflow set up (Entry 82); `FootballTransition` deleted
   (Entry 83); 200+-point streak analysis (Entry 84); docs brought current and a stray duplicate
-  lockfile removed (Entry 85).
+  lockfile removed (Entry 85); mobile left-handle drawer + FleaFlicker on latest season only (Entry 86).
 
 **Next concrete step:** the **screenshot-based visual review of every season's nugget section**
 under the Milestone 20 pixel-position model (2011 included). Headless Chromium has been available
