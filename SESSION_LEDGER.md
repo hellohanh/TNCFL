@@ -2771,3 +2771,16 @@ All four project docs brought current with what's actually in the repo, checked 
 Per Hanh: the header shrinks rather than hiding (the Tracker hides its top bar; the RB keeps its brand). At ≤820px `SiteHeader.module.css` scales everything down: padding `8px 12px`, logo 90→52px, gap 16→10px, title `clamp(10px, 3.3vw, 19px)`, subtitle `clamp(8px, 2.4vw, 12px)`. Both title lines stay one line each and now fit.
 
 **Reference phone for mobile checks from now on: Galaxy S25** (Hanh's call) — emulated as 360×780 CSS px, 3× density, touch, Android Chrome UA (Playwright has no S25 preset). On it: header 119px → 69px tall, full title visible ("…LEAGUE RECORD BOOK" ends ~40px short of the right edge), page width = 360 (no sideways scroll), drawer still works. Desktop header unchanged (119px). Zero console errors; clean build.
+
+## Entry 88 (2026-10-16) — Mobile: Trophy Cabinet shows one trophy at a time; swipe fixed on phones
+
+Hall of Fame tab, first stop in the tab-by-tab mobile pass (Galaxy S25). Previewed inline first (current vs. proposed), approved with one change from Hanh: **the flanking trophies must not stay on screen** — they glide in and out on a year change, but at rest only that year's trophy shows.
+
+**Phones only (≤820px; desktop coverflow unchanged — still 225/375px offsets, 0.25/0.1 opacity):**
+- `TrophyCabinet.tsx` gets a `LAYOUT.phone` geometry (neighbors at ±190/±320px, opacity 0) via a new `lib/useIsPhone.ts` hook (same 820px breakpoint as the CSS). The existing spring animation does the glide: the old trophy slides out one side fading, the new one slides in from the other.
+- `TrophyCabinet.module.css`: trophy 400→260px, stage 300px, card height follows content (was fixed 561px), arrows 40px with mustard outline/arrow.
+- Flare spread scaled to the smaller trophy.
+
+**Real bug found: swiping the cabinet never worked, desktop included.** The trophy `<img>`s carry `pointer-events: none`, so framer-motion's `drag` on them never receives a pointer. On phones the swipe now lives on the stage (`motion.div` `onPan`/`onPanEnd`): the trophy follows the finger, and swipe left → older year (right side), swipe right → more recent — normal phone direction. (The dead desktop `drag` code, which also had the reversed mapping, is left as-is; flagged to Hanh.)
+
+**Verified on S25 emulation:** at rest exactly 1 trophy visible (opacity > 0); mid-transition the outgoing one is fading at the left edge while the incoming glides in; arrows and both swipe directions change year correctly; desktop still shows 3 (1 / 0.25 / 0.1). Zero console errors; clean build.

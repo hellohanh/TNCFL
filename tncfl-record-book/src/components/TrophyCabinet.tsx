@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import type { Meta, PayoutsEntry } from '../types/data'
 import { computeTrophyCabinet, trophyImageSrc } from '../lib/computeTrophyCabinet'
 import { ord } from '../lib/format'
+import { useIsPhone } from '../lib/useIsPhone'
 import styles from './TrophyCabinet.module.css'
 
 interface TrophyCabinetProps {
@@ -33,11 +34,27 @@ interface Flare {
 // DOM/animation work if the league runs another decade.
 const WINDOW = 2
 
+// Carousel geometry. Desktop is the locked Milestone 17 coverflow, unchanged.
+// Phones (<=820px, Entry 88, per Hanh): the trophy is sized to the screen and
+// ONLY that year's trophy is visible at rest — neighbors sit off to the sides
+// at opacity 0, so on a year change the old trophy glides out one side while
+// the new one glides in from the other, and nothing else stays on screen.
+const LAYOUT = {
+  desktop: { o1: 225, o2: 375, s1: 0.625, s2: 0.25, a1: 0.25, a2: 0.1, flareSpread: 300 },
+  phone: { o1: 190, o2: 320, s1: 0.55, s2: 0.32, a1: 0, a2: 0, flareSpread: 195 },
+}
+
 export default function TrophyCabinet({ payouts, yearsDesc, meta }: TrophyCabinetProps) {
   const entries = useMemo(() => computeTrophyCabinet(payouts, yearsDesc), [payouts, yearsDesc])
   const [current, setCurrent] = useState(0)
   const [flares, setFlares] = useState<Flare[]>([])
   const n = entries.length
+  const isPhone = useIsPhone()
+  const L = isPhone ? LAYOUT.phone : LAYOUT.desktop
+  // Phones: live finger offset while swiping the stage (the focal trophy follows
+  // the finger). The <img>s have pointer-events:none, so their own framer-motion
+  // `drag` never receives a touch — swipes have to be read off the stage itself.
+  const [swipeX, setSwipeX] = useState(0)
 
   function go(delta: number) {
     setCurrent((c) => Math.max(0, Math.min(n - 1, c + delta)))
@@ -53,8 +70,8 @@ export default function TrophyCabinet({ payouts, yearsDesc, meta }: TrophyCabine
     const batchId = Date.now()
     const batch: Flare[] = Array.from({ length: count }, (_, i) => ({
       id: `${batchId}-${i}`,
-      xOffset: (Math.random() - 0.5) * 300, // within ~150px of center each side — the focal image's own footprint, not the full (much wider) stage
-      yOffset: (Math.random() - 0.5) * 300,
+      xOffset: (Math.random() - 0.5) * L.flareSpread, // within the focal image's own footprint, not the full (much wider) stage
+      yOffset: (Math.random() - 0.5) * L.flareSpread,
       size: 16 + Math.random() * 22, // 16-38px
     }))
     setFlares(batch)
@@ -72,8 +89,16 @@ export default function TrophyCabinet({ payouts, yearsDesc, meta }: TrophyCabine
 
   return (
     <div className={styles.card}>
-      <div
+      <motion.div
         className={styles.stage}
+        onPan={(_, info) => { if (isPhone) setSwipeX(info.offset.x * 0.6) }}
+        onPanEnd={(_, info) => {
+          if (!isPhone) return
+          setSwipeX(0)
+          // Swipe left brings in the trophy on the right (older year).
+          if (info.offset.x < -50) go(1)
+          else if (info.offset.x > 50) go(-1)
+        }}
         tabIndex={0}
         role="group"
         aria-label={`Championship trophy cabinet, ${current + 1} of ${n}`}
@@ -87,7 +112,7 @@ export default function TrophyCabinet({ payouts, yearsDesc, meta }: TrophyCabine
           // Focal->Immediate offset (225px) and Immediate->Far offset (150px
           // more, so 375px total from focal) are two independently-set
           // steps now, not one uniform d*step formula.
-          const offset = d === 0 ? 0 : Math.sign(d) * (absD === 1 ? 225 : 225 + 150)
+          const offset = d === 0 ? swipeX : Math.sign(d) * (absD === 1 ? L.o1 : L.o2)
           return (
             <motion.img
               key={entry.year}
@@ -105,8 +130,8 @@ export default function TrophyCabinet({ payouts, yearsDesc, meta }: TrophyCabine
               animate={{
                 x: `calc(-50% + ${offset}px)`,
                 y: '-50%',
-                scale: d === 0 ? 1 : absD === 1 ? 0.625 : 0.25,
-                opacity: d === 0 ? 1 : absD === 1 ? 0.25 : 0.1,
+                scale: d === 0 ? 1 : absD === 1 ? L.s1 : L.s2,
+                opacity: d === 0 ? 1 : absD === 1 ? L.a1 : L.a2,
               }}
               initial={false}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
@@ -129,7 +154,7 @@ export default function TrophyCabinet({ payouts, yearsDesc, meta }: TrophyCabine
             }
           />
         ))}
-      </div>
+      </motion.div>
 
       <div className={styles.caption}>
         <div className={styles.year} style={{ color: activeColor }}>
