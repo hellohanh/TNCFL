@@ -2852,3 +2852,7 @@ Verified on S25 across six pairings incl. the longest names (Hanh/Damian, Douang
 Per Hanh: in the Duel Picker's score banner, the trailing manager's win count was plain white (`#eee`); only the leader got their color. Now each count always uses its own manager's color (`H2HDuelPicker.tsx`), on desktop and phones. Verified: Hanh vs Damian → 128 in Hanh's #FF9900, 113 in Damian's #05E632, on both S25 and 1440px desktop. Clean build. Committed locally, not pushed.
 
 Note: while applying this, the edit landed on disk with a code comment different from the one this session's script wrote (the script itself aborted before saving) — i.e. the file was changed concurrently by something other than this session. The resulting change matched the request exactly, so it was kept as-is.
+
+## Entry 100 (2026-10-16) — Duel Picker: Finish header avatars on desktop too
+
+Per Hanh: the Finish column header shows the two managers' avatars (instead of "Finish (A/B)") on desktop as well as phones (Entry 98 was phones-only). `H2HDuelPicker.module.css`: the avatar header styles moved out of the ≤820px block into the base rules; the names version is hidden everywhere. Verified on S25 and 1440px desktop: header reads "Finish" over [H avatar] / [D avatar], names hidden. Clean build. Committed locally, not pushed.

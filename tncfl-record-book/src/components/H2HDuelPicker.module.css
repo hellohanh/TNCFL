@@ -108,9 +108,22 @@
   margin-top: 20px;
 }
 
-/* Finish header: names on desktop, avatars on phones (Entry 98). */
-.finAvatars {
+/* Finish header: the two managers' avatars instead of their names — phones
+   (Entry 98) and, per Hanh, desktop too (Entry 100). The names version stays
+   in the markup but is hidden everywhere. */
+.finNames {
   display: none;
+}
+.finAvatars {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+.finAvRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
 }
 
 /* Phones (<=820px, Entry 98, per Hanh): the season table shrinks so all five
@@ -133,19 +146,5 @@
   .yrTable th:last-child,
   .yrTable td:last-child {
     padding-right: 0;
-  }
-  .finNames {
-    display: none;
-  }
-  .finAvatars {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 2px;
-  }
-  .finAvRow {
-    display: inline-flex;
-    align-items: center;
-    gap: 2px;
   }
 }
