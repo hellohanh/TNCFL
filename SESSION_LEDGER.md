@@ -2790,3 +2790,9 @@ Hall of Fame tab, first stop in the tab-by-tab mobile pass (Galaxy S25). Preview
 Manager Profiles tab, worked on Damian as the example (applies to every manager). Per Hanh: on phones (≤820px) the 5 stat panels split over two lines — **Seasons + Career Net** on line 1, **HMOTW Tally + Career Pts + Best Season** on line 2. `ManagerProfileCard.module.css`: 6-column grid at ≤820px, first two panels span 3, last three span 2, both lines fill the width; panel padding tightened to `6px 8px`. Desktop keeps its single row of 5.
 
 Before: on the S25 only 3 of 5 panels fit — Career Pts was sliced and Best Season was off-screen with no way to reach it. **Verified on S25 emulation** across Damian, Hanh, D'lyn (widest value, −$2,248.40), Lonny (1 season) and Randy ($5,583.20): every panel on screen, no value clipped; desktop still one row. Clean build. **Committed locally, not pushed** (push only on Hanh's go-ahead).
+
+## Entry 90 (2026-10-16) — Mobile: Records 3×3 grid fits the phone
+
+Records tab. Per Hanh: on phones all 9 League Records panels stay in a 3×3 grid with nothing cut off. Root cause of the clipping: `repeat(3, 1fr)` lets each column grow to its widest word, so the grid ran ~5px past the right edge of the S25 ("Damian"/"96 wks" touching the edge). `LeagueRecordsGrid.module.css` at ≤820px: `repeat(3, minmax(0, 1fr))` (three equal ~103px columns), tile padding `10px 8px`, value 22→17px (no wrap), label 10→9px, sub-line 10px. Verified on S25: grid right edge 336px of 360, zero elements overflowing their tile, page width = viewport. Desktop unchanged (22px values, 3 × ~399px). Committed locally, not pushed.
+
+Noted for Hanh (not changed): on phones the Cumulative Competence Chart's floating "Points per finish" legend sits on top of ranks 12–18's medals; All-Time Longest Drought's "96 wks" wraps to two lines.

@@ -35,3 +35,32 @@
   color: #888;
   margin-top: 3px;
 }
+
+/* Phones (<=820px, Entry 90, per Hanh): all 9 panels stay in a 3x3 grid with
+   nothing cut off. Columns are locked to equal thirds of the screen
+   (minmax(0, 1fr) — plain 1fr let the widest word push the grid ~5px past
+   the right edge), and the type/padding scale down so the widest values
+   ("$75,370", "Damian", "96 wks") fit inside a ~100px tile. Desktop unchanged. */
+@media (max-width: 820px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .tile {
+    padding: 10px 8px;
+    min-width: 0;
+  }
+  .val {
+    font-size: 17px;
+    white-space: nowrap;
+  }
+  .lbl {
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    margin-top: 5px;
+  }
+  .sub {
+    font-size: 10px;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+}
