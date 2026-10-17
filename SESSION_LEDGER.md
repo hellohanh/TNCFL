@@ -2876,3 +2876,7 @@ Per Hanh: the "Points per finish" legend handle (Entry 91, Records/phones only) 
 Verified (headless Chromium) on Records, Season 2011 and Season 2025, at S25 and 1440px desktop: closed → only the handle visible inside the panel, legend clipped; tap/click handle → legend out; tap/click legend → tucked. Zero console errors; clean build. Committed locally, not pushed.
 
 Noted (not changed): on phones the Season page's Competence | Highest | Lowest row is still the desktop 3-column layout (each ~90px wide) — for the season-page mobile pass.
+
+## Entry 105 (2026-10-16) — Mobile: season hero sparkline on its own full-width line
+
+Season pages, mobile pass (2020 as the example). Per Hanh: on phones the sparkline sits on its own line below the championship total, spanning the full width. `SeasonHero.module.css` at ≤820px: `.statRow` becomes a column (total, then sparkline), `.sparkWrap` full width; the line redraws to the measured width. Verified on S25: sparkline 312px wide (= content width), starts below the total. Desktop unchanged (side by side). Committed locally, not pushed.
