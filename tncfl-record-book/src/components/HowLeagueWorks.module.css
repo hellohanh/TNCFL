@@ -45,6 +45,23 @@
   margin-top: 2px;
 }
 
+/* Entry 102: icon | text grid — the second line sits in the text column, so
+   it starts exactly under "HMOTW"/"DHMOTW", not under the icon. The gap
+   matches the normal space after the icon. */
+.titleGrid {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 0.3em;
+  justify-content: start;
+  text-align: left;
+}
+.titleIcon {
+  grid-row: 1 / span 2;
+}
+.titleGrid .triggerSub {
+  grid-column: 2;
+}
+
 .chevron {
   color: #888;
   transition: transform 0.15s;

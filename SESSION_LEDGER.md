@@ -2860,3 +2860,7 @@ Per Hanh: the Finish column header shows the two managers' avatars (instead of "
 ## Entry 101 (2026-10-16) — How Our League Works: HMOTW/DHMOTW titles on two lines (desktop + phones)
 
 Per Hanh: in the HMOTW and DHMOTW accordion titles, the text after the dash goes on a second line, left-justified with the first line — desktop and phones. `HowLeagueWorks.tsx`: a title containing " — " renders as two stacked spans ("🏆 HMOTW" / "High Man of the Week"; "⚡ DHMOTW" / "Double High Man (2017+)"), dash dropped; `HowLeagueWorks.module.css`: `.triggerTitle` is a left-aligned flex column (`align-items: flex-start; text-align: left`). Drought System and Payout Structure (no dash) unchanged. Verified on S25 and 1440px desktop: both lines start at the same x (41px / 216px), second line below the first. Clean build. Committed locally, not pushed.
+
+## Entry 102 (2026-10-16) — How Our League Works: second title line aligned with the text, not the icon
+
+Per Hanh: the HMOTW/DHMOTW second line should line up with the title text, not the icon. `HowLeagueWorks.tsx` renders those titles as an icon | text grid (`.titleGrid`: icon in column 1 spanning both rows, "HMOTW" and "High Man of the Week" in column 2, `column-gap: 0.3em` ≈ the old space). Verified on S25 and desktop: second line starts at exactly the same x as "HMOTW"/"DHMOTW" (63px phone, 238px desktop), 22px right of the icon. Single-line titles unchanged. Committed locally, not pushed.

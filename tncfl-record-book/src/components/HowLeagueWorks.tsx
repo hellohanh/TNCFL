@@ -105,15 +105,18 @@ export default function HowLeagueWorks() {
           return (
             <div className={styles.item} key={item.title}>
               <button type="button" className={styles.trigger} onClick={() => setOpenIndex(open ? null : i)}>
-                {/* Entry 101 (Hanh): titles with an em dash (HMOTW, DHMOTW) put the
-                    text after the dash on its own second line, left-aligned with
-                    the first line — desktop and phones. */}
+                {/* Entry 101/102 (Hanh): titles with an em dash (HMOTW, DHMOTW) put the
+                    text after the dash on its own second line, left-aligned with the
+                    first line's text (not its icon) — desktop and phones. */}
                 <span className={styles.triggerTitle}>
                   {item.title.includes(' \u2014 ') ? (
-                    <>
-                      <span>{item.title.split(' \u2014 ')[0]}</span>
+                    // Entry 102: icon in its own column, so the second line lines up
+                    // with the title TEXT ("HMOTW"), not the icon.
+                    <span className={styles.titleGrid}>
+                      <span className={styles.titleIcon}>{item.title.split(' \u2014 ')[0].split(' ')[0]}</span>
+                      <span>{item.title.split(' \u2014 ')[0].split(' ').slice(1).join(' ')}</span>
                       <span className={styles.triggerSub}>{item.title.split(' \u2014 ').slice(1).join(' \u2014 ')}</span>
-                    </>
+                    </span>
                   ) : (
                     item.title
                   )}
