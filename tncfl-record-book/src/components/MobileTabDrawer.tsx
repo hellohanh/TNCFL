@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import styles from './MobileTabDrawer.module.css'
 
 interface MobileTabDrawerProps {
@@ -85,9 +85,24 @@ export default function MobileTabDrawer({ years }: MobileTabDrawerProps) {
     else doClose()
   }
 
-  const linkClass = ({ isActive }: { isActive: boolean }) =>
-    isActive ? `${styles.item} ${styles.active}` : styles.item
-  const pick = () => { doClose(); window.scrollTo({ top: 0 }) }
+  // Entry 111 (Hanh): like the Tracker, the tapped tab lights up the moment
+  // it's tapped (same .active look: white text, #222, red left bar) and stays
+  // lit while the drawer slides away — the highlight moves off the old tab at
+  // once, so the tap visibly registers before the page changes.
+  const navigate = useNavigate()
+  const [pending, setPending] = useState<string | null>(null)
+  useEffect(() => { setPending(null) }, [location.pathname])
+  const linkClass = (to: string) => ({ isActive }: { isActive: boolean }) =>
+    (pending ? pending === to : isActive) ? `${styles.item} ${styles.active}` : styles.item
+  const pick = (to: string) => (e: React.MouseEvent) => {
+    e.preventDefault()
+    setPending(to)
+    window.setTimeout(() => {
+      doClose()
+      navigate(to)
+      window.scrollTo({ top: 0 })
+    }, 160)
+  }
 
   const rootClass = [styles.root, open ? styles.open : '', dragging ? styles.dragging : ''].join(' ')
 
@@ -127,7 +142,7 @@ export default function MobileTabDrawer({ years }: MobileTabDrawerProps) {
       >
         <div className={styles.head}>League</div>
         {LEAGUE_LINKS.map((link) => (
-          <NavLink key={link.to} to={link.to} className={linkClass} onClick={pick}>
+          <NavLink key={link.to} to={link.to} className={linkClass(link.to)} onClick={pick(link.to)}>
             {link.label}
           </NavLink>
         ))}
@@ -136,7 +151,7 @@ export default function MobileTabDrawer({ years }: MobileTabDrawerProps) {
           2026 ↗
         </a>
         {years.map((year) => (
-          <NavLink key={year} to={`/season/${year}`} className={linkClass} onClick={pick}>
+          <NavLink key={year} to={`/season/${year}`} className={linkClass(`/season/${year}`)} onClick={pick(`/season/${year}`)}>
             {year}
           </NavLink>
         ))}

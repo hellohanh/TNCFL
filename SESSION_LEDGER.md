@@ -2922,3 +2922,7 @@ Per Hanh: "remove the hero scroll on mobile device only." `SeasonPage.tsx`: `<Fl
 ## Entry 110 (2026-10-17) — Mobile: drawer tab text a little bigger
 
 Per Hanh: keep the left drawer's spacing, make the tab text a little bigger for easier tapping. `MobileTabDrawer.module.css`: `.item` font 13px → 15px; padding unchanged (11px 18px). Verified on S25: every item one line (incl. "HOW OUR LEAGUE WORKS"), tap rows 42px; the list scrolls inside the drawer as before (2011–2015 below the fold). Committed locally, not pushed.
+
+## Entry 111 (2026-10-17) — Mobile drawer: tapped tab highlights instantly, like the Tracker
+
+Per Hanh: highlight the tapped tab like the Tracker does. The active style already matched the Tracker exactly (white text, `#222` background, red `#C0252B` left bar); what differed was timing — the drawer closed and the route changed in the same tap, so the new highlight was never seen. `MobileTabDrawer.tsx`: tapping a tab now moves the highlight to it immediately (`pending` state), holds 160ms, then closes the drawer and navigates; `pending` clears on route change. Inactive item text `#999` → `#aaa` (the Tracker's `--text2`). Verified on S25: before tap 2020 active; 60ms after tapping Records → Records highlighted while still on 2020; then navigates to /league/records and closes; reopening shows Records active. Zero console errors; clean build. Committed locally, not pushed.

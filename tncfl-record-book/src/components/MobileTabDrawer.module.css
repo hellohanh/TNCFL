@@ -91,7 +91,7 @@
     font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #999;
+    color: #aaa; /* Tracker's --text2 */
     text-decoration: none;
     border-left: 3px solid transparent;
     -webkit-tap-highlight-color: transparent;
