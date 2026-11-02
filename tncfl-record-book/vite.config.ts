@@ -28,9 +28,11 @@ export default defineConfig({
     stripCrossorigin(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icon192.png', 'icon512.png'],
+      includeAssets: ['icon192.png', 'icon512.png', 'favicon.ico', 'favicon-32.png', 'apple-touch-icon.png'],
       manifest: {
-        // Reuses the old hub's real icon files (icon192.png/icon512.png,
+        // Entry 119: icons are now the hawk head on a TRANSPARENT background
+        // (purpose 'any' — 'maskable' would crop it and fill the corners).
+        // Originally reused the old hub's real icon files (icon192.png/icon512.png,
         // already in public/) and branding colors — only the name/short_name
         // changed to reflect the new Record Book, not a redesign.
         name: 'Thursday Night Curse Record Book',
@@ -42,8 +44,8 @@ export default defineConfig({
         theme_color: '#111111',
         orientation: 'any',
         icons: [
-          { src: 'icon192.png', sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
-          { src: 'icon512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
+          { src: 'icon192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: 'icon512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
         ],
       },
     }),
