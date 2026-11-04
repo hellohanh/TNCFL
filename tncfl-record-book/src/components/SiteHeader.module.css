@@ -56,7 +56,7 @@
    Logo, text and padding all scale down; both title lines stay on one line
    each and fit the width. Checked on a Galaxy S25 (360px wide). Desktop is
    unchanged. Per Hanh, 2026-10-16. */
-@media (max-width: 820px) {
+@media (max-width: 820px), (pointer: coarse) and (max-width: 1199px) {
   .header {
     padding: 8px 12px;
   }

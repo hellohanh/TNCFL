@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react'
+import { PHONE_UPRIGHT_QUERY } from '../lib/phoneQuery'
 import type { ReactNode } from 'react'
 import { useHeaderHeight } from '../lib/HeaderHeightContext'
 
@@ -18,7 +19,7 @@ import { useHeaderHeight } from '../lib/HeaderHeightContext'
 // In landscape, or above 820px, children render normally (untouched).
 // While rotated, the inner unit carries `data-rotated` so a child can tune
 // its own layout for the turned screen (e.g. H2HMatrix stretches its table).
-const QUERY = '(max-width: 820px) and (orientation: portrait)'
+const QUERY = PHONE_UPRIGHT_QUERY
 // Upper bound when scaling a short panel UP to fill the turned height.
 const MAX_SCALE = 1.6
 

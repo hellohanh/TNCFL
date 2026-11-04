@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { PHONE_QUERY } from '../lib/phoneQuery'
 import type { Season, Meta } from '../types/data'
 import { drawPeakChart, PEAK_WINDOW } from '../lib/drawPeakChart'
 import type { PeakHit } from '../lib/drawPeakChart'
@@ -51,7 +52,7 @@ export default function PeakPerformance({ season, meta }: PeakPerformanceProps) 
       // Entry 106: the 360px floor is desktop-era; on a phone (312px of room)
       // it pushed both pyramid charts ~110px off-screen. Phones draw at the
       // real container width so Active and Inactive stack and fit.
-      const floor = window.matchMedia('(max-width: 820px)').matches ? 0 : 360
+      const floor = window.matchMedia(PHONE_QUERY).matches ? 0 : 360
       const containerW = Math.max(floor, container?.clientWidth ?? 360)
       const DPR = Math.max(1, window.devicePixelRatio || 1)
       const spotlit =
